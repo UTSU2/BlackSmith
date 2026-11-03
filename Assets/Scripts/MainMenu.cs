@@ -6,11 +6,14 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private string gameSceneName = "Game";
+    [SerializeField] private SaveLoadPanel loadPanel;
 
     private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
 
     private void OnEnable()
     {
+        if (Application.isPlaying && loadPanel != null) loadPanel.Loaded += OnPanelLoaded;
+
         // OS 폰트는 씬에 저장되지 않으므로 활성화될 때마다 버튼 글자에 적용한다.
         Font font = Font.CreateDynamicFontFromOSFont(KoreanFonts, 36);
         foreach (Text label in GetComponentsInChildren<Text>(true))
@@ -19,14 +22,26 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        if (loadPanel != null) loadPanel.Loaded -= OnPanelLoaded;
+    }
+
     public void OnNewGame()
     {
+        GameSession.StartNew();
         SceneManager.LoadScene(gameSceneName);
     }
 
     public void OnLoadGame()
     {
-        // TODO: 로드 게임 기능은 아직 구현하지 않음
+        if (loadPanel != null) loadPanel.OpenLoad();
+    }
+
+    private void OnPanelLoaded(PlayerData data)
+    {
+        // GameSession에는 SaveLoadPanel이 이미 반영해 두었다.
+        SceneManager.LoadScene(gameSceneName);
     }
 
     public void OnQuit()
