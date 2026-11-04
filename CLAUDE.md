@@ -4,7 +4,40 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-BlackSmith: a 2D crafting game (Unity `6000.3.27f2`, URP 2D, Input System, uGUI). Core loop: buy minerals → craft (heat → forge → heat-treat → polish) → grade determined by completion → sell. See `README.md` (Korean) for design and current status; most gameplay specs (crafting steps, grade names/counts, multipliers) are still **undecided/placeholder**. Only the title menu, a Game scene background, and the item data layer exist so far.
+- Engine: Unity 6 (`6000.3.27f2`, URP 2D, Input System, uGUI)
+- Language: C#
+- Genre: 2D Blacksmith Simulation
+- Developer: Solo Developer
+
+BlackSmith core loop: buy minerals → craft (heat → forge → heat-treat → polish) → grade determined by completion → sell → use profit to buy better materials and craft higher-grade gear. Recipe unlocking is **not** part of the main loop. See `README.md` (Korean) for current status. Only the title menu, a Game scene background, and the item data layer exist so far.
+
+- Crafting is four fast, rhythm-game-style mouse minigames: heat (press/release to hold a bar at a target position), forge (click shrinking circles at the right timing), heat-treat (click when an oscillating marker hits a spot on a gauge), polish (click a flaw and drag to sand it off).
+- Planned after the core is done: gear enhancement (price depends on grade + enhancement level) and a proficiency system.
+- Design docs live in `docs/` (`GameDesign.md`, `CoreLoop.md`, `MVP.md`, `Roadmap.md`). Items marked **미정** there (judging rules, completion/grade formulas, grade names/counts, multipliers, prices, etc.) (including the MVP completion criteria and Roadmap schedules) must **not** be decided on your own — ask the user or leave them as placeholders.
+
+## Architecture Rules
+
+- 게임 데이터는 ScriptableObject 활용
+- 런타임 상태와 정적 데이터 분리 (예: `ItemData`는 정적 데이터. 제작된 장비의 등급·강화 수치 같은 개별 상태는 별도 런타임 데이터로 둔다)
+- UI와 게임 로직 분리
+- 기능별로 클래스 책임 분리
+
+## Coding Rules
+
+- 클래스와 메서드는 PascalCase
+- private 필드는 camelCase
+- 직렬화 필드는 [SerializeField] 사용
+- 불필요한 Singleton 사용 금지 (기존 `static class`인 `ItemDatabase`, `GameSession`, `SaveSlotManager`는 그대로 두되, 새 코드에서 불필요한 Singleton/전역 상태를 늘리지 않는다)
+- 네임스페이스 규칙은 아래 [Namespaces](#namespaces) 참고
+
+## Workflow
+
+- 기존 코드를 먼저 분석할 것
+- 구현 전에 변경 계획을 설명할 것
+- 요청하지 않은 시스템 수정 금지
+- 새로운 기능은 작은 단위로 구현
+- 변경한 파일과 테스트 방법 설명 (검증은 아래 [Unity MCP](#unity-mcp)의 절차를 따르고, 무엇을 확인했고 무엇을 확인하지 않았는지 함께 보고)
+- 기획 문서에 **미정**으로 표시된 사항은 임의로 결정하지 않는다
 
 ## Working in this repo
 
@@ -52,4 +85,5 @@ BlackSmith: a 2D crafting game (Unity `6000.3.27f2`, URP 2D, Input System, uGUI)
 - Each item is one ScriptableObject asset (`ItemData` → `MineralItemData` / `CraftedItemData`). Minerals can be bought and sold; crafted items sell only (`CanBuy`, `BuyPrice` are virtual on `ItemData`).
 - `ItemDatabase` (static, `RuntimeInitializeOnLoadMethod`) loads everything under `Assets/Resources/Items/` via `Resources.LoadAll` — no manual registry. Assets outside that folder are silently not loaded. Duplicate/empty IDs are logged and skipped.
 - Create/edit items through `Tools > BlackSmith > Item Creator` (`Assets/Editor/ItemCreatorWindow.cs`): left pane lists items, right pane creates or edits. It writes fields via `SerializedObject` using the **private field names** (`id`, `displayName`, `icon`, `description`, `maxStack`, `defaultGrade`, `sellPrice`, `sellPriceMultipliers`, `buyPrice`) — renaming those fields in `ItemData`/`MineralItemData` requires updating the window. Item type can't change after creation (different classes); changing an ID renames the asset file.
+- Future design note (not implemented): `CraftedItemData` is static data for a *kind* of item; per-crafted-instance state (grade, later enhancement level) belongs in runtime data per Architecture Rules. Don't build this until the spec is decided.
 - `ItemGrade` enum order is the index into each item's `sellPriceMultipliers`; `ItemData.OnValidate` pads/resizes to `ItemGradeInfo.Count` (new slots = 1.0). Sell price = `sellPrice × multiplier[grade]`, rounded.
