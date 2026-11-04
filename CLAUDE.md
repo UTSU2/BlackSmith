@@ -12,6 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 BlackSmith core loop: buy minerals → craft (heat → forge → heat-treat → polish) → grade determined by completion → sell → use profit to buy better materials and craft higher-grade gear. Recipe unlocking is **not** part of the main loop. See `README.md` (Korean) for current status. Only the title menu, a Game scene background, and the item data layer exist so far.
 
 - Crafting is four fast, rhythm-game-style mouse minigames: heat (press/release to hold a bar at a target position), forge (click shrinking circles at the right timing), heat-treat (click when an oscillating marker hits a spot on a gauge), polish (click a flaw and drag to sand it off).
+- Minigame difficulty is 10 levels (1–10). Each ingredient grade has a score; the average score over the used ingredient units (sum ÷ unit count, so amount doesn't matter) raises difficulty by one level each time it passes a threshold. The per-grade scores, thresholds and per-level values are **미정** — don't decide them on your own.
 - Planned after the core is done: gear enhancement (price depends on grade + enhancement level) and a proficiency system.
 - Design docs live in `docs/` (`GameDesign.md`, `CoreLoop.md`, `MVP.md`, `Roadmap.md`). Items marked **미정** there (judging rules, completion/grade formulas, grade names/counts, multipliers, prices, etc.) (including the MVP completion criteria and Roadmap schedules) must **not** be decided on your own — ask the user or leave them as placeholders.
 
@@ -38,6 +39,14 @@ BlackSmith core loop: buy minerals → craft (heat → forge → heat-treat → 
 - 새로운 기능은 작은 단위로 구현
 - 변경한 파일과 테스트 방법 설명 (검증은 아래 [Unity MCP](#unity-mcp)의 절차를 따르고, 무엇을 확인했고 무엇을 확인하지 않았는지 함께 보고)
 - 기획 문서에 **미정**으로 표시된 사항은 임의로 결정하지 않는다
+
+## Issues
+
+- 이슈 제목 맨 앞에 `[분류]` 말머리를 붙여, 제목만 보고 성격을 바로 알 수 있게 한다. 예: `[BUG] 저장 슬롯 로드 시 NullReference`
+- 기본 말머리: `[BUG]` (버그), `[제안]` (기능/개선 제안), `[검증]` (확인·테스트가 필요한 항목). 이 외에도 내용에 맞는 짧은 말머리를 쓸 수 있다.
+- 말머리는 하나만 쓰고, 본문에서 다시 설명하지 않아도 될 만큼 명확한 단어를 고른다.
+- 기획 문서에 **미정**으로 표시된 사항은 이슈에서도 임의로 확정하지 않는다. 결정이 필요하면 그 사실을 이슈에 명시한다.
+- `gh`가 PATH에 없을 수 있다. 이 경우 `C:\Program Files\GitHub CLI\gh.exe`를 전체 경로로 호출한다.
 
 ## Working in this repo
 
@@ -72,6 +81,7 @@ BlackSmith core loop: buy minerals → craft (heat → forge → heat-treat → 
   | `Assets/Scripts/Items/` | `BlackSmith.Items` |
   | `Assets/Scripts/Data/` | `BlackSmith.Data` |
   | `Assets/Scripts/UI/` | `BlackSmith.UI` |
+  | `Assets/Scripts/Crafting/` | `BlackSmith.Crafting` |
   | `Assets/Editor/` | `BlackSmith.EditorTools` |
 
 - One namespace per file, **block style** (`namespace X { ... }`). Unity 6 compiles C# 9, so file-scoped `namespace X;` (C# 10) does not compile.
@@ -87,3 +97,12 @@ BlackSmith core loop: buy minerals → craft (heat → forge → heat-treat → 
 - Create/edit items through `Tools > BlackSmith > Item Creator` (`Assets/Editor/ItemCreatorWindow.cs`): left pane lists items, right pane creates or edits. It writes fields via `SerializedObject` using the **private field names** (`id`, `displayName`, `icon`, `description`, `maxStack`, `defaultGrade`, `sellPrice`, `sellPriceMultipliers`, `buyPrice`) — renaming those fields in `ItemData`/`MineralItemData` requires updating the window. Item type can't change after creation (different classes); changing an ID renames the asset file.
 - Future design note (not implemented): `CraftedItemData` is static data for a *kind* of item; per-crafted-instance state (grade, later enhancement level) belongs in runtime data per Architecture Rules. Don't build this until the spec is decided.
 - `ItemGrade` enum order is the index into each item's `sellPriceMultipliers`; `ItemData.OnValidate` pads/resizes to `ItemGradeInfo.Count` (new slots = 1.0). Sell price = `sellPrice × multiplier[grade]`, rounded.
+
+## Recipe architecture
+
+- Each recipe is one ScriptableObject asset (`CraftRecipeData`: `id`, `result`, `ingredients`, `stages`). There is no recipe unlocking and recipes are not shown to the player; every asset under `Assets/Resources/Recipes/` is open. Crafting starts by inserting ingredients, which are matched to a recipe (matching not implemented yet).
+- `RecipeDatabase` (static, same pattern as `ItemDatabase`) loads `Resources/Recipes` via `Resources.LoadAll`. Empty/duplicate IDs and recipes without a result are logged and skipped.
+- Create/edit recipes through `Tools > BlackSmith > Recipe Creator` (`Assets/Editor/RecipeCreatorWindow.cs`). It writes via `SerializedObject` using the **private field names** (`id`, `result`, `ingredients` (`item`, `count`), `stages`) — renaming those in `CraftRecipeData`/`CraftIngredient` requires updating the window. It warns when two recipes share the same ingredient set.
+- Difficulty (1–10) is derived from the average ingredient-grade score (sum over units ÷ unit count); each threshold crossed adds one level. Amount does not affect difficulty. Per-grade scores and thresholds are **미정**.
+- `CraftStage` values are stored as integers in assets: append new stages at the end, never reorder.
+- Crafting design (stage minigames, completion → grade, service/presenter split) is planned but not implemented beyond the recipe data and tool. Judging, scoring and grade rules are **미정**.
