@@ -7,7 +7,7 @@ namespace BlackSmith.Crafting
     /// 레시피 데이터베이스. ItemDatabase와 같은 방식이다.
     /// Assets/Resources/Recipes/ 아래(하위 폴더 포함)의 모든 CraftRecipeData 에셋을 게임 시작 시 자동으로 읽어 등록한다.
     /// 별도 오브젝트나 목록 관리는 필요 없다.
-    /// TODO: 재료 조합으로 레시피를 찾는 매칭은 3단계(RecipeMatcher)에서 추가한다.
+    /// 재료 조합으로 레시피를 찾는 매칭은 RecipeMatcher가 맡는다.
     /// </summary>
     public static class RecipeDatabase
     {

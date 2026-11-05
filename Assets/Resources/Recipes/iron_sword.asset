@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e03cfc8ee38b934ab579e1c94696f04, type: 3}
+  m_Name: iron_sword
+  m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Crafting.CraftRecipeData
+  id: iron_sword
+  result: {fileID: 11400000, guid: 23b9c92fe59d4dd4f812e2e89b59fc17, type: 2}
+  ingredients:
+  - item: {fileID: 11400000, guid: 52fe61322fcaf5d45be0c6891d4a53e1, type: 2}
+    count: 1
+  stages: 00000000010000000200000003000000
