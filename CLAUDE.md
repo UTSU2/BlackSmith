@@ -71,6 +71,17 @@ BlackSmith core loop: buy minerals → craft (heat → forge → heat-treat → 
 - **State changes**: save scenes only when asked (check with `manage_scene`). Use `execute_code` for read-only inspection first; tell the user what any asset/scene-mutating code will change before running it.
 - Before tool calls, check `mcpforunity://custom-tools` and `mcpforunity://instances` (call `set_active_instance` if more than one editor is connected). MCP paths are relative to `Assets/` with `/` separators.
 
+## UI Buttons
+
+- **글자(`Label`)가 있는 버튼은 모두 `ButtonLabelPress`(`Assets/Scripts/ButtonLabelPress.cs`)를 붙인다.** 눌림 스프라이트가 보이는 동안 글자를 함께 내려, 버튼 이미지와 글자 위치를 일치시킨다. 새 버튼도 예외 없이 같은 방식으로 만든다. (글자가 없는 닫기·화살표·아이콘 버튼은 해당 없음)
+- 구성 (Title 씬 버튼과 동일):
+  - `Button` 전환(Transition)은 `SpriteSwap`, `pressedSprite`에 눌림 스프라이트를 지정한다. (예: `TextBTN_Medium` / `TextBTN_Medium_Pressed`)
+  - 글자는 이름이 정확히 `Label`인 자식 오브젝트(`Text`)로 두고 부모에 꽉 채운다(앵커 0,0 ~ 1,1).
+  - **평소 위치**는 씬에 저장된 `Label`의 `anchoredPosition`이다. 평소에는 버튼 면이 위로 올라와 있으므로 `Label`을 **위로 +20**(`offsetMin`/`offsetMax`의 y = 20, Title 버튼 기준 높이 100~130) 올려 둔다. 버튼이 작으면 높이에 비례해 줄이고(예: 높이 90 → 16) 화면에서 확인한다.
+  - **눌림 위치**는 `ButtonLabelPress.pressedPosition`이며 `(0, 0)`으로 둔다. `label` 필드는 비워 두면 `Label` 자식을 자동으로 찾는다.
+- 눌림 여부는 포인터 이벤트가 아니라 `Button`의 현재 스프라이트(`image.overrideSprite == pressedSprite`)로 판단한다. 따라서 토글처럼 코드에서 `image.sprite`를 눌림 스프라이트로 바꿔 "선택됨"을 표시하면 글자도 함께 내려간다. (상점 구매/판매 탭이 이 방식)
+- 새 버튼 스크립트를 짤 때 글자 위치를 직접 옮기는 코드를 따로 만들지 않는다. 버튼 연출은 `ButtonLabelPress`로만 처리한다.
+
 ## Namespaces
 
 - Root is `BlackSmith`; `Assets/Scripts/<Folder>` → `BlackSmith.<Folder>`. Keep folder and namespace in sync, including for new folders (max 2 levels below root).

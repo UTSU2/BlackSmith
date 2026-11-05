@@ -1,12 +1,15 @@
 using UnityEngine;
+using BlackSmith.UI;
 
 namespace BlackSmith
 {
     public class GameHUD : MonoBehaviour
     {
+        [SerializeField] private ShopPanel shopPanel;
+
         public void OnShop()
         {
-            // TODO: 상점 기능은 아직 구현하지 않음
+            if (shopPanel != null) shopPanel.Open();
         }
 
         public void OnBook()
