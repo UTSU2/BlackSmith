@@ -22,6 +22,16 @@ namespace BlackSmith.Crafting
         [Range(0f, 1f)] public float targetCenter = 0.6f;
         [Tooltip("목표 구간의 절반 폭.")]
         [Range(0.01f, 0.5f)] public float targetHalfWidth = 0.1f;
+        [Tooltip("난이도 1에서 100%를 채우는 데 필요한 구간 안 시간 비율(전체 시간 대비). 임시값(미정).")]
+        [Range(0.05f, 0.7f)] public float requiredRatioAtMinDifficulty = 0.4f;
+        [Tooltip("필요 시간 비율의 상한(전체 시간 대비). 난이도가 올라도 이 값을 넘지 않는다.")]
+        [Range(0.05f, 0.7f)] public float requiredRatioCap = 0.7f;
+        [Tooltip("필요 시간 비율의 난이도 곡선 지수. 2면 낮은 난이도 사이보다 높은 난이도 사이의 증가폭이 크다.")]
+        [Min(1f)] public float requiredRatioCurvePower = 2f;
+        [Tooltip("난이도 10에서 목표 구간 절반 폭의 배율(난이도 1은 1). 선형으로 줄어든다.")]
+        [Range(0.1f, 1f)] public float halfWidthScaleAtMax = 0.5f;
+        [Tooltip("켜면 시작할 때마다 목표 구간 위치가 랜덤이다. 끄면 targetCenter 고정.")]
+        public bool randomizeTarget = true;
     }
 
     /// <summary>
@@ -32,16 +42,21 @@ namespace BlackSmith.Crafting
     public class HeatMinigame : ICraftStageGame
     {
         private readonly HeatSettings settings;
+        private readonly System.Random random;
         private float time;
         private float inZoneTime;
+        private float requiredTime;
         private bool holding;
 
         public event Action<float> Completed;
 
-        public HeatMinigame(HeatSettings settings)
+        public HeatMinigame(HeatSettings settings, int? seed = null)
         {
             this.settings = settings ?? new HeatSettings();
+            random = seed.HasValue ? new System.Random(seed.Value) : new System.Random();
             Value = this.settings.startValue;
+            Center = this.settings.targetCenter;
+            HalfWidth = this.settings.targetHalfWidth;
         }
 
         public bool IsRunning { get; private set; }
@@ -55,17 +70,36 @@ namespace BlackSmith.Crafting
 
         public bool IsHolding => holding;
 
-        public bool IsInZone => Mathf.Abs(Value - settings.targetCenter) <= settings.targetHalfWidth;
+        /// <summary>이번 판 목표 구간의 중심. Begin에서 (랜덤으로) 정해진다.</summary>
+        public float Center { get; private set; }
+
+        /// <summary>이번 판 목표 구간의 절반 폭. 난이도가 오르면 줄어든다.</summary>
+        public float HalfWidth { get; private set; }
+
+        public bool IsInZone => Mathf.Abs(Value - Center) <= HalfWidth;
+
+        /// <summary>100%를 채우는 데 필요한 구간 안 시간(초). 난이도에 따라 늘며 전체 시간의 requiredRatioCap을 넘지 않는다.</summary>
+        public float RequiredTime => requiredTime;
 
         /// <summary>
-        /// 완성도 0~1. 점수식이 미정이라 임시로 "목표 구간 안에 있던 시간 / 전체 시간"이다.
+        /// 완성도 0~1. 점수식이 미정이라 임시로 "목표 구간 안에 있던 시간 / 필요 시간"이다.
+        /// 전체 시간 중 필요 시간만큼만 구간 안에 있으면 100%가 된다.
         /// TODO: 판정 기준과 점수식이 정해지면 교체한다.
         /// </summary>
-        public float Completeness => Mathf.Clamp01(inZoneTime / settings.duration);
+        public float Completeness => requiredTime > 0f ? Mathf.Clamp01(inZoneTime / requiredTime) : 0f;
 
         public void Begin(int difficulty)
         {
-            // TODO: 난이도(1~10)에 따른 속도·구간 폭은 미정이라 아직 반영하지 않는다.
+            // 난이도 1 = 현행 값. 필요 시간 비율은 볼록 곡선(t^power), 구간 폭은 선형으로 줄어든다.
+            // TODO: 상승·하강 속도의 난이도 변화는 미정이라 반영하지 않는다.
+            float t = CraftDifficulty.Progress(difficulty);
+            float ratio = Mathf.Lerp(settings.requiredRatioAtMinDifficulty, settings.requiredRatioCap, Mathf.Pow(t, settings.requiredRatioCurvePower));
+            requiredTime = settings.duration * Mathf.Min(ratio, settings.requiredRatioCap);
+
+            HalfWidth = settings.targetHalfWidth * Mathf.Lerp(1f, settings.halfWidthScaleAtMax, t);
+            Center = settings.randomizeTarget
+                ? Mathf.Lerp(HalfWidth, 1f - HalfWidth, (float)random.NextDouble())
+                : settings.targetCenter;
             time = 0f;
             inZoneTime = 0f;
             holding = false;

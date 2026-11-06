@@ -13,6 +13,12 @@ namespace BlackSmith.Crafting
         public const int MinLevel = 1;
         public const int MaxLevel = 10;
 
+        /// <summary>난이도 1이면 0, 10이면 1인 보간 계수. 미니게임이 난이도별 값을 Lerp할 때 쓴다.</summary>
+        public static float Progress(int difficulty)
+        {
+            return UnityEngine.Mathf.Clamp01((difficulty - MinLevel) / (float)(MaxLevel - MinLevel));
+        }
+
         /// <param name="unitGrades">사용한 재료를 유닛 하나당 등급 하나로 펼친 목록.</param>
         public static int Calculate(IReadOnlyList<ItemGrade> unitGrades)
         {

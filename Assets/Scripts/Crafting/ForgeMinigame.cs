@@ -29,6 +29,10 @@ namespace BlackSmith.Crafting
         [Min(0f)] public float margin = 2f;
         [Tooltip("마지막 원 판정 뒤 끝나기까지 기다리는 시간.")]
         [Min(0f)] public float endDelay = 0.5f;
+        [Tooltip("난이도 10에서 원 개수의 배율(난이도 1은 1). 선형으로 늘어난다.")]
+        [Min(1f)] public float countMultiplierAtMax = 4f;
+        [Tooltip("난이도 10에서 원이 줄어드는 속도의 배율(난이도 1은 1). 선형으로 빨라진다.")]
+        [Min(1f)] public float shrinkSpeedMultiplierAtMax = 2f;
     }
 
     /// <summary>
@@ -63,6 +67,7 @@ namespace BlackSmith.Crafting
         private readonly List<Circle> circles = new List<Circle>();
         private float time;
         private float lastJudgedTime;
+        private float shrinkDuration;
 
         public event Action<float> Completed;
 
@@ -70,7 +75,11 @@ namespace BlackSmith.Crafting
         {
             this.settings = settings ?? new ForgeSettings();
             random = seed.HasValue ? new System.Random(seed.Value) : new System.Random();
+            shrinkDuration = this.settings.shrinkDuration;
         }
+
+        /// <summary>이번 판 원이 나타나서 안쪽 원과 겹치기까지 걸리는 시간(초). 난이도가 오르면 짧아진다.</summary>
+        public float ShrinkDuration => shrinkDuration;
 
         public bool IsRunning { get; private set; }
         public float Time => time;
@@ -98,19 +107,23 @@ namespace BlackSmith.Crafting
 
         public void Begin(int difficulty)
         {
-            // TODO: 난이도(1~10)에 따른 속도·크기·개수는 미정이라 아직 반영하지 않는다.
+            // 난이도 1 = 현행 값. 개수와 줄어드는 속도만 선형으로 변한다. (원 크기·판정 폭은 변하지 않는다)
+            float t = CraftDifficulty.Progress(difficulty);
+            int count = Mathf.Max(1, Mathf.RoundToInt(settings.circleCount * Mathf.Lerp(1f, settings.countMultiplierAtMax, t)));
+            shrinkDuration = settings.shrinkDuration / Mathf.Lerp(1f, settings.shrinkSpeedMultiplierAtMax, t);
+
             circles.Clear();
             time = 0f;
             lastJudgedTime = 0f;
 
-            for (int i = 0; i < settings.circleCount; i++)
+            for (int i = 0; i < count; i++)
             {
                 float spawn = settings.startDelay + i * settings.spawnInterval;
                 circles.Add(new Circle
                 {
                     Position = PickPosition(i),
                     SpawnTime = spawn,
-                    HitTime = spawn + settings.shrinkDuration,
+                    HitTime = spawn + shrinkDuration,
                     State = CircleState.Pending,
                 });
             }
@@ -175,7 +188,7 @@ namespace BlackSmith.Crafting
         /// <summary>지금 줄어드는 원의 반지름. 안쪽 원과 겹치는 시각에 targetRadius가 된다.</summary>
         public float GetRadius(Circle circle)
         {
-            float progress = (time - circle.SpawnTime) / settings.shrinkDuration;
+            float progress = (time - circle.SpawnTime) / shrinkDuration;
             return settings.startRadius - (settings.startRadius - settings.targetRadius) * progress;
         }
 

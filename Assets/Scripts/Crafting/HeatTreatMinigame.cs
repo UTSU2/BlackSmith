@@ -22,6 +22,12 @@ namespace BlackSmith.Crafting
         [Min(1f)] public float timeLimit = 6f;
         [Tooltip("클릭(또는 시간 초과) 뒤 결과를 보여주고 끝나기까지 기다리는 시간(초).")]
         [Min(0f)] public float endDelay = 0.6f;
+        [Tooltip("난이도 10에서 오브젝트 속도의 배율(난이도 1은 1). 선형으로 빨라진다.")]
+        [Min(1f)] public float speedMultiplierAtMax = 2f;
+        [Tooltip("난이도 10에서 목표 범위(perfectHalfWidth, tolerance)의 배율(난이도 1은 1). 선형으로 줄어든다.")]
+        [Range(0.1f, 1f)] public float rangeScaleAtMax = 0.5f;
+        [Tooltip("켜면 시작할 때마다 목표 위치가 랜덤이다. 끄면 targetPosition 고정.")]
+        public bool randomizeTarget = true;
     }
 
     /// <summary>
@@ -32,18 +38,32 @@ namespace BlackSmith.Crafting
     public class HeatTreatMinigame : ICraftStageGame
     {
         private readonly HeatTreatSettings settings;
+        private readonly System.Random random;
+        private float speed;
+        private float tolerance;
         private float elapsed;
         private float judgedTimer;
 
         public event Action<float> Completed;
 
-        public HeatTreatMinigame(HeatTreatSettings settings)
+        public HeatTreatMinigame(HeatTreatSettings settings, int? seed = null)
         {
             this.settings = settings ?? new HeatTreatSettings();
+            random = seed.HasValue ? new System.Random(seed.Value) : new System.Random();
+            speed = this.settings.speed;
+            tolerance = this.settings.tolerance;
+            PerfectHalfWidth = this.settings.perfectHalfWidth;
+            TargetPosition = this.settings.targetPosition;
         }
 
         public bool IsRunning { get; private set; }
         public HeatTreatSettings Settings => settings;
+
+        /// <summary>이번 판 목표 위치. Begin에서 (랜덤으로) 정해진다.</summary>
+        public float TargetPosition { get; private set; }
+
+        /// <summary>이번 판 완성도 최대 판정 폭(목표 앞뒤). 난이도가 오르면 줄어든다.</summary>
+        public float PerfectHalfWidth { get; private set; }
 
         /// <summary>눌러서 판정됐거나 시간이 다 돼서 끝난 상태인가.</summary>
         public bool IsJudged { get; private set; }
@@ -71,7 +91,16 @@ namespace BlackSmith.Crafting
 
         public void Begin(int difficulty)
         {
-            // TODO: 난이도(1~10)에 따른 속도·목표 폭은 미정이라 아직 반영하지 않는다.
+            // 난이도 1 = 현행 값. 속도는 빨라지고 목표 범위는 줄어든다(선형).
+            float t = CraftDifficulty.Progress(difficulty);
+            float rangeScale = Mathf.Lerp(1f, settings.rangeScaleAtMax, t);
+            speed = settings.speed * Mathf.Lerp(1f, settings.speedMultiplierAtMax, t);
+            PerfectHalfWidth = settings.perfectHalfWidth * rangeScale;
+            tolerance = settings.tolerance * rangeScale;
+            TargetPosition = settings.randomizeTarget
+                ? Mathf.Lerp(PerfectHalfWidth, 1f - PerfectHalfWidth, (float)random.NextDouble())
+                : settings.targetPosition;
+
             elapsed = 0f;
             judgedTimer = 0f;
             IsJudged = false;
@@ -93,7 +122,7 @@ namespace BlackSmith.Crafting
                 {
                     // 못 누르고 시간이 다 됐다.
                     ClickedPosition = PositionAt(settings.timeLimit);
-                    Error = ClickedPosition - settings.targetPosition;
+                    Error = ClickedPosition - TargetPosition;
                     Completeness = 0f;
                     TimedOut = true;
                     IsJudged = true;
@@ -115,7 +144,7 @@ namespace BlackSmith.Crafting
             if (!IsRunning || IsJudged) return;
 
             ClickedPosition = PositionAt(elapsed);
-            Error = ClickedPosition - settings.targetPosition;
+            Error = ClickedPosition - TargetPosition;
             Completeness = Score(Mathf.Abs(Error));
             IsJudged = true;
         }
@@ -127,14 +156,14 @@ namespace BlackSmith.Crafting
 
         private float PositionAt(float time)
         {
-            return Mathf.PingPong(time * settings.speed, 1f);
+            return Mathf.PingPong(time * speed, 1f);
         }
 
         private float Score(float distance)
         {
-            if (distance <= settings.perfectHalfWidth) return 1f;
-            float span = Mathf.Max(settings.tolerance - settings.perfectHalfWidth, 0.0001f);
-            return Mathf.Clamp01(1f - (distance - settings.perfectHalfWidth) / span);
+            if (distance <= PerfectHalfWidth) return 1f;
+            float span = Mathf.Max(tolerance - PerfectHalfWidth, 0.0001f);
+            return Mathf.Clamp01(1f - (distance - PerfectHalfWidth) / span);
         }
     }
 }

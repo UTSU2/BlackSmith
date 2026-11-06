@@ -70,8 +70,8 @@ namespace BlackSmith.UI
         private void ApplyZone()
         {
             if (targetZone == null) return;
-            float c = game.Settings.targetCenter;
-            float h = game.Settings.targetHalfWidth;
+            float c = game.Center;
+            float h = game.HalfWidth;
             targetZone.anchorMin = new Vector2(0f, Mathf.Clamp01(c - h));
             targetZone.anchorMax = new Vector2(1f, Mathf.Clamp01(c + h));
             targetZone.offsetMin = Vector2.zero;

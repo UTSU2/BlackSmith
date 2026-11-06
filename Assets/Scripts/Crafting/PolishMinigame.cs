@@ -22,6 +22,10 @@ namespace BlackSmith.Crafting
         [Min(0f)] public float margin = 2f;
         [Tooltip("끝난 뒤(전부 지웠거나 시간 초과) 결과를 보여주고 끝나기까지 기다리는 시간(초).")]
         [Min(0f)] public float endDelay = 0.5f;
+        [Tooltip("난이도 10에서 흠집 개수의 배율(난이도 1은 1). 선형으로 늘어난다.")]
+        [Min(1f)] public float countMultiplierAtMax = 1.5f;
+        [Tooltip("난이도 10에서 흠집 하나를 지우는 데 필요한 문지르는 거리의 배율(난이도 1은 1). 선형으로 늘어난다.")]
+        [Min(1f)] public float distanceMultiplierAtMax = 2f;
     }
 
     /// <summary>
@@ -48,6 +52,7 @@ namespace BlackSmith.Crafting
         private readonly System.Random random;
         private readonly List<Flaw> flaws = new List<Flaw>();
         private Flaw activeFlaw;
+        private float sandPerUnit;
         private Vector2 lastPosition;
         private float time;
         private float endTimer;
@@ -59,6 +64,7 @@ namespace BlackSmith.Crafting
         {
             this.settings = settings ?? new PolishSettings();
             random = seed.HasValue ? new System.Random(seed.Value) : new System.Random();
+            sandPerUnit = this.settings.sandPerUnit;
         }
 
         public bool IsRunning { get; private set; }
@@ -102,14 +108,18 @@ namespace BlackSmith.Crafting
 
         public void Begin(int difficulty)
         {
-            // TODO: 난이도(1~10)에 따른 흠집 개수·크기·단단함은 미정이라 아직 반영하지 않는다.
+            // 난이도 1 = 현행 값. 흠집 개수는 늘고, 흠집당 필요 문지름 거리도 늘어난다(선형). 크기는 변하지 않는다.
+            float t = CraftDifficulty.Progress(difficulty);
+            int count = Mathf.Max(1, Mathf.RoundToInt(settings.flawCount * Mathf.Lerp(1f, settings.countMultiplierAtMax, t)));
+            sandPerUnit = settings.sandPerUnit / Mathf.Lerp(1f, settings.distanceMultiplierAtMax, t);
+
             flaws.Clear();
             activeFlaw = null;
             time = 0f;
             endTimer = 0f;
             finished = false;
 
-            for (int i = 0; i < settings.flawCount; i++)
+            for (int i = 0; i < count; i++)
             {
                 flaws.Add(new Flaw { Position = PickPosition(), Amount = 1f });
             }
@@ -172,7 +182,7 @@ namespace BlackSmith.Crafting
             lastPosition = position;
             if (inside <= 0f) return;
 
-            activeFlaw.Amount = Mathf.Max(0f, activeFlaw.Amount - inside * settings.sandPerUnit);
+            activeFlaw.Amount = Mathf.Max(0f, activeFlaw.Amount - inside * sandPerUnit);
             if (activeFlaw.IsCleared) activeFlaw = null;
         }
 

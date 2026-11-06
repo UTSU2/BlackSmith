@@ -110,33 +110,34 @@ namespace BlackSmith.Crafting
                 case CraftStage.Heat:
                     if (HasNoView(heatView, "heatView")) return false;
                     HeatMinigame heat = new HeatMinigame(heatSettings);
-                    heatView.Show(heat);
+                    // View가 Begin 이후의 값(랜덤 목표, 난이도 반영 값)을 읽도록 Run을 먼저 한다.
                     hideActiveView = heatView.Hide;
                     Run(heat);
+                    heatView.Show(heat);
                     return true;
 
                 case CraftStage.Forge:
                     if (HasNoView(forgeView, "forgeView")) return false;
                     ForgeMinigame forge = new ForgeMinigame(forgeSettings);
-                    forgeView.Show(forge);
                     hideActiveView = forgeView.Hide;
                     Run(forge);
+                    forgeView.Show(forge);
                     return true;
 
                 case CraftStage.HeatTreat:
                     if (HasNoView(heatTreatView, "heatTreatView")) return false;
                     HeatTreatMinigame heatTreat = new HeatTreatMinigame(heatTreatSettings);
-                    heatTreatView.Show(heatTreat);
                     hideActiveView = heatTreatView.Hide;
                     Run(heatTreat);
+                    heatTreatView.Show(heatTreat);
                     return true;
 
                 case CraftStage.Polish:
                     if (HasNoView(polishView, "polishView")) return false;
                     PolishMinigame polish = new PolishMinigame(polishSettings);
-                    polishView.Show(polish);
                     hideActiveView = polishView.Hide;
                     Run(polish);
+                    polishView.Show(polish);
                     return true;
 
                 default:
