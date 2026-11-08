@@ -129,7 +129,7 @@ namespace BlackSmith.UI
                     foreach (ShopService.SellEntry entry in service.GetSellList())
                     {
                         ShopItemView view = CreateView();
-                        view.Bind(entry.Item, entry.Grade, entry.Count);
+                        view.Bind(entry.Item, entry.Variant, entry.Count);
                         hasItems = true;
                     }
                 }
@@ -163,11 +163,11 @@ namespace BlackSmith.UI
             if (sprite != null) image.sprite = sprite;
         }
 
-        private void OnItemClicked(ItemData item, ItemGrade grade)
+        private void OnItemClicked(ItemData item, ItemVariant variant)
         {
             if (buyPopup == null) return;
             if (mode == Mode.Buy) buyPopup.OpenBuy(service, item);
-            else buyPopup.OpenSell(service, item, grade);
+            else buyPopup.OpenSell(service, item, variant);
         }
 
         private void OnMoneyChanged(int money)

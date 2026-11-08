@@ -30,8 +30,7 @@ namespace BlackSmith.EditorTools
         private ItemGrade defaultGrade = ItemGrade.Common;
         private int sellPrice;
         private int buyPrice;
-        private float[] multipliers = NewMultipliers();
-        private bool showMultipliers;
+        private bool showGradePrices;
 
         /// <summary>null이면 새로 만들기 모드, 아니면 이 아이템을 수정 중.</summary>
         private ItemData editing;
@@ -103,20 +102,25 @@ namespace BlackSmith.EditorTools
             EditorGUILayout.Space();
             if (type == ItemType.Mineral)
             {
-                buyPrice = Mathf.Max(0, EditorGUILayout.IntField("구매가", buyPrice));
-            }
-            sellPrice = Mathf.Max(0, EditorGUILayout.IntField("판매가", sellPrice));
+                buyPrice = Mathf.Max(0, EditorGUILayout.IntField(new GUIContent("구매가 (Common 기준)", "Common 등급 가격. 다른 등급은 배율(1.2 / 1.5 / 1.8 / 2)을 곱해 반올림한 값이 자동으로 정해진다."), buyPrice));
+                sellPrice = Mathf.Max(0, EditorGUILayout.IntField(new GUIContent("판매가 (Common 기준)", "Common 등급 가격. 다른 등급은 자동 계산된다."), sellPrice));
 
-            showMultipliers = EditorGUILayout.Foldout(showMultipliers, "등급별 판매 배율 (임시값 1)", true);
-            if (showMultipliers)
-            {
-                EditorGUI.indentLevel++;
-                if (multipliers == null || multipliers.Length != ItemGradeInfo.Count) multipliers = NewMultipliers();
-                for (int i = 0; i < multipliers.Length; i++)
+                showGradePrices = EditorGUILayout.Foldout(showGradePrices, "등급별 가격 미리보기 (자동 계산)", true);
+                if (showGradePrices)
                 {
-                    multipliers[i] = Mathf.Max(0f, EditorGUILayout.FloatField(((ItemGrade)i).ToString(), multipliers[i]));
+                    EditorGUI.indentLevel++;
+                    for (int i = 0; i < ItemGradeInfo.Count; i++)
+                    {
+                        ItemGrade grade = (ItemGrade)i;
+                        EditorGUILayout.LabelField($"{grade}  (x{ItemGradeInfo.PriceMultiplier(grade)})",
+                            $"구매 {ItemGradeInfo.ScalePrice(buyPrice, grade):N0}  /  판매 {ItemGradeInfo.ScalePrice(sellPrice, grade):N0}");
+                    }
+                    EditorGUI.indentLevel--;
                 }
-                EditorGUI.indentLevel--;
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("제작품 판매가는 입력하지 않습니다. 제작할 때 (레시피에 적힌 재료 구매가 합) x 품질 배율로 정해집니다. 등급은 위 '기본 등급' 하나뿐입니다.", MessageType.Info);
             }
 
             EditorGUILayout.Space();
@@ -144,7 +148,7 @@ namespace BlackSmith.EditorTools
         private void OnCreateClicked()
         {
             string error;
-            ItemData created = CreateItem(type, id, displayName, icon, description, maxStack, defaultGrade, sellPrice, buyPrice, multipliers, out error);
+            ItemData created = CreateItem(type, id, displayName, icon, description, maxStack, defaultGrade, sellPrice, buyPrice, out error);
             if (created == null)
             {
                 SetMessage(error, MessageType.Error);
@@ -162,7 +166,7 @@ namespace BlackSmith.EditorTools
         private void OnSaveClicked()
         {
             string error;
-            if (UpdateItem(editing, id, displayName, icon, description, maxStack, defaultGrade, sellPrice, buyPrice, multipliers, out error))
+            if (UpdateItem(editing, id, displayName, icon, description, maxStack, defaultGrade, sellPrice, buyPrice, out error))
             {
                 SetMessage("저장 완료: " + AssetDatabase.GetAssetPath(editing), MessageType.Info);
             }
@@ -210,13 +214,6 @@ namespace BlackSmith.EditorTools
 
             SerializedProperty buy = so.FindProperty("buyPrice");
             buyPrice = buy != null ? buy.intValue : 0;
-
-            multipliers = NewMultipliers();
-            SerializedProperty multiplierProperty = so.FindProperty("sellPriceMultipliers");
-            for (int i = 0; i < multipliers.Length && i < multiplierProperty.arraySize; i++)
-            {
-                multipliers[i] = multiplierProperty.GetArrayElementAtIndex(i).floatValue;
-            }
         }
 
         // ───────────────────────── 왼쪽: 목록 ─────────────────────────
@@ -308,19 +305,11 @@ namespace BlackSmith.EditorTools
             defaultGrade = ItemGrade.Common;
             sellPrice = 0;
             buyPrice = 0;
-            multipliers = NewMultipliers();
         }
 
         private static int DefaultMaxStack(ItemType type)
         {
             return type == ItemType.Mineral ? 99 : 1;
-        }
-
-        private static float[] NewMultipliers()
-        {
-            float[] values = new float[ItemGradeInfo.Count];
-            for (int i = 0; i < values.Length; i++) values[i] = 1f;
-            return values;
         }
 
         /// <summary>프로젝트 안의 모든 ItemData 에셋.</summary>
@@ -368,7 +357,7 @@ namespace BlackSmith.EditorTools
         /// 창의 만들기 버튼과 테스트 코드가 같이 쓴다.
         /// </summary>
         public static ItemData CreateItem(ItemType type, string id, string displayName, Sprite icon, string description,
-            int maxStack, ItemGrade defaultGrade, int sellPrice, int buyPrice, float[] multipliers, out string error)
+            int maxStack, ItemGrade defaultGrade, int sellPrice, int buyPrice, out string error)
         {
             if (!Validate(ref id, ref displayName, maxStack, sellPrice, buyPrice, null, out error)) return null;
 
@@ -381,14 +370,14 @@ namespace BlackSmith.EditorTools
             string path = AssetDatabase.GenerateUniqueAssetPath(folder + "/" + id + ".asset");
             AssetDatabase.CreateAsset(asset, path);
 
-            ApplyFields(asset, id, displayName, icon, description, maxStack, defaultGrade, sellPrice, buyPrice, multipliers);
+            ApplyFields(asset, id, displayName, icon, description, maxStack, defaultGrade, sellPrice, buyPrice);
             error = null;
             return asset;
         }
 
         /// <summary>기존 아이템 에셋을 수정한다. 종류(광물/제작품)는 바꿀 수 없다. 실패하면 false와 이유를 반환한다.</summary>
         public static bool UpdateItem(ItemData item, string id, string displayName, Sprite icon, string description,
-            int maxStack, ItemGrade defaultGrade, int sellPrice, int buyPrice, float[] multipliers, out string error)
+            int maxStack, ItemGrade defaultGrade, int sellPrice, int buyPrice, out string error)
         {
             if (item == null) { error = "수정할 아이템이 없습니다."; return false; }
             if (!Validate(ref id, ref displayName, maxStack, sellPrice, buyPrice, item, out error)) return false;
@@ -405,13 +394,13 @@ namespace BlackSmith.EditorTools
                 }
             }
 
-            ApplyFields(item, id, displayName, icon, description, maxStack, defaultGrade, sellPrice, buyPrice, multipliers);
+            ApplyFields(item, id, displayName, icon, description, maxStack, defaultGrade, sellPrice, buyPrice);
             error = null;
             return true;
         }
 
         private static void ApplyFields(ItemData asset, string id, string displayName, Sprite icon, string description,
-            int maxStack, ItemGrade defaultGrade, int sellPrice, int buyPrice, float[] multipliers)
+            int maxStack, ItemGrade defaultGrade, int sellPrice, int buyPrice)
         {
             SerializedObject so = new SerializedObject(asset);
             so.FindProperty("id").stringValue = id;
@@ -421,14 +410,6 @@ namespace BlackSmith.EditorTools
             so.FindProperty("maxStack").intValue = maxStack;
             so.FindProperty("defaultGrade").enumValueIndex = (int)defaultGrade;
             so.FindProperty("sellPrice").intValue = sellPrice;
-
-            SerializedProperty multiplierProperty = so.FindProperty("sellPriceMultipliers");
-            multiplierProperty.arraySize = ItemGradeInfo.Count;
-            for (int i = 0; i < ItemGradeInfo.Count; i++)
-            {
-                float value = (multipliers != null && i < multipliers.Length) ? multipliers[i] : 1f;
-                multiplierProperty.GetArrayElementAtIndex(i).floatValue = value;
-            }
 
             SerializedProperty buy = so.FindProperty("buyPrice");
             if (asset.Type == ItemType.Mineral && buy != null)

@@ -68,17 +68,19 @@ namespace BlackSmith.Shop
 
         // ---- 판매 ----
 
-        /// <summary>판매 목록의 한 항목: 보유 중인 (아이템, 등급, 수량).</summary>
+        /// <summary>판매 목록의 한 항목: 보유 중인 (아이템, 개별 상태, 수량).</summary>
         public readonly struct SellEntry
         {
             public readonly ItemData Item;
-            public readonly ItemGrade Grade;
+            public readonly ItemVariant Variant;
             public readonly int Count;
 
-            public SellEntry(ItemData item, ItemGrade grade, int count)
+            public ItemGrade Grade => Variant.Grade;
+
+            public SellEntry(ItemData item, ItemVariant variant, int count)
             {
                 Item = item;
-                Grade = grade;
+                Variant = variant;
                 Count = count;
             }
         }
@@ -92,42 +94,52 @@ namespace BlackSmith.Shop
                 if (entry.Count <= 0) continue;
                 if (!ItemDatabase.TryGet(entry.ItemId, out ItemData item)) continue;
                 if (!item.CanSell) continue;
-                list.Add(new SellEntry(item, entry.Grade, entry.Count));
+                list.Add(new SellEntry(item, entry.Variant, entry.Count));
             }
             list.Sort((a, b) =>
             {
                 int byId = string.CompareOrdinal(a.Item.Id, b.Item.Id);
-                return byId != 0 ? byId : a.Grade.CompareTo(b.Grade);
+                if (byId != 0) return byId;
+                int byGrade = a.Variant.Grade.CompareTo(b.Variant.Grade);
+                if (byGrade != 0) return byGrade;
+                int byQuality = a.Variant.Quality.CompareTo(b.Variant.Quality);
+                return byQuality != 0 ? byQuality : a.Variant.IngredientValue.CompareTo(b.Variant.IngredientValue);
             });
             return list;
         }
 
-        public int GetOwnedCount(ItemData item, ItemGrade grade)
+        public int GetOwnedCount(ItemData item, ItemVariant variant)
         {
-            return item == null ? 0 : player.GetCount(item.Id, grade);
+            return item == null ? 0 : player.GetCount(item.Id, variant);
+        }
+
+        /// <summary>판매 단가. 광물은 Common 기준 판매가 x 등급 배율, 제작품은 재료 합산 가격 x 품질 배율.</summary>
+        public int GetSellUnitPrice(ItemData item, ItemVariant variant)
+        {
+            return item == null ? 0 : item.GetSellUnitPrice(variant);
         }
 
         /// <summary>총 판매 금액. int 범위를 넘으면 int.MaxValue로 제한한다.</summary>
-        public int GetSellTotalPrice(ItemData item, ItemGrade grade, int quantity)
+        public int GetSellTotalPrice(ItemData item, ItemVariant variant, int quantity)
         {
             if (item == null || quantity <= 0) return 0;
-            long total = (long)item.GetSellPrice(grade) * quantity;
+            long total = (long)item.GetSellUnitPrice(variant) * quantity;
             return (int)Math.Min(total, int.MaxValue);
         }
 
-        public bool CanSell(ItemData item, ItemGrade grade, int quantity)
+        public bool CanSell(ItemData item, ItemVariant variant, int quantity)
         {
             if (item == null || !item.CanSell) return false;
-            return player.HasItem(item.Id, grade, quantity);
+            return player.HasItem(item.Id, variant, quantity);
         }
 
         /// <summary>판매한다. 보유 수량이 부족하면 아무 변화 없이 false.</summary>
-        public bool TrySell(ItemData item, ItemGrade grade, int quantity)
+        public bool TrySell(ItemData item, ItemVariant variant, int quantity)
         {
-            if (!CanSell(item, grade, quantity)) return false;
+            if (!CanSell(item, variant, quantity)) return false;
 
-            int total = GetSellTotalPrice(item, grade, quantity);
-            if (!player.TryRemoveItem(item.Id, quantity, grade)) return false;
+            int total = GetSellTotalPrice(item, variant, quantity);
+            if (!player.TryRemoveItem(item.Id, quantity, variant)) return false;
 
             player.AddMoney(total);
             return true;

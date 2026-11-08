@@ -33,7 +33,7 @@ namespace BlackSmith.UI
 
         private ShopService service;
         private ItemData item;
-        private ItemGrade grade;
+        private ItemVariant variant;
         private PopupMode mode = PopupMode.Buy;
         private int quantity = ShopService.MinPurchaseQuantity;
 
@@ -58,20 +58,20 @@ namespace BlackSmith.UI
 
         public void OpenBuy(ShopService shopService, ItemData target)
         {
-            Open(PopupMode.Buy, shopService, target, target.DefaultGrade);
+            Open(PopupMode.Buy, shopService, target, new ItemVariant(target.DefaultGrade));
         }
 
-        public void OpenSell(ShopService shopService, ItemData target, ItemGrade targetGrade)
+        public void OpenSell(ShopService shopService, ItemData target, ItemVariant targetVariant)
         {
-            Open(PopupMode.Sell, shopService, target, targetGrade);
+            Open(PopupMode.Sell, shopService, target, targetVariant);
         }
 
-        private void Open(PopupMode newMode, ShopService shopService, ItemData target, ItemGrade targetGrade)
+        private void Open(PopupMode newMode, ShopService shopService, ItemData target, ItemVariant targetVariant)
         {
             mode = newMode;
             service = shopService;
             item = target;
-            grade = targetGrade;
+            variant = targetVariant;
             quantity = ShopService.MinPurchaseQuantity;
 
             if (headerLabel != null) headerLabel.text = mode == PopupMode.Buy ? "구매" : "판매";
@@ -111,21 +111,21 @@ namespace BlackSmith.UI
         {
             return mode == PopupMode.Buy
                 ? ShopService.MaxPurchaseQuantity
-                : service.GetOwnedCount(item, grade);
+                : service.GetOwnedCount(item, variant);
         }
 
         private int GetTotalPrice()
         {
             return mode == PopupMode.Buy
                 ? service.GetTotalPrice(item, quantity)
-                : service.GetSellTotalPrice(item, grade, quantity);
+                : service.GetSellTotalPrice(item, variant, quantity);
         }
 
         private bool CanConfirm()
         {
             return mode == PopupMode.Buy
                 ? service.CanBuy(item, quantity)
-                : service.CanSell(item, grade, quantity);
+                : service.CanSell(item, variant, quantity);
         }
 
         private void OnDecrease() => SetQuantity(quantity - 1);
@@ -146,7 +146,7 @@ namespace BlackSmith.UI
 
             bool done = mode == PopupMode.Buy
                 ? service.TryBuy(item, quantity)
-                : service.TrySell(item, grade, quantity);
+                : service.TrySell(item, variant, quantity);
             if (!done) return;
 
             // 구매/판매가 이루어졌으면 팝업을 닫는다. (실패하면 위에서 이미 반환해 열려 있다)

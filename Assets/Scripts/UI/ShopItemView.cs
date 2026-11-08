@@ -7,7 +7,7 @@ namespace BlackSmith.UI
 {
     /// <summary>
     /// 상점 목록의 한 줄. 아이콘, 이름, 가격을 보여주고 누르면 Clicked를 알린다.
-    /// 구매 목록은 Bind(item), 판매 목록은 Bind(item, grade, count)로 채운다.
+    /// 구매 목록은 Bind(item), 판매 목록은 Bind(item, variant, count)로 채운다.
     /// </summary>
     public class ShopItemView : MonoBehaviour
     {
@@ -17,9 +17,9 @@ namespace BlackSmith.UI
         [SerializeField] private Text priceLabel;
 
         private ItemData item;
-        private ItemGrade grade;
+        private ItemVariant variant;
 
-        public event Action<ItemData, ItemGrade> Clicked;
+        public event Action<ItemData, ItemVariant> Clicked;
 
         private void Awake()
         {
@@ -35,19 +35,19 @@ namespace BlackSmith.UI
         public void Bind(ItemData data)
         {
             item = data;
-            grade = data.DefaultGrade;
+            variant = new ItemVariant(data.DefaultGrade);
             if (nameLabel != null) nameLabel.text = data.DisplayName;
             if (priceLabel != null) priceLabel.text = $"{data.BuyPrice:N0} G";
             SetIcon(data);
         }
 
-        /// <summary>판매 목록용: 이름(등급, 보유 수량)과 판매 단가.</summary>
-        public void Bind(ItemData data, ItemGrade itemGrade, int count)
+        /// <summary>판매 목록용: 이름(등급, 품질, 보유 수량)과 판매 단가.</summary>
+        public void Bind(ItemData data, ItemVariant itemVariant, int count)
         {
             item = data;
-            grade = itemGrade;
-            if (nameLabel != null) nameLabel.text = $"{data.DisplayName} ({itemGrade}) x{count}";
-            if (priceLabel != null) priceLabel.text = $"{data.GetSellPrice(itemGrade):N0} G";
+            variant = itemVariant;
+            if (nameLabel != null) nameLabel.text = $"{data.DisplayName} ({itemVariant.Describe()}) x{count}";
+            if (priceLabel != null) priceLabel.text = $"{data.GetSellUnitPrice(itemVariant):N0} G";
             SetIcon(data);
         }
 
@@ -60,7 +60,7 @@ namespace BlackSmith.UI
 
         private void OnClick()
         {
-            if (item != null) Clicked?.Invoke(item, grade);
+            if (item != null) Clicked?.Invoke(item, variant);
         }
     }
 }

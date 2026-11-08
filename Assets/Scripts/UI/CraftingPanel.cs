@@ -30,8 +30,8 @@ namespace BlackSmith.UI
         private readonly List<CraftingIngredientView> views = new List<CraftingIngredientView>();
         private CraftingSession session;
 
-        /// <summary>제작 시작이 확정될 때 호출 (레시피, 난이도). 이후 진행은 CraftingController가 맡는다.</summary>
-        public event Action<CraftRecipeData, int> StartRequested;
+        /// <summary>제작 시작이 확정될 때 호출 (레시피, 난이도, 재료 합산 가격 등). 이후 진행은 CraftingController가 맡는다.</summary>
+        public event Action<CraftRequest> StartRequested;
 
         public bool IsOpen => gameObject.activeSelf;
 
@@ -129,10 +129,10 @@ namespace BlackSmith.UI
         private void OnStart()
         {
             if (session == null || !session.CanStart) return;
-            if (!session.TryStart(out CraftRecipeData recipe, out int difficulty)) return;
+            if (!session.TryStart(out CraftRequest request)) return;
 
             Close();
-            StartRequested?.Invoke(recipe, difficulty);
+            StartRequested?.Invoke(request);
         }
 
         private void OnSessionChanged()

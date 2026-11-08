@@ -1,12 +1,9 @@
-using System.Collections.Generic;
-using BlackSmith.Items;
-
 namespace BlackSmith.Crafting
 {
     /// <summary>
-    /// 미니게임 난이도(1~10). 재료 등급 점수의 평균(사용한 유닛의 점수 합 ÷ 유닛 수, 수량 무관)이
-    /// 임계값을 넘을 때마다 한 단계씩 오른다.
-    /// 등급별 점수와 임계값이 아직 미정이라 지금은 항상 최소 난이도를 돌려주는 자리표시자다.
+    /// 미니게임 난이도(1~10). 기본값은 레시피에 정의하고, 상위 등급 재료마다 0.1단계씩 더한 뒤 소수점은 올린다.
+    /// 4개 미니게임에 같은 값을 쓰고 플레이어에게는 표시하지 않는다.
+    /// 단계별 미니게임 수치(속도, 크기 등)는 아직 미정이라 각 미니게임이 Progress로 임시 보간한다.
     /// </summary>
     public static class CraftDifficulty
     {
@@ -19,11 +16,15 @@ namespace BlackSmith.Crafting
             return UnityEngine.Mathf.Clamp01((difficulty - MinLevel) / (float)(MaxLevel - MinLevel));
         }
 
-        /// <param name="unitGrades">사용한 재료를 유닛 하나당 등급 하나로 펼친 목록.</param>
-        public static int Calculate(IReadOnlyList<ItemGrade> unitGrades)
+        /// <param name="baseDifficulty">레시피에 정의된 기본 난이도.</param>
+        /// <param name="bonusTenths">상위 등급 재료 가중을 0.1단계 단위로 센 값 (3이면 +0.3단계).</param>
+        public static int Calculate(int baseDifficulty, int bonusTenths)
         {
-            // TODO: 등급별 점수와 임계값이 정해지면 평균 점수 → 난이도 계산을 구현한다. (미정)
-            return MinLevel;
+            // 올림은 정수 연산으로 한다. (0.1 x 10 같은 값이 부동소수점 오차로 한 단계 더 올라가는 것을 피한다)
+            int raised = bonusTenths <= 0 ? 0 : (bonusTenths + 9) / 10;
+            int level = baseDifficulty + raised;
+            if (level < MinLevel) return MinLevel;
+            return level > MaxLevel ? MaxLevel : level;
         }
     }
 }

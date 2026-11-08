@@ -23,20 +23,20 @@ namespace BlackSmith.Crafting
 
     /// <summary>
     /// 제작 한 번의 결과. 정적 데이터(레시피)와 분리된 런타임 데이터다.
-    /// 완성도 → 등급 계산과 인벤토리 지급은 미정이라 아직 하지 않는다.
+    /// 단계 점수 → 품질 계산은 CraftScoring이, 인벤토리 지급은 CraftingController가 맡는다.
     /// </summary>
     public class CraftResult
     {
         private readonly List<CraftStageResult> stages = new List<CraftStageResult>();
 
-        public CraftRecipeData Recipe { get; }
-        public int Difficulty { get; }
+        public CraftRequest Request { get; }
+        public CraftRecipeData Recipe => Request.Recipe;
+        public int Difficulty => Request.Difficulty;
         public IReadOnlyList<CraftStageResult> Stages => stages;
 
-        public CraftResult(CraftRecipeData recipe, int difficulty)
+        public CraftResult(CraftRequest request)
         {
-            Recipe = recipe;
-            Difficulty = difficulty;
+            Request = request;
         }
 
         public void AddStage(CraftStageResult stage)

@@ -87,43 +87,52 @@ namespace BlackSmith.Crafting
             Refresh();
         }
 
-        /// <summary>제작을 시작할 수 있으면 레시피와 난이도를 돌려주고 true.</summary>
-        public bool TryStart(out CraftRecipeData recipe, out int difficulty)
+        /// <summary>
+        /// 제작을 시작할 수 있으면 재료를 모두 소모하고 제작 요청(레시피, 난이도, 어드밴티지, 재료 합산 가격)을 돌려준다.
+        /// 투입량이 레시피 요구량보다 많아도 투입한 재료는 전부 소모된다.
+        /// </summary>
+        public bool TryStart(out CraftRequest request)
         {
-            recipe = Recipe;
-            difficulty = CraftDifficulty.MinLevel;
+            request = null;
+            CraftRecipeData recipe = Recipe;
             if (recipe == null) return false;
 
-            List<ItemGrade> unitGrades = new List<ItemGrade>();
             foreach (Slot slot in slots)
             {
                 if (player.GetCount(slot.ItemId, slot.Grade) < slot.Count) return false;
-                for (int i = 0; i < slot.Count; i++) unitGrades.Add(slot.Grade);
             }
 
-            difficulty = CraftDifficulty.Calculate(unitGrades);
+            // 소모하면 소지품이 바뀌므로 계산에 쓸 입력은 소모 전에 스냅샷으로 만든다.
+            List<CraftInput> inputs = GetInputs();
+            request = CraftScoring.CreateRequest(recipe, inputs);
             Commit();
             return true;
         }
 
-        /// <summary>
-        /// 재료를 실제로 소모하는 자리. 소모 시점(시작 시 / 성공 시)과 실패 시 소모 여부가 미정이라
-        /// 지금은 소지품에서 빼지 않는다. 정해지면 이 메서드에서만 처리한다.
-        /// </summary>
+        /// <summary>투입한 재료를 제작 규칙 계산용 스냅샷 목록으로 돌려준다.</summary>
+        public List<CraftInput> GetInputs()
+        {
+            List<CraftInput> inputs = new List<CraftInput>(slots.Count);
+            foreach (Slot slot in slots)
+            {
+                inputs.Add(new CraftInput(slot.ItemId, slot.Grade, slot.Count));
+            }
+            return inputs;
+        }
+
+        /// <summary>투입한 재료를 소지품에서 모두 뺀다. 제작을 시작하는 순간 소모된다.</summary>
         private void Commit()
         {
-            // TODO: 재료 소모 규칙이 정해지면 player.TryRemoveItem으로 slots를 차감한다. (미정, CoreLoop §6)
+            foreach (Slot slot in slots)
+            {
+                player.TryRemoveItem(slot.ItemId, slot.Count, slot.Grade);
+            }
+            slots.Clear();
         }
 
         private void Refresh()
         {
-            Dictionary<string, int> counts = new Dictionary<string, int>();
-            foreach (Slot slot in slots)
-            {
-                counts.TryGetValue(slot.ItemId, out int current);
-                counts[slot.ItemId] = current + slot.Count;
-            }
-            Recipe = RecipeMatcher.Match(counts);
+            Recipe = RecipeMatcher.Match(GetInputs());
             Changed?.Invoke();
         }
 

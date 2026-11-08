@@ -32,6 +32,7 @@ namespace BlackSmith.EditorTools
         private CraftedItemData result;
         private List<IngredientInput> ingredients = new List<IngredientInput>();
         private List<CraftStage> stages = DefaultStages();
+        private int baseDifficulty = 1;
 
         /// <summary>null이면 새로 만들기 모드, 아니면 이 레시피를 수정 중.</summary>
         private CraftRecipeData editing;
@@ -82,6 +83,14 @@ namespace BlackSmith.EditorTools
             id = EditorGUILayout.TextField(new GUIContent("ID", "영소문자, 숫자, 밑줄만 사용. 예: iron_sword"), id);
             result = (CraftedItemData)EditorGUILayout.ObjectField(
                 new GUIContent("결과물", "이 레시피로 만들어지는 제작품 (Item Creator에서 만든 제작품)"), result, typeof(CraftedItemData), false);
+
+            if (result != null)
+            {
+                EditorGUILayout.LabelField("결과물 등급", result.DefaultGrade.ToString());
+            }
+            baseDifficulty = EditorGUILayout.IntSlider(
+                new GUIContent("기본 난이도", "미니게임 기본 난이도(1~10). 레시피 등급보다 높은 재료를 쓰면 가중이 더해진다."),
+                baseDifficulty, CraftDifficulty.MinLevel, CraftDifficulty.MaxLevel);
 
             EditorGUILayout.Space();
             DrawIngredients();
@@ -171,7 +180,7 @@ namespace BlackSmith.EditorTools
         private void OnCreateClicked()
         {
             string error;
-            CraftRecipeData created = CreateRecipe(id, result, ingredients, stages, out error);
+            CraftRecipeData created = CreateRecipe(id, result, ingredients, stages, baseDifficulty, out error);
             if (created == null)
             {
                 SetMessage(error, MessageType.Error);
@@ -189,7 +198,7 @@ namespace BlackSmith.EditorTools
         private void OnSaveClicked()
         {
             string error;
-            if (UpdateRecipe(editing, id, result, ingredients, stages, out error))
+            if (UpdateRecipe(editing, id, result, ingredients, stages, baseDifficulty, out error))
             {
                 SetMessage("저장 완료: " + AssetDatabase.GetAssetPath(editing), MessageType.Info);
             }
@@ -247,6 +256,7 @@ namespace BlackSmith.EditorTools
             }
 
             stages = new List<CraftStage>(recipe.Stages);
+            baseDifficulty = recipe.BaseDifficulty;
         }
 
         // ───────────────────────── 왼쪽: 목록 ─────────────────────────
@@ -348,6 +358,7 @@ namespace BlackSmith.EditorTools
             result = null;
             ingredients = new List<IngredientInput>();
             stages = DefaultStages();
+            baseDifficulty = CraftDifficulty.MinLevel;
         }
 
         /// <summary>GameDesign.md의 확정 순서: 가열 → 단조 → 열처리 → 연마.</summary>
@@ -426,7 +437,7 @@ namespace BlackSmith.EditorTools
 
         /// <summary>레시피 에셋을 검증하고 만든다. 실패하면 null을 반환하고 error에 이유를 담는다.</summary>
         public static CraftRecipeData CreateRecipe(string id, CraftedItemData result, IList<IngredientInput> ingredients,
-            IList<CraftStage> stages, out string error)
+            IList<CraftStage> stages, int baseDifficulty, out string error)
         {
             if (!Validate(ref id, result, ingredients, stages, null, out error)) return null;
 
@@ -436,14 +447,14 @@ namespace BlackSmith.EditorTools
             string path = AssetDatabase.GenerateUniqueAssetPath(RootFolder + "/" + id + ".asset");
             AssetDatabase.CreateAsset(asset, path);
 
-            ApplyFields(asset, id, result, ingredients, stages);
+            ApplyFields(asset, id, result, ingredients, stages, baseDifficulty);
             error = null;
             return asset;
         }
 
         /// <summary>기존 레시피 에셋을 수정한다. 실패하면 false와 이유를 반환한다.</summary>
         public static bool UpdateRecipe(CraftRecipeData recipe, string id, CraftedItemData result,
-            IList<IngredientInput> ingredients, IList<CraftStage> stages, out string error)
+            IList<IngredientInput> ingredients, IList<CraftStage> stages, int baseDifficulty, out string error)
         {
             if (recipe == null) { error = "수정할 레시피가 없습니다."; return false; }
             if (!Validate(ref id, result, ingredients, stages, recipe, out error)) return false;
@@ -460,16 +471,17 @@ namespace BlackSmith.EditorTools
                 }
             }
 
-            ApplyFields(recipe, id, result, ingredients, stages);
+            ApplyFields(recipe, id, result, ingredients, stages, baseDifficulty);
             error = null;
             return true;
         }
 
         private static void ApplyFields(CraftRecipeData asset, string id, CraftedItemData result,
-            IList<IngredientInput> ingredients, IList<CraftStage> stages)
+            IList<IngredientInput> ingredients, IList<CraftStage> stages, int baseDifficulty)
         {
             SerializedObject so = new SerializedObject(asset);
             so.FindProperty("id").stringValue = id;
+            so.FindProperty("baseDifficulty").intValue = Mathf.Clamp(baseDifficulty, CraftDifficulty.MinLevel, CraftDifficulty.MaxLevel);
             so.FindProperty("result").objectReferenceValue = result;
 
             SerializedProperty ingredientProperty = so.FindProperty("ingredients");

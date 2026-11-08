@@ -1,6 +1,8 @@
 using System;
 using System.Text;
 using UnityEngine;
+using BlackSmith.Data;
+using BlackSmith.Items;
 using BlackSmith.UI;
 
 namespace BlackSmith.Crafting
@@ -10,7 +12,7 @@ namespace BlackSmith.Crafting
     /// 제작 중에는 모루 클릭을 무시한다.
     /// 단계는 레시피의 stages 순서대로 진행하며, 뷰가 연결되지 않았거나 아직 구현되지 않은 단계는
     /// 건너뛰고 결과에 Skipped로 기록한다.
-    /// 마지막에 CraftResult를 알릴 뿐, 완성도 → 등급 계산과 결과 지급은 미정이라 하지 않는다.
+    /// 마지막에 단계 점수 → 품질을 계산해 완성품을 소지품에 지급하고 CraftResult를 알린다.
     /// </summary>
     public class CraftingController : MonoBehaviour
     {
@@ -73,15 +75,15 @@ namespace BlackSmith.Crafting
             craftingPanel.Open();
         }
 
-        private void OnStartRequested(CraftRecipeData startedRecipe, int startedDifficulty)
+        private void OnStartRequested(CraftRequest request)
         {
             if (IsCrafting) return;
 
             IsCrafting = true;
-            recipe = startedRecipe;
-            difficulty = startedDifficulty;
+            recipe = request.Recipe;
+            difficulty = request.Difficulty;
             stageIndex = -1;
-            result = new CraftResult(recipe, difficulty);
+            result = new CraftResult(request);
             AdvanceStage();
         }
 
@@ -178,9 +180,26 @@ namespace BlackSmith.Crafting
             recipe = null;
             result = null;
 
-            // TODO: 완성도 → 등급 계산과 완성품 지급은 미정이라 하지 않는다.
-            Debug.Log($"[Crafting] 제작 종료: '{finished.Recipe.Id}' / 난이도 {finished.Difficulty} / {Describe(finished)}");
+            GrantResult(finished);
             CraftFinished?.Invoke(finished);
+        }
+
+        /// <summary>
+        /// 완성품을 소지품에 지급한다. 등급은 레시피 결과물의 등급이고, 품질은 단계 점수 합계(+어드밴티지)로 정한다.
+        /// 재료 합산 가격은 제작을 시작할 때 계산해 둔 값을 쓴다 (재료는 이미 소모됐기 때문).
+        /// </summary>
+        private static void GrantResult(CraftResult finished)
+        {
+            CraftRequest request = finished.Request;
+            CraftedItemData product = finished.Recipe.Result;
+            decimal score = CraftScoring.CalculateScore(finished.Stages, request.AdvantageTenths);
+            ItemQuality quality = ItemQualityInfo.FromScore(score);
+            ItemVariant variant = new ItemVariant(product.DefaultGrade, quality, request.IngredientValue);
+
+            bool granted = GameSession.Current.AddItem(product.Id, 1, variant);
+            Debug.Log($"[Crafting] 제작 종료: '{finished.Recipe.Id}' / 난이도 {finished.Difficulty} / {Describe(finished)}"
+                + $" / 점수 {score:0.0} → {product.DefaultGrade} {ItemQualityInfo.DisplayName(quality)}"
+                + $" / 재료 합산 {request.IngredientValue}G / 지급 {(granted ? "완료" : "실패")}");
         }
 
         private void AbortCrafting()

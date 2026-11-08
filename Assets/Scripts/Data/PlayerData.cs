@@ -8,7 +8,7 @@ namespace BlackSmith.Data
     /// <summary>
     /// 플레이어 데이터: 보유 금액과 소지 아이템.
     /// 순수 C# 직렬화 클래스라 JsonUtility로 그대로 저장할 수 있다. (저장/불러오기는 아직 없음)
-    /// 소지 아이템은 (아이템 ID, 등급)별 수량 목록이며 칸 수 제한과 maxStack은 적용하지 않는다.
+    /// 소지 아이템은 (아이템 ID, 등급, 품질, 재료 합산 가격)별 수량 목록이며 칸 수 제한과 maxStack은 적용하지 않는다.
     /// </summary>
     [Serializable]
     public class PlayerData
@@ -51,19 +51,28 @@ namespace BlackSmith.Data
 
         // ---- 아이템 ----
 
-        public int GetCount(string itemId, ItemGrade grade)
+        // 등급만 받는 메서드는 품질이 없는 아이템(광물)용이다. 완성품은 ItemVariant를 받는 메서드를 쓴다.
+
+        public int GetCount(string itemId, ItemGrade grade) => GetCount(itemId, new ItemVariant(grade));
+
+        public int GetCount(string itemId, ItemVariant variant)
         {
-            InventoryEntry entry = Find(itemId, grade);
+            InventoryEntry entry = Find(itemId, variant);
             return entry != null ? entry.Count : 0;
         }
 
-        public bool HasItem(string itemId, ItemGrade grade, int count = 1)
+        public bool HasItem(string itemId, ItemGrade grade, int count = 1) => HasItem(itemId, new ItemVariant(grade), count);
+
+        public bool HasItem(string itemId, ItemVariant variant, int count = 1)
         {
-            return count > 0 && GetCount(itemId, grade) >= count;
+            return count > 0 && GetCount(itemId, variant) >= count;
         }
 
         /// <summary>아이템을 추가한다. 존재하지 않는 ID거나 수량이 0 이하이면 false.</summary>
-        public bool AddItem(string itemId, int count, ItemGrade grade)
+        public bool AddItem(string itemId, int count, ItemGrade grade) => AddItem(itemId, count, new ItemVariant(grade));
+
+        /// <summary>개별 상태(등급, 품질, 재료 합산 가격)가 같은 항목에 합쳐서 추가한다.</summary>
+        public bool AddItem(string itemId, int count, ItemVariant variant)
         {
             if (count <= 0) return false;
             if (!ItemDatabase.TryGet(itemId, out _))
@@ -72,14 +81,14 @@ namespace BlackSmith.Data
                 return false;
             }
 
-            InventoryEntry entry = Find(itemId, grade);
+            InventoryEntry entry = Find(itemId, variant);
             if (entry != null)
             {
                 entry.SetCount((int)Math.Min((long)entry.Count + count, int.MaxValue));
             }
             else
             {
-                items.Add(new InventoryEntry(itemId, grade, count));
+                items.Add(new InventoryEntry(itemId, variant, count));
             }
 
             OnInventoryChanged?.Invoke();
@@ -87,10 +96,12 @@ namespace BlackSmith.Data
         }
 
         /// <summary>아이템을 제거한다. 수량이 부족하면 아무것도 하지 않고 false. 0이 되면 항목을 삭제한다.</summary>
-        public bool TryRemoveItem(string itemId, int count, ItemGrade grade)
+        public bool TryRemoveItem(string itemId, int count, ItemGrade grade) => TryRemoveItem(itemId, count, new ItemVariant(grade));
+
+        public bool TryRemoveItem(string itemId, int count, ItemVariant variant)
         {
             if (count <= 0) return false;
-            InventoryEntry entry = Find(itemId, grade);
+            InventoryEntry entry = Find(itemId, variant);
             if (entry == null || entry.Count < count) return false;
 
             if (entry.Count == count) items.Remove(entry);
@@ -100,11 +111,11 @@ namespace BlackSmith.Data
             return true;
         }
 
-        private InventoryEntry Find(string itemId, ItemGrade grade)
+        private InventoryEntry Find(string itemId, ItemVariant variant)
         {
             foreach (InventoryEntry entry in items)
             {
-                if (entry.ItemId == itemId && entry.Grade == grade) return entry;
+                if (entry.ItemId == itemId && entry.Variant.Equals(variant)) return entry;
             }
             return null;
         }
