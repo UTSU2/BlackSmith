@@ -55,18 +55,21 @@ BlackSmith는 **제작 중심**의 게임입니다. 플레이어는 대장간에
   - 조명과 연출: 화로 위치의 주황색 Point Light 2D, 불꽃 파티클
   - 메뉴 버튼 3개 (우측 하단, Fantasy Wooden GUI 에셋 사용)
     - 새 게임: `Game` 씬으로 이동
-    - 로드 게임: 버튼만 있고 기능은 아직 없음
+    - 로드 게임: 슬롯 8개(2페이지) 로드 패널에서 저장 파일을 불러와 `Game` 씬으로 이동
     - 닫기: 게임 종료 (에디터에서는 플레이 모드 종료)
   - 버튼을 누르는 동안 글자도 함께 내려가는 눌림 연출
 - **게임 씬 (`Game`)**
   - 대장간 배경
-  - 우측 상단 상점 아이콘 버튼 (누르면 호출되는 함수만 있고 기능은 아직 없음)
+  - 상점 (우측 상단 상점 버튼): 구매/판매 탭, 광물 구매, 완성품 판매, 구매/판매 팝업
+  - 제작: 모루를 클릭해 재료를 넣고 시작. 가열, 단조, 열처리, 연마 4개 미니게임, 레시피 자동 매칭, 점수 → 품질, 완성품 지급
+  - 저장/불러오기 (우측 상단 책 버튼): 저장/불러오기 탭, 슬롯 8개(2페이지), 덮어쓰기 확인 팝업. 불러오면 `Game` 씬을 다시 로드
+  - 저장 파일은 `persistentDataPath/saves/slot_N.json`에 슬롯별로 저장
 
 ### 구현 예정
 
-- 로드 게임과 저장
-- 상점 UI, 광물 구매, 장비 판매
-- 제작 4단계 플레이 (가열, 단조, 열처리, 연마)
+- 미니게임 완성도 판정 규칙과 난이도 단계별 수치 (**미정**)
+- Common 재료 기준 가격 (**미정**)
+- 콘텐츠 확충: 현재 광물 1종, 완성품 1종, 레시피 1개뿐. MVP 목표는 재료·장비 각 약 3종
 
 구현 예정 항목의 세부 사양은 아직 정해지지 않았습니다.
 
@@ -88,7 +91,11 @@ BlackSmith는 **제작 중심**의 게임입니다. 플레이어는 대장간에
 | 파일 | 역할 |
 |---|---|
 | `Assets/Scripts/MainMenu.cs` | 타이틀 메뉴 버튼 동작 (새 게임, 로드 게임, 닫기) 과 버튼 글자 폰트 적용 |
-| `Assets/Scripts/GameHUD.cs` | `Game` 씬 UI. 상점 버튼이 호출할 `OnShop()`만 있고 본문은 비어 있음 |
+| `Assets/Scripts/GameHUD.cs` | `Game` 씬 HUD. 상점 버튼(`OnShop`)과 책 버튼(`OnBook`, 저장/불러오기 패널 열기)을 연결하고, 불러오기 성공 시 씬을 다시 로드 |
+| `Assets/Scripts/Data/` | `PlayerData`(돈·소지품), `InventoryEntry`, `GameSession`(현재 세션), `SaveSlotManager`(슬롯 8개 저장/불러오기), `SaveFile` |
+| `Assets/Scripts/Shop/ShopService.cs` | 구매/판매 규칙 |
+| `Assets/Scripts/Crafting/` | 제작 로직: `CraftRecipeData`, `RecipeDatabase`, `RecipeMatcher`, `CraftScoring`, `CraftDifficulty`, `CraftingSession`, `CraftingController`, 4개 미니게임(`HeatMinigame`, `ForgeMinigame`, `HeatTreatMinigame`, `PolishMinigame`), `AnvilInteractable` |
+| `Assets/Scripts/UI/` | 화면 표시: `ShopPanel`, `ShopItemView`, `ShopBuyPopup`, `CraftingPanel`, 미니게임 View 4종, `SaveLoadPanel`, `SaveSlotView`, `SaveSlotPager` 등 |
 | `Assets/Scripts/ButtonLabelPress.cs` | 버튼이 눌림 이미지일 때 글자를 함께 내리는 연출 |
 | `Assets/Scripts/Items/ItemData.cs` | 아이템 공통 데이터(ScriptableObject): ID, 이름, 아이콘, 설명, 최대 스택, 기본 등급, 판매가, 등급별 판매 배율 |
 | `Assets/Scripts/Items/MineralItemData.cs` | 광물 아이템. 구매와 판매 가능 (구매가 포함) |
@@ -96,6 +103,8 @@ BlackSmith는 **제작 중심**의 게임입니다. 플레이어는 대장간에
 | `Assets/Scripts/Items/ItemType.cs`, `ItemGrade.cs` | 아이템 종류 enum, 등급 enum (Common, Uncommon, Rare, Unique, Legendary), `ItemQuality.cs` 품질 enum, `ItemVariant.cs` 등급·품질·재료 합산 가격 묶음 |
 | `Assets/Scripts/Items/ItemDatabase.cs` | `Assets/Resources/Items/` 아래 모든 아이템을 게임 시작 시 자동으로 읽어 등록하는 데이터베이스 |
 | `Assets/Editor/ItemCreatorWindow.cs` | 아이템 생성 툴. 메뉴 `Tools > BlackSmith > Item Creator` |
+| `Assets/Editor/RecipeCreatorWindow.cs` | 레시피 생성 툴. 메뉴 `Tools > BlackSmith > Recipe Creator` |
+| `Assets/Editor/MoneyCheatMenu.cs` | 테스트용 돈 지급 메뉴 |
 
 ## 아이템 데이터베이스
 
@@ -138,10 +147,15 @@ docs/              GameDesign.md, CoreLoop.md, MVP.md, Roadmap.md (기획 문서
 Assets/
 ├── Scenes/        TItle.unity, Game.unity
 ├── Scripts/       MainMenu.cs, GameHUD.cs, ButtonLabelPress.cs
-│   └── Items/     ItemData, MineralItemData, CraftedItemData, ItemDatabase 등
-├── Editor/        ItemCreatorWindow.cs (아이템 생성 툴)
+│   ├── Items/     ItemData, MineralItemData, CraftedItemData, ItemDatabase 등
+│   ├── Data/      PlayerData, GameSession, SaveSlotManager 등
+│   ├── Shop/      ShopService
+│   ├── Crafting/  레시피, 매칭, 점수, 미니게임
+│   └── UI/        상점, 제작, 저장/불러오기 UI
+├── Editor/        ItemCreatorWindow, RecipeCreatorWindow, MoneyCheatMenu
 ├── Resources/
-│   └── Items/     아이템 ScriptableObject 에셋 (Minerals/, Crafted/)
+│   ├── Items/     아이템 ScriptableObject 에셋 (Minerals/, Crafted/)
+│   └── Recipes/   레시피 ScriptableObject 에셋
 ├── Sprites/       WhiteSquare.png, WhiteCircle.png
 ├── Fantasy Wooden GUI  Free/
 ├── 48 Free Minerals Pixel Art Icons Pack/
