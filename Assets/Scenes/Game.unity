@@ -6800,7 +6800,8 @@ MonoBehaviour:
   panelRoot: {fileID: 1114091085}
   targetColor: {r: 1, g: 1, b: 1, a: 0.6}
   shrinkingColor: {r: 1, g: 0.6, b: 0.15, a: 0.9}
-  hitColor: {r: 0.4, g: 1, b: 0.4, a: 0.8}
+  perfectColor: {r: 0.4, g: 1, b: 0.4, a: 0.8}
+  goodColor: {r: 1, g: 0.9, b: 0.3, a: 0.8}
   missColor: {r: 1, g: 0.3, b: 0.3, a: 0.8}
   resultLingerTime: 0.3
 --- !u!224 &662190369
@@ -8167,48 +8168,59 @@ MonoBehaviour:
   heatTreatView: {fileID: 2134102010}
   polishView: {fileID: 1980745582}
   heatSettings:
-    duration: 8
+    duration: 6
     startValue: 0.2
     riseSpeed: 0.6
     fallSpeed: 0.5
     targetCenter: 0.6
     targetHalfWidth: 0.1
-    requiredRatioAtMinDifficulty: 0.4
-    requiredRatioCap: 0.7
-    requiredRatioCurvePower: 2
-    halfWidthScaleAtMax: 0.5
+    requiredRatioAtMin: 0.4
+    requiredRatioAtMax: 0.8
+    halfWidthScaleByDifficulty:
+    - 1
+    - 0.95
+    - 0.9
+    - 0.85
+    - 0.8
+    - 0.75
+    - 0.7
+    - 0.65
+    - 0.6
+    - 0.5
+    speedMultiplierAtMax: 2
     randomizeTarget: 1
   forgeSettings:
     circleCount: 6
     startDelay: 0.5
     spawnInterval: 0.7
+    spawnIntervalAtMax: 0.3
     shrinkDuration: 1.2
-    hitWindow: 0.15
+    shrinkDurationAtMax: 0.5
+    perfectWindow: 0.15
+    goodExtraWindow: 0.2
     targetRadius: 0.8
     startRadius: 2
     margin: 2
     endDelay: 0.5
-    countMultiplierAtMax: 4
-    shrinkSpeedMultiplierAtMax: 2
+    countMultiplierAtMax: 3
   heatTreatSettings:
     speed: 1.2
     targetPosition: 0.7
-    perfectHalfWidth: 0.04
-    tolerance: 0.3
-    timeLimit: 6
+    perfectHalfWidth: 0.06
+    perfectHalfWidthAtMax: 0.03
+    timeLimit: 2
     endDelay: 0.6
     speedMultiplierAtMax: 2
-    rangeScaleAtMax: 0.5
     randomizeTarget: 1
   polishSettings:
-    flawCount: 4
+    flawCount: 3
     flawRadius: 0.9
     sandPerUnit: 0.5
-    timeLimit: 10
+    timeLimit: 4
     margin: 2
     endDelay: 0.5
-    countMultiplierAtMax: 1.5
-    distanceMultiplierAtMax: 2
+    countMultiplierAtMax: 2
+    distanceMultiplierAtMax: 1.5
 --- !u!4 &802897486
 Transform:
   m_ObjectHideFlags: 0

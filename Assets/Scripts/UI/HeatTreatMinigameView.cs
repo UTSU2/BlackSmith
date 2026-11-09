@@ -49,6 +49,7 @@ namespace BlackSmith.UI
             game = heatTreat;
             Root.SetActive(true);
             if (marker != null && markerImage == null) markerImage = marker.GetComponent<Image>();
+            ApplyMarkerSize();
             ApplyZone();
             Draw();
         }
@@ -63,6 +64,14 @@ namespace BlackSmith.UI
         {
             if (game == null) return;
             Draw();
+        }
+
+        /// <summary>마커 원의 반지름을 게이지 길이 대비 비율로 바꿔 게임에 알린다. 판정(온전히/일부)에 쓰인다.</summary>
+        private void ApplyMarkerSize()
+        {
+            if (marker == null || gaugeArea == null) return;
+            float gaugeWidth = gaugeArea.rect.width;
+            game.MarkerHalfSize = gaugeWidth > 0f ? marker.rect.width * 0.5f / gaugeWidth : 0f;
         }
 
         private void ApplyZone()

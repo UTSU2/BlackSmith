@@ -5,33 +5,34 @@ using UnityEngine;
 namespace BlackSmith.Crafting
 {
     /// <summary>
-    /// 연마 미니게임 설정. 기획에서 판정·난이도별 수치가 아직 정해지지 않아 모두 동작 확인용 임시값이다.
+    /// 연마 미니게임 설정. 난이도 1 값은 철검 기준이고, 난이도별 변화는 docs/GameDesign.md §4를 따른다.
     /// 길이와 좌표는 미니게임 공간 단위(PolishMinigame.AreaSize 기준)다.
     /// </summary>
     [Serializable]
     public class PolishSettings
     {
-        [Min(1)] public int flawCount = 4;
+        [Tooltip("난이도 1의 흠집 개수.")]
+        [Min(1)] public int flawCount = 3;
         [Tooltip("흠집 하나의 반지름.")]
         [Min(0.1f)] public float flawRadius = 0.9f;
         [Tooltip("흠집 안에서 문지른 거리 1당 줄어드는 양. 흠집 하나는 1에서 시작해 0이 되면 지워진다.")]
         [Min(0.01f)] public float sandPerUnit = 0.5f;
         [Tooltip("이 시간(초) 안에 못 지우면 거기서 끝난다.")]
-        [Min(1f)] public float timeLimit = 10f;
+        [Min(1f)] public float timeLimit = 4f;
         [Tooltip("흠집이 화면 가장자리에 붙지 않게 하는 여백.")]
         [Min(0f)] public float margin = 2f;
         [Tooltip("끝난 뒤(전부 지웠거나 시간 초과) 결과를 보여주고 끝나기까지 기다리는 시간(초).")]
         [Min(0f)] public float endDelay = 0.5f;
-        [Tooltip("난이도 10에서 흠집 개수의 배율(난이도 1은 1). 선형으로 늘어난다.")]
-        [Min(1f)] public float countMultiplierAtMax = 1.5f;
-        [Tooltip("난이도 10에서 흠집 하나를 지우는 데 필요한 문지르는 거리의 배율(난이도 1은 1). 선형으로 늘어난다.")]
-        [Min(1f)] public float distanceMultiplierAtMax = 2f;
+        [Tooltip("난이도 10에서 흠집 개수의 배율(난이도 1은 1). 곡선(지수 2)으로 늘어난다. 2면 3개 -> 6개.")]
+        [Min(1f)] public float countMultiplierAtMax = 2f;
+        [Tooltip("난이도 10에서 흠집 하나를 지우는 데 필요한 문지르는 거리의 배율(난이도 1은 1). 곡선(지수 2)으로 늘어난다.")]
+        [Min(1f)] public float distanceMultiplierAtMax = 1.5f;
     }
 
     /// <summary>
     /// 연마: 사포질하듯 흠집을 클릭한 뒤 드래그해서 갈아낸다.
     /// 순수 로직이라 시간(Tick)과 포인터(PointerDown/Move/Up)만 받고, 그리는 건 PolishMinigameView가 한다.
-    /// 판정 기준·점수식·실패 처리는 미정이라 지금은 "흠집을 지운 비율"만 본다.
+    /// 완성도는 흠집별로 지운 비율의 평균이다.
     /// </summary>
     public class PolishMinigame : ICraftStageGame
     {
@@ -92,8 +93,7 @@ namespace BlackSmith.Crafting
         }
 
         /// <summary>
-        /// 완성도 0~1. 점수식이 미정이라 임시로 "흠집별로 지운 비율의 평균"이다.
-        /// TODO: 판정 기준과 점수식이 정해지면 교체한다.
+        /// 완성도 0~1 = 흠집별로 지운 비율의 평균.
         /// </summary>
         public float Completeness
         {
@@ -108,10 +108,9 @@ namespace BlackSmith.Crafting
 
         public void Begin(int difficulty)
         {
-            // 난이도 1 = 현행 값. 흠집 개수는 늘고, 흠집당 필요 문지름 거리도 늘어난다(선형). 크기는 변하지 않는다.
-            float t = CraftDifficulty.Progress(difficulty);
-            int count = Mathf.Max(1, Mathf.RoundToInt(settings.flawCount * Mathf.Lerp(1f, settings.countMultiplierAtMax, t)));
-            sandPerUnit = settings.sandPerUnit / Mathf.Lerp(1f, settings.distanceMultiplierAtMax, t);
+            // 흠집 개수는 늘고, 흠집당 필요 문지름 거리도 늘어난다(곡선, 지수 2). 크기는 변하지 않는다.
+            int count = Mathf.Max(1, Mathf.RoundToInt(settings.flawCount * CraftDifficulty.CurveLerp(1f, settings.countMultiplierAtMax, difficulty)));
+            sandPerUnit = settings.sandPerUnit / CraftDifficulty.CurveLerp(1f, settings.distanceMultiplierAtMax, difficulty);
 
             flaws.Clear();
             activeFlaw = null;

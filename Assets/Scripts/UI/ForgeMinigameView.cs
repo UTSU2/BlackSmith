@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using BlackSmith.Crafting;
 
@@ -24,7 +25,9 @@ namespace BlackSmith.UI
         [Header("색")]
         [SerializeField] private Color targetColor = new Color(1f, 1f, 1f, 0.35f);
         [SerializeField] private Color shrinkingColor = new Color(1f, 0.6f, 0.15f, 0.9f);
-        [SerializeField] private Color hitColor = new Color(0.4f, 1f, 0.4f, 0.8f);
+        [FormerlySerializedAs("hitColor")]
+        [SerializeField] private Color perfectColor = new Color(0.4f, 1f, 0.4f, 0.8f);
+        [SerializeField] private Color goodColor = new Color(1f, 0.9f, 0.3f, 0.8f);
         [SerializeField] private Color missColor = new Color(1f, 0.3f, 0.3f, 0.8f);
         [Tooltip("판정 뒤 결과 색으로 남아 있는 시간(초).")]
         [SerializeField] private float resultLingerTime = 0.3f;
@@ -104,7 +107,9 @@ namespace BlackSmith.UI
             if (judged)
             {
                 view.Shrinking.enabled = false;
-                view.Target.color = circle.State == ForgeMinigame.CircleState.Hit ? hitColor : missColor;
+                view.Target.color = circle.State == ForgeMinigame.CircleState.Perfect ? perfectColor
+                    : circle.State == ForgeMinigame.CircleState.Good ? goodColor
+                    : missColor;
             }
             else
             {

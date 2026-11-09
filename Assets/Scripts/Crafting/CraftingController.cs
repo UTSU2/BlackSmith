@@ -25,7 +25,7 @@ namespace BlackSmith.Crafting
         [SerializeField] private HeatTreatMinigameView heatTreatView;
         [SerializeField] private PolishMinigameView polishView;
 
-        [Header("미니게임 설정 (기획이 정해지기 전까지는 모두 임시값)")]
+        [Header("미니게임 설정 (난이도 1 기준값. 난이도별 변화는 docs/GameDesign.md §4)")]
         [SerializeField] private HeatSettings heatSettings = new HeatSettings();
         [SerializeField] private ForgeSettings forgeSettings = new ForgeSettings();
         [SerializeField] private HeatTreatSettings heatTreatSettings = new HeatTreatSettings();
