@@ -23,6 +23,17 @@ namespace BlackSmith.UI
         [Tooltip("슬롯 페이지 넘기기. 없으면 페이징 없이 동작한다.")]
         [SerializeField] private SaveSlotPager pager;
 
+        [Header("탭 (선택 사항 - Game 씬에서 사용)")]
+        [SerializeField] private Button saveTabButton;
+        [SerializeField] private Button loadTabButton;
+        [Tooltip("탭 버튼에 쓰는 이미지. 선택된 탭은 눌린 스프라이트로 보여준다.")]
+        [SerializeField] private Image saveTabImage;
+        [SerializeField] private Image loadTabImage;
+        [SerializeField] private Sprite tabNormalSprite;
+        [SerializeField] private Sprite tabSelectedSprite;
+        [Tooltip("닫기 버튼. 비워 두면 연결하지 않는다.")]
+        [SerializeField] private Button closeButton;
+
         private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
 
         private Mode mode = Mode.Save;
@@ -39,6 +50,9 @@ namespace BlackSmith.UI
             {
                 if (slots[i] != null) slots[i].Clicked += OnSlotClicked;
             }
+            if (saveTabButton != null) saveTabButton.onClick.AddListener(OpenSave);
+            if (loadTabButton != null) loadTabButton.onClick.AddListener(OpenLoad);
+            if (closeButton != null) closeButton.onClick.AddListener(Close);
             ApplyFont();
         }
 
@@ -48,6 +62,9 @@ namespace BlackSmith.UI
             {
                 if (slots[i] != null) slots[i].Clicked -= OnSlotClicked;
             }
+            if (saveTabButton != null) saveTabButton.onClick.RemoveListener(OpenSave);
+            if (loadTabButton != null) loadTabButton.onClick.RemoveListener(OpenLoad);
+            if (closeButton != null) closeButton.onClick.RemoveListener(Close);
         }
 
         public void OpenSave() => Open(Mode.Save);
@@ -125,6 +142,20 @@ namespace BlackSmith.UI
             {
                 if (slots[i] != null) slots[i].Refresh(i);
             }
+            RefreshTabs();
+        }
+
+        private void RefreshTabs()
+        {
+            SetTabSprite(saveTabImage, mode == Mode.Save);
+            SetTabSprite(loadTabImage, mode == Mode.Load);
+        }
+
+        private void SetTabSprite(Image image, bool selected)
+        {
+            if (image == null) return;
+            Sprite sprite = selected ? tabSelectedSprite : tabNormalSprite;
+            if (sprite != null) image.sprite = sprite;
         }
 
         private void HideConfirm()
