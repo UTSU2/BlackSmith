@@ -27,7 +27,7 @@ namespace BlackSmith.Crafting
         [Tooltip("거칠 제작 단계를 순서대로. 값(판정 등)은 단계별 설정에서 정한다.")]
         [SerializeField] private List<CraftStage> stages = new List<CraftStage>();
 
-        [Tooltip("미니게임 기본 난이도(1~10). 레시피 등급보다 높은 재료를 쓰면 여기에 가중이 더해진다.")]
+        [Tooltip("미니게임 기본 난이도(1~10). 재료의 등급·종류·개수와 상관없이 이 값이 그대로 적용된다.")]
         [SerializeField, Range(1, 10)] private int baseDifficulty = 1;
 
         public string Id => id;

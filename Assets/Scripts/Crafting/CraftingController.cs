@@ -185,7 +185,7 @@ namespace BlackSmith.Crafting
         }
 
         /// <summary>
-        /// 완성품을 소지품에 지급한다. 등급은 레시피 결과물의 등급이고, 품질은 단계 점수 합계(+어드밴티지)로 정한다.
+        /// 완성품을 소지품에 지급한다. 등급은 레시피 결과물의 등급이고, 품질은 단계 점수 합계로 정한다.
         /// 재료 합산 가격은 제작을 시작할 때 계산해 둔 값을 쓴다 (재료는 이미 소모됐기 때문).
         /// </summary>
         private static void GrantResult(CraftResult finished)

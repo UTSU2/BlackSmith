@@ -61,7 +61,7 @@ BlackSmith는 **제작 중심**의 게임입니다. 플레이어는 대장간에
   - 버튼을 누르는 동안 글자도 함께 내려가는 눌림 연출
 - **게임 씬 (`Game`)**
   - 대장간 배경
-  - 상점 (우측 상단 상점 버튼): 구매/판매 탭, 광물 구매, 완성품 판매, 구매/판매 팝업
+  - 상점 (우측 상단 상점 버튼): 구매/판매 탭, 광물 구매, 완성품 판매, 구매/판매 팝업. 목록은 가격 낮은 순(같으면 ID 순)으로 정렬
   - 제작: 모루를 클릭해 재료를 넣고 시작. 가열, 단조, 열처리, 연마 4개 미니게임, 레시피 자동 매칭, 점수 → 품질, 완성품 지급
   - 저장/불러오기 (우측 상단 책 버튼): 저장/불러오기 탭, 슬롯 8개(2페이지), 덮어쓰기 확인 팝업. 불러오면 `Game` 씬을 다시 로드
   - 저장 파일은 `persistentDataPath/saves/slot_N.json`에 슬롯별로 저장
@@ -69,7 +69,7 @@ BlackSmith는 **제작 중심**의 게임입니다. 플레이어는 대장간에
 ### 구현 예정
 
 - 미니게임 판정·난이도 수치의 플레이 검증과 조정 (특히 열처리 난이도 10, 연마 4초)
-- 콘텐츠 확충: 현재 광물 1종, 완성품 1종, 레시피 1개뿐. MVP 목표는 재료·장비 각 약 3종. 재료·완성품·레시피는 나중에 한꺼번에 작성하며, 각 아이템의 Common 가격은 아이템 생성 시 정합니다.
+- 콘텐츠 확충: 현재 광물 48종(등급 분포 18/12/9/6/3), 임시 제작품 5종(`temp_gear_*`), 레시피 48개가 있으나 이름·가격·난이도는 모두 임시값입니다. MVP 목표는 재료·장비 각 약 3종. 재료·완성품·레시피는 나중에 한꺼번에 작성하며, 각 아이템의 Common 가격은 아이템 생성 시 정합니다.
 
 구현 예정 항목의 세부 사양은 아직 정해지지 않았습니다.
 
@@ -97,7 +97,7 @@ BlackSmith는 **제작 중심**의 게임입니다. 플레이어는 대장간에
 | `Assets/Scripts/Crafting/` | 제작 로직: `CraftRecipeData`, `RecipeDatabase`, `RecipeMatcher`, `CraftScoring`, `CraftDifficulty`, `CraftingSession`, `CraftingController`, 4개 미니게임(`HeatMinigame`, `ForgeMinigame`, `HeatTreatMinigame`, `PolishMinigame`), `AnvilInteractable` |
 | `Assets/Scripts/UI/` | 화면 표시: `ShopPanel`, `ShopItemView`, `ShopBuyPopup`, `CraftingPanel`, 미니게임 View 4종, `SaveLoadPanel`, `SaveSlotView`, `SaveSlotPager` 등 |
 | `Assets/Scripts/ButtonLabelPress.cs` | 버튼이 눌림 이미지일 때 글자를 함께 내리는 연출 |
-| `Assets/Scripts/Items/ItemData.cs` | 아이템 공통 데이터(ScriptableObject): ID, 이름, 아이콘, 설명, 최대 스택, 기본 등급, 판매가, 등급별 판매 배율 |
+| `Assets/Scripts/Items/ItemData.cs` | 아이템 공통 데이터(ScriptableObject): ID, 이름, 아이콘, 설명, 최대 스택, 기본 등급(아이템당 하나), Common 기준 판매가 (등급 배율은 `ItemGradeInfo`) |
 | `Assets/Scripts/Items/MineralItemData.cs` | 광물 아이템. 구매와 판매 가능 (구매가 포함) |
 | `Assets/Scripts/Items/CraftedItemData.cs` | 제작품 아이템. 판매만 가능. 제작품 전용 정보는 규칙 확정 후 추가 예정 |
 | `Assets/Scripts/Items/ItemType.cs`, `ItemGrade.cs` | 아이템 종류 enum, 등급 enum (Common, Uncommon, Rare, Unique, Legendary), `ItemQuality.cs` 품질 enum, `ItemVariant.cs` 등급·품질·재료 합산 가격 묶음 |

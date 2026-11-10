@@ -96,7 +96,7 @@ namespace BlackSmith.UI
                     if (!ItemDatabase.TryGet(entry.ItemId, out ItemData data) || !(data is MineralItemData)) continue;
 
                     CraftingIngredientView view = Instantiate(ingredientViewPrefab, listContent);
-                    view.Bind(data, entry.Grade, entry.Count, session.GetInserted(entry.ItemId, entry.Grade));
+                    view.Bind(data, entry.Count, session.GetInserted(entry.ItemId));
                     view.AddClicked += OnAddClicked;
                     view.RemoveClicked += OnRemoveClicked;
                     views.Add(view);
@@ -111,14 +111,14 @@ namespace BlackSmith.UI
             }
         }
 
-        private void OnAddClicked(ItemData item, ItemGrade grade)
+        private void OnAddClicked(ItemData item)
         {
-            if (session != null) session.TryAdd(item.Id, grade);
+            if (session != null) session.TryAdd(item.Id);
         }
 
-        private void OnRemoveClicked(ItemData item, ItemGrade grade)
+        private void OnRemoveClicked(ItemData item)
         {
-            if (session != null) session.TryRemove(item.Id, grade);
+            if (session != null) session.TryRemove(item.Id);
         }
 
         private void OnClear()
@@ -147,7 +147,7 @@ namespace BlackSmith.UI
             foreach (CraftingIngredientView view in views)
             {
                 if (view == null) continue;
-                view.SetInserted(session.GetInserted(view.Item.Id, view.Grade));
+                view.SetInserted(session.GetInserted(view.Item.Id));
             }
 
             if (statusLabel != null)

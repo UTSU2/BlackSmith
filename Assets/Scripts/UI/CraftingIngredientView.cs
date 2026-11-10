@@ -18,14 +18,12 @@ namespace BlackSmith.UI
         [SerializeField] private Button removeButton;
 
         private ItemData item;
-        private ItemGrade grade;
         private int owned;
 
         public ItemData Item => item;
-        public ItemGrade Grade => grade;
 
-        public event Action<ItemData, ItemGrade> AddClicked;
-        public event Action<ItemData, ItemGrade> RemoveClicked;
+        public event Action<ItemData> AddClicked;
+        public event Action<ItemData> RemoveClicked;
 
         private void Awake()
         {
@@ -39,13 +37,12 @@ namespace BlackSmith.UI
             if (removeButton != null) removeButton.onClick.RemoveListener(OnRemove);
         }
 
-        public void Bind(ItemData data, ItemGrade itemGrade, int ownedCount, int insertedCount)
+        public void Bind(ItemData data, int ownedCount, int insertedCount)
         {
             item = data;
-            grade = itemGrade;
             owned = ownedCount;
 
-            if (nameLabel != null) nameLabel.text = $"{data.DisplayName} ({itemGrade})";
+            if (nameLabel != null) nameLabel.text = $"{data.DisplayName} ({data.DefaultGrade})";
             if (iconImage != null)
             {
                 iconImage.sprite = data.Icon;
@@ -61,12 +58,12 @@ namespace BlackSmith.UI
 
         private void OnAdd()
         {
-            if (item != null) AddClicked?.Invoke(item, grade);
+            if (item != null) AddClicked?.Invoke(item);
         }
 
         private void OnRemove()
         {
-            if (item != null) RemoveClicked?.Invoke(item, grade);
+            if (item != null) RemoveClicked?.Invoke(item);
         }
     }
 }
