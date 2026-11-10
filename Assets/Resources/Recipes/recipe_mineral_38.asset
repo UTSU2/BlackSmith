@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e03cfc8ee38b934ab579e1c94696f04, type: 3}
+  m_Name: recipe_mineral_38
+  m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Crafting.CraftRecipeData
+  id: recipe_mineral_38
+  result: {fileID: 11400000, guid: aaf2a5fbaed953f4a87dbd8e124374de, type: 2}
+  ingredients:
+  - item: {fileID: 11400000, guid: c046d404d27935f408457371234f6a85, type: 2}
+    count: 1
+  stages: 00000000010000000200000003000000
+  baseDifficulty: 3

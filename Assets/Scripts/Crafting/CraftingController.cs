@@ -192,7 +192,7 @@ namespace BlackSmith.Crafting
         {
             CraftRequest request = finished.Request;
             CraftedItemData product = finished.Recipe.Result;
-            decimal score = CraftScoring.CalculateScore(finished.Stages, request.AdvantageTenths);
+            decimal score = CraftScoring.CalculateScore(finished.Stages);
             ItemQuality quality = ItemQualityInfo.FromScore(score);
             ItemVariant variant = new ItemVariant(product.DefaultGrade, quality, request.IngredientValue);
 

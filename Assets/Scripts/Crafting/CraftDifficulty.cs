@@ -1,7 +1,7 @@
 namespace BlackSmith.Crafting
 {
     /// <summary>
-    /// 미니게임 난이도(1~10). 기본값은 레시피에 정의하고, 상위 등급 재료마다 0.1단계씩 더한 뒤 소수점은 올린다.
+    /// 미니게임 난이도(1~10). 값은 레시피에 정의된 기본값 그대로다. (재료 등급에 따른 가중 없음)
     /// 4개 미니게임에 같은 값을 쓰고 플레이어에게는 표시하지 않는다.
     /// 단계별 미니게임 수치는 docs/GameDesign.md §4에 정해져 있고, 각 미니게임이 아래 보간 함수로 난이도 1 값과 10 값 사이를 잇는다.
     /// </summary>
@@ -31,15 +31,11 @@ namespace BlackSmith.Crafting
             return UnityEngine.Mathf.Lerp(atMin, atMax, Curve(difficulty));
         }
 
-        /// <param name="baseDifficulty">레시피에 정의된 기본 난이도.</param>
-        /// <param name="bonusTenths">상위 등급 재료 가중을 0.1단계 단위로 센 값 (3이면 +0.3단계).</param>
-        public static int Calculate(int baseDifficulty, int bonusTenths)
+        /// <summary>레시피에 정의된 기본 난이도를 1~10 범위로 맞춘다. 재료 등급·종류·개수는 영향을 주지 않는다.</summary>
+        public static int Calculate(int baseDifficulty)
         {
-            // 올림은 정수 연산으로 한다. (0.1 x 10 같은 값이 부동소수점 오차로 한 단계 더 올라가는 것을 피한다)
-            int raised = bonusTenths <= 0 ? 0 : (bonusTenths + 9) / 10;
-            int level = baseDifficulty + raised;
-            if (level < MinLevel) return MinLevel;
-            return level > MaxLevel ? MaxLevel : level;
+            if (baseDifficulty < MinLevel) return MinLevel;
+            return baseDifficulty > MaxLevel ? MaxLevel : baseDifficulty;
         }
     }
 }

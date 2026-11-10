@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cbddd9d9b1e88c42b07e338666f705f, type: 3}
+  m_Name: mineral_10
+  m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Items.MineralItemData
+  id: mineral_10
+  displayName: "\uAE08 \uC6D0\uC11D"
+  icon: {fileID: 3091584776675602801, guid: 1deb34a1ee012984c885561a72b38d05, type: 3}
+  description: "\uC784\uC2DC \uAD11\uBB3C (\uD76C\uADC0)."
+  maxStack: 99
+  defaultGrade: 2
+  sellPrice: 100
+  buyPrice: 200

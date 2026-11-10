@@ -25,7 +25,7 @@ namespace BlackSmith.Shop
 
         public PlayerData Player => player;
 
-        /// <summary>현재 판매 중인 아이템. 정렬은 ID 순 (정렬 기준 미정이라 임시).</summary>
+        /// <summary>현재 판매 중인 아이템. 구매가 낮은 순, 같은 가격이면 ID 순.</summary>
         public List<ItemData> GetStock()
         {
             List<ItemData> stock = new List<ItemData>();
@@ -33,7 +33,11 @@ namespace BlackSmith.Shop
             {
                 if (item.CanBuy) stock.Add(item);
             }
-            stock.Sort((a, b) => string.CompareOrdinal(a.Id, b.Id));
+            stock.Sort((a, b) =>
+            {
+                int byPrice = a.BuyPrice.CompareTo(b.BuyPrice);
+                return byPrice != 0 ? byPrice : string.CompareOrdinal(a.Id, b.Id);
+            });
             return stock;
         }
 
@@ -85,7 +89,7 @@ namespace BlackSmith.Shop
             }
         }
 
-        /// <summary>판매할 수 있는 보유 아이템. 정렬은 ID, 등급 순 (정렬 기준 미정이라 임시).</summary>
+        /// <summary>판매할 수 있는 보유 아이템. 판매 단가 낮은 순, 같은 가격이면 ID, 등급, 품질 순.</summary>
         public List<SellEntry> GetSellList()
         {
             List<SellEntry> list = new List<SellEntry>();
@@ -98,6 +102,8 @@ namespace BlackSmith.Shop
             }
             list.Sort((a, b) =>
             {
+                int byPrice = a.Item.GetSellUnitPrice(a.Variant).CompareTo(b.Item.GetSellUnitPrice(b.Variant));
+                if (byPrice != 0) return byPrice;
                 int byId = string.CompareOrdinal(a.Item.Id, b.Item.Id);
                 if (byId != 0) return byId;
                 int byGrade = a.Variant.Grade.CompareTo(b.Variant.Grade);
