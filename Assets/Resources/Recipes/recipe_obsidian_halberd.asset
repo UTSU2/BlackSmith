@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e03cfc8ee38b934ab579e1c94696f04, type: 3}
-  m_Name: recipe_mineral_44
+  m_Name: recipe_obsidian_halberd
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Crafting.CraftRecipeData
-  id: recipe_mineral_44
-  result: {fileID: 11400000, guid: d2e93e5abd816644f859ab685775421b, type: 2}
+  id: recipe_obsidian_halberd
+  result: {fileID: 11400000, guid: 2c288c3adf55be743ad8ecb29c95572b, type: 2}
   ingredients:
-  - item: {fileID: 11400000, guid: ae72153232073b34094e68505ce3668f, type: 2}
+  - item: {fileID: 11400000, guid: 52fe61322fcaf5d45be0c6891d4a53e1, type: 2}
+    count: 3
+  - item: {fileID: 11400000, guid: 01fb34ab67409e9488fb2f9fc8454d69, type: 2}
     count: 1
   stages: 00000000010000000200000003000000
   baseDifficulty: 7

@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e03cfc8ee38b934ab579e1c94696f04, type: 3}
-  m_Name: recipe_mineral_1
+  m_Name: recipe_sapphire_battleaxe
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Crafting.CraftRecipeData
-  id: recipe_mineral_1
-  result: {fileID: 11400000, guid: aaf2a5fbaed953f4a87dbd8e124374de, type: 2}
+  id: recipe_sapphire_battleaxe
+  result: {fileID: 11400000, guid: 96948e5426213d04ea11c4b3eebadb20, type: 2}
   ingredients:
-  - item: {fileID: 11400000, guid: 3642d9c58da855644907681e354aba4f, type: 2}
+  - item: {fileID: 11400000, guid: 52fe61322fcaf5d45be0c6891d4a53e1, type: 2}
+    count: 3
+  - item: {fileID: 11400000, guid: 6ae12b2c94748af43bb705f428f250df, type: 2}
     count: 1
   stages: 00000000010000000200000003000000
-  baseDifficulty: 3
+  baseDifficulty: 5

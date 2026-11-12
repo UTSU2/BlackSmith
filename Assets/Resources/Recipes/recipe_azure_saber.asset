@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e03cfc8ee38b934ab579e1c94696f04, type: 3}
-  m_Name: recipe_mineral_17
+  m_Name: recipe_azure_saber
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Crafting.CraftRecipeData
-  id: recipe_mineral_17
-  result: {fileID: 11400000, guid: d2e93e5abd816644f859ab685775421b, type: 2}
+  id: recipe_azure_saber
+  result: {fileID: 11400000, guid: b00e504e2d6401443ab2c3c78e41364d, type: 2}
   ingredients:
-  - item: {fileID: 11400000, guid: 01fb34ab67409e9488fb2f9fc8454d69, type: 2}
+  - item: {fileID: 11400000, guid: 52fe61322fcaf5d45be0c6891d4a53e1, type: 2}
+    count: 2
+  - item: {fileID: 11400000, guid: fc1db65fe461ba54a8b86b3db00eaf85, type: 2}
     count: 1
   stages: 00000000010000000200000003000000
-  baseDifficulty: 7
+  baseDifficulty: 5

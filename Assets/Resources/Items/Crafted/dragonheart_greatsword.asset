@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bffba30a58ef0447b4ef10205a7ef95, type: 3}
+  m_Name: dragonheart_greatsword
+  m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Items.CraftedItemData
+  id: dragonheart_greatsword
+  displayName: "\uC6A9\uC2EC \uB8E8\uBE44 \uB300\uAC80"
+  icon: {fileID: 21300000, guid: eef159f119fa9fe44a3070ca59e1ab23, type: 3}
+  description: "\uC6A9\uC2EC \uB8E8\uBE44\uAC00 \uBC15\uD78C \uB300\uAC80."
+  maxStack: 1
+  defaultGrade: 4
+  sellPrice: 0

@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e03cfc8ee38b934ab579e1c94696f04, type: 3}
-  m_Name: recipe_mineral_22
+  m_Name: recipe_deepsea_jade_spear
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Crafting.CraftRecipeData
-  id: recipe_mineral_22
-  result: {fileID: 11400000, guid: aaf2a5fbaed953f4a87dbd8e124374de, type: 2}
+  id: recipe_deepsea_jade_spear
+  result: {fileID: 11400000, guid: fd979a5e3ff8d0147a44c49f7d2b6d02, type: 2}
   ingredients:
-  - item: {fileID: 11400000, guid: a296e412559be5c46abe69fdd698cf4a, type: 2}
+  - item: {fileID: 11400000, guid: 52fe61322fcaf5d45be0c6891d4a53e1, type: 2}
+    count: 2
+  - item: {fileID: 11400000, guid: ae72153232073b34094e68505ce3668f, type: 2}
     count: 1
   stages: 00000000010000000200000003000000
-  baseDifficulty: 3
+  baseDifficulty: 7
