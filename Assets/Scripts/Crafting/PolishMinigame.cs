@@ -18,7 +18,7 @@ namespace BlackSmith.Crafting
         [Tooltip("흠집 안에서 문지른 거리 1당 줄어드는 양. 흠집 하나는 1에서 시작해 0이 되면 지워진다.")]
         [Min(0.01f)] public float sandPerUnit = 0.5f;
         [Tooltip("이 시간(초) 안에 못 지우면 거기서 끝난다.")]
-        [Min(1f)] public float timeLimit = 4f;
+        [Min(1f)] public float timeLimit = 5f;
         [Tooltip("흠집이 화면 가장자리에 붙지 않게 하는 여백.")]
         [Min(0f)] public float margin = 2f;
         [Tooltip("끝난 뒤(전부 지웠거나 시간 초과) 결과를 보여주고 끝나기까지 기다리는 시간(초).")]

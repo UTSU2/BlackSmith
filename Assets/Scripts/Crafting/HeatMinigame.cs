@@ -11,7 +11,7 @@ namespace BlackSmith.Crafting
     public class HeatSettings
     {
         [Tooltip("가열 시간(초).")]
-        [Min(1f)] public float duration = 6f;
+        [Min(1f)] public float duration = 5f;
         [Tooltip("시작할 때 바 값.")]
         [Range(0f, 1f)] public float startValue = 0.2f;
         [Tooltip("누르고 있는 동안 바가 오르는 속도.")]

@@ -9584,7 +9584,7 @@ MonoBehaviour:
   polishView: {fileID: 1980745582}
   sfx: {fileID: 2021471423}
   heatSettings:
-    duration: 6
+    duration: 5
     startValue: 0.2
     riseSpeed: 0.6
     fallSpeed: 0.5
@@ -9632,7 +9632,7 @@ MonoBehaviour:
     flawCount: 3
     flawRadius: 0.9
     sandPerUnit: 0.5
-    timeLimit: 4
+    timeLimit: 5
     margin: 2
     endDelay: 0.5
     countMultiplierAtMax: 2
