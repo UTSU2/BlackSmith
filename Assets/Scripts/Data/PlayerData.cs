@@ -25,7 +25,19 @@ namespace BlackSmith.Data
         /// <summary>소지 아이템이 바뀔 때 호출.</summary>
         [field: NonSerialized] public event Action OnInventoryChanged;
 
+        // 저장 이후 금액·소지품이 바뀌었는지. [SerializeField]가 아니므로 저장 파일에 들어가지 않는다.
+        private bool hasUnsavedChanges;
+
         public int Money => money;
+
+        /// <summary>마지막 저장(또는 불러오기·새 게임) 이후 금액이나 소지품이 바뀌었는가. 타이틀로 나갈 때 확인 창을 띄울지 정하는 데 쓴다.</summary>
+        public bool HasUnsavedChanges => hasUnsavedChanges;
+
+        /// <summary>저장에 성공했을 때 SaveSlotManager가 부른다.</summary>
+        public void MarkSaved()
+        {
+            hasUnsavedChanges = false;
+        }
         public IReadOnlyList<InventoryEntry> Items => items;
 
         // ---- 금액 ----
@@ -36,6 +48,7 @@ namespace BlackSmith.Data
         {
             if (amount <= 0) return;
             money = (int)Math.Min((long)money + amount, int.MaxValue);
+            hasUnsavedChanges = true;
             OnMoneyChanged?.Invoke(money);
         }
 
@@ -45,6 +58,7 @@ namespace BlackSmith.Data
             if (amount < 0 || money < amount) return false;
             if (amount == 0) return true;
             money -= amount;
+            hasUnsavedChanges = true;
             OnMoneyChanged?.Invoke(money);
             return true;
         }
@@ -91,6 +105,7 @@ namespace BlackSmith.Data
                 items.Add(new InventoryEntry(itemId, variant, count));
             }
 
+            hasUnsavedChanges = true;
             OnInventoryChanged?.Invoke();
             return true;
         }
@@ -107,6 +122,7 @@ namespace BlackSmith.Data
             if (entry.Count == count) items.Remove(entry);
             else entry.SetCount(entry.Count - count);
 
+            hasUnsavedChanges = true;
             OnInventoryChanged?.Invoke();
             return true;
         }

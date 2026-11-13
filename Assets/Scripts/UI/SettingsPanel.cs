@@ -1,6 +1,8 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using BlackSmith.Audio;
+using BlackSmith.Data;
 
 namespace BlackSmith.UI
 {
@@ -17,6 +19,14 @@ namespace BlackSmith.UI
         [SerializeField] private Text sfxValueLabel;
         [SerializeField] private Button closeButton;
 
+        [Header("타이틀로 돌아가기 (Game 씬에서만 연결. 비워 두면 동작하지 않는다)")]
+        [SerializeField] private Button titleButton;
+        [Tooltip("저장하지 않은 변경이 있을 때만 뜨는 확인 창. 기본은 꺼 둔다.")]
+        [SerializeField] private GameObject confirmPopup;
+        [SerializeField] private Button confirmYesButton;
+        [SerializeField] private Button confirmNoButton;
+        [SerializeField] private string titleSceneName = "TItle";
+
         private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
 
         public bool IsOpen => gameObject.activeSelf;
@@ -26,6 +36,9 @@ namespace BlackSmith.UI
             if (closeButton != null) closeButton.onClick.AddListener(Close);
             if (bgmSlider != null) bgmSlider.onValueChanged.AddListener(OnBgmChanged);
             if (sfxSlider != null) sfxSlider.onValueChanged.AddListener(OnSfxChanged);
+            if (titleButton != null) titleButton.onClick.AddListener(OnTitleClicked);
+            if (confirmYesButton != null) confirmYesButton.onClick.AddListener(GoToTitle);
+            if (confirmNoButton != null) confirmNoButton.onClick.AddListener(CloseConfirm);
 
             Font font = Font.CreateDynamicFontFromOSFont(KoreanFonts, 36);
             foreach (Text text in GetComponentsInChildren<Text>(true)) text.font = font;
@@ -36,6 +49,9 @@ namespace BlackSmith.UI
             if (closeButton != null) closeButton.onClick.RemoveListener(Close);
             if (bgmSlider != null) bgmSlider.onValueChanged.RemoveListener(OnBgmChanged);
             if (sfxSlider != null) sfxSlider.onValueChanged.RemoveListener(OnSfxChanged);
+            if (titleButton != null) titleButton.onClick.RemoveListener(OnTitleClicked);
+            if (confirmYesButton != null) confirmYesButton.onClick.RemoveListener(GoToTitle);
+            if (confirmNoButton != null) confirmNoButton.onClick.RemoveListener(CloseConfirm);
         }
 
         public void Open()
@@ -43,6 +59,7 @@ namespace BlackSmith.UI
             // 처음 켜질 때 Awake가 불리므로 켠 뒤에 값을 채운다.
             gameObject.SetActive(true);
             transform.SetAsLastSibling();
+            CloseConfirm();
 
             Show(bgmSlider, bgmValueLabel, SoundSettings.BgmVolume);
             Show(sfxSlider, sfxValueLabel, SoundSettings.SfxVolume);
@@ -50,7 +67,25 @@ namespace BlackSmith.UI
 
         public void Close()
         {
+            CloseConfirm();
             gameObject.SetActive(false);
+        }
+
+        // 저장 이후 금액·소지품이 바뀌지 않았으면 바로 이동하고, 바뀌었으면 확인 창을 띄운다.
+        private void OnTitleClicked()
+        {
+            if (GameSession.Current.HasUnsavedChanges && confirmPopup != null) confirmPopup.SetActive(true);
+            else GoToTitle();
+        }
+
+        private void GoToTitle()
+        {
+            SceneManager.LoadScene(titleSceneName);
+        }
+
+        private void CloseConfirm()
+        {
+            if (confirmPopup != null) confirmPopup.SetActive(false);
         }
 
         private void OnBgmChanged(float value)
