@@ -12,6 +12,8 @@ namespace BlackSmith
         [SerializeField] private string gameSceneName = "Game";
         [SerializeField] private SaveLoadPanel loadPanel;
         [SerializeField] private SettingsPanel settingsPanel;
+        [Tooltip("제목 글자. 자체 폰트를 쓰므로 OS 한글 폰트를 덮어쓰지 않는다.")]
+        [SerializeField] private Text titleLabel;
 
         private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
 
@@ -23,6 +25,7 @@ namespace BlackSmith
             Font font = Font.CreateDynamicFontFromOSFont(KoreanFonts, 36);
             foreach (Text label in GetComponentsInChildren<Text>(true))
             {
+                if (label == titleLabel) continue;
                 label.font = font;
             }
         }
