@@ -134,12 +134,19 @@ MVP 완료 기준(광물·제작품 임시 완성, 적중 사운드, BGM, 아주
 |---|---|
 | `Assets/Fantasy Wooden GUI  Free` | 나무 느낌의 UI 버튼과 패널 (타이틀·Game UI의 버튼과 패널에 사용) |
 | `Assets/Audio` | 임시 효과음 9종(`Sfx/`), BGM 2곡(`Bgm/`), 효과음 클립 모음 `SfxClips.asset` |
+| `Assets/Fonts` | 타이틀 제목 글자에 쓰는 폰트 `I AM A PLAYER.ttf` (아래 폰트 출처 참고) |
 | `Assets/48 Free Minerals Pixel Art Icons Pack` | 광물 픽셀 아이콘 |
 | `Assets/Medieval_Weapons` | 중세 무기 이미지와 데모 씬 |
 | `Assets/Sprites` | 배경과 일부 UI(톱니바퀴 아이콘, 슬라이더) 제작에 쓴 흰색 사각형 / 원 / 링 도형 스프라이트 |
 
 - 폴더 이름 `Fantasy Wooden GUI  Free`에는 "Free" 앞에 공백이 두 칸 있습니다.
-- 외부 에셋의 라이선스와 출처는 이 문서에서 확인하지 않았습니다. 배포 전에 각 에셋의 라이선스를 확인해야 합니다.
+- 외부 에셋의 라이선스와 출처는 아래 폰트를 제외하고 이 문서에서 확인하지 않았습니다. 배포 전에 각 에셋의 라이선스를 확인해야 합니다.
+
+### 폰트 출처
+
+- **I AM A PLAYER** — 제작: greenegg (greenegg.co.kr), 2016. 눈누에서 무료로 배포 중인 폰트입니다. 영문·숫자 전용이라 한글 글자는 없으며, 타이틀 제목 `BlackSmith`에만 씁니다. (한글 UI는 OS 폰트 맑은 고딕을 씁니다)
+- 라이선스(원문 요지): 개인과 기업 모두 무료이고 수정과 재배포가 자유이며, 폰트 파일 자체를 유료로 판매하는 것만 금지입니다. 출처 표기는 권장입니다. ([라이선스 원문을 옮겨 둔 페이지](https://www.sandollcloud.com/free-font/15777/I-AM-A-PLAYER))
+- 라이선스 조건은 바뀔 수 있으므로 정식 출시 전에 제작자 공식 사이트에서 최신 조건을 다시 확인해야 합니다.
 
 ## 기술 정보
 
@@ -170,6 +177,7 @@ Assets/
 │   ├── Items/     아이템 ScriptableObject 에셋 (Minerals/, Crafted/)
 │   └── Recipes/   레시피 ScriptableObject 에셋
 ├── Audio/         Sfx/ (효과음), Bgm/ (BGM), SfxClips.asset
+├── Fonts/         I AM A PLAYER.ttf (타이틀 제목)
 ├── Prefabs/UI/    ShopItemView, CraftingIngredientView
 ├── UI/            상점 화살표 등 UI 스프라이트
 ├── Screenshots/   개발 중 캡처 이미지
