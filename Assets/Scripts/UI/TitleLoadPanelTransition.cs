@@ -5,9 +5,10 @@ using UnityEngine;
 namespace BlackSmith.UI
 {
     /// <summary>
-    /// 타이틀 씬 연출: 메뉴 버튼들이 오른쪽으로 밀려 나가고,
-    /// 패널(뒤로 가기 버튼 포함)이 위에서 화면 중앙으로 내려온다. Hide는 그 반대.
-    /// 패널 하나와 메뉴 버튼을 함께 움직이므로 패널마다 이 컴포넌트를 하나씩 둔다. (로드 패널, 설정 패널)
+    /// 패널이 위에서 화면 중앙으로 내려오는 연출. Hide는 그 반대.
+    /// 타이틀 씬에서는 메뉴 버튼들이 오른쪽으로 밀려 나가고 제목이 위로 올라가며(menuButtons, title),
+    /// Game 씬에서는 둘 다 비워 두고 패널만 움직인다. (이름은 처음 쓰인 곳을 따른 것이다)
+    /// 패널 하나를 움직이므로 패널마다 이 컴포넌트를 하나씩 둔다. (타이틀: 로드·설정, Game: 상점·저장/불러오기·설정)
     /// 패널이 비활성이 되어도 코루틴이 유지되도록 항상 활성인 오브젝트(MainMenuCanvas 또는 그 자식)에 붙인다.
     /// </summary>
     public class TitleLoadPanelTransition : SaveLoadPanelTransition

@@ -21,6 +21,8 @@ namespace BlackSmith.UI
         [SerializeField] private Text moneyLabel;
         [SerializeField] private ShopBuyPopup buyPopup;
         [SerializeField] private Button closeButton;
+        [Tooltip("보이고 숨기는 연출. 비워 두면 즉시 켜고 끈다.")]
+        [SerializeField] private SaveLoadPanelTransition transition;
 
         [Header("탭")]
         [SerializeField] private Button buyTabButton;
@@ -61,6 +63,8 @@ namespace BlackSmith.UI
 
         public void Open()
         {
+            if (transition != null && transition.IsPlaying) return;
+
             Unsubscribe();
             PlayerData player = GameSession.Current;
             service = new ShopService(player);
@@ -68,7 +72,9 @@ namespace BlackSmith.UI
             subscribedPlayer.OnMoneyChanged += OnMoneyChanged;
             subscribedPlayer.OnInventoryChanged += OnInventoryChanged;
 
-            gameObject.SetActive(true);
+            // 목록을 채우기 전에 패널이 먼저 활성화되어 있어야 한다. (transition.Show도 즉시 활성화함)
+            if (transition != null) transition.Show();
+            else gameObject.SetActive(true);
             if (buyPopup != null) buyPopup.gameObject.SetActive(false);
             mode = Mode.Buy;
             Rebuild();
@@ -79,7 +85,8 @@ namespace BlackSmith.UI
         {
             if (buyPopup != null) buyPopup.Close();
             Unsubscribe();
-            gameObject.SetActive(false);
+            if (transition != null) transition.Hide();
+            else gameObject.SetActive(false);
         }
 
         public void SetMode(Mode newMode)

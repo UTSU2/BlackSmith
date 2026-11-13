@@ -3863,6 +3863,86 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &341601885
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 341601886}
+  - component: {fileID: 341601887}
+  m_Layer: 0
+  m_Name: SaveLoadTransition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &341601886
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341601885}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 773277430}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &341601887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341601885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5020db082b34546b8c5135c9f5d76f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.UI.TitleLoadPanelTransition
+  panel: {fileID: 1547114865}
+  menuButtons: []
+  panelGroup: {fileID: 1547114869}
+  title: {fileID: 0}
+  duration: 0.5
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  menuSlideDistance: 600
+  menuStagger: 0.05
+  titleSlideDistance: 400
 --- !u!1 &345182013
 GameObject:
   m_ObjectHideFlags: 0
@@ -7113,6 +7193,7 @@ GameObject:
   - component: {fileID: 615042041}
   - component: {fileID: 615042040}
   - component: {fileID: 615042039}
+  - component: {fileID: 615042042}
   m_Layer: 0
   m_Name: SettingsPanel
   m_TagString: Untagged
@@ -7163,6 +7244,7 @@ MonoBehaviour:
   bgmValueLabel: {fileID: 1301371952}
   sfxValueLabel: {fileID: 658954844}
   closeButton: {fileID: 2012593890}
+  transition: {fileID: 1184276404}
   titleButton: {fileID: 158178909}
   confirmPopup: {fileID: 826526499}
   confirmYesButton: {fileID: 536099044}
@@ -7206,6 +7288,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 615042037}
   m_CullTransparentMesh: 1
+--- !u!225 &615042042
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 615042037}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &615645725
 GameObject:
   m_ObjectHideFlags: 0
@@ -8912,6 +9006,9 @@ RectTransform:
   - {fileID: 251874986}
   - {fileID: 761450200}
   - {fileID: 615042038}
+  - {fileID: 1455415479}
+  - {fileID: 341601886}
+  - {fileID: 1184276403}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -11797,6 +11894,7 @@ GameObject:
   - component: {fileID: 950923500}
   - component: {fileID: 950923499}
   - component: {fileID: 950923497}
+  - component: {fileID: 950923501}
   m_Layer: 0
   m_Name: ShopPanel
   m_TagString: Untagged
@@ -11821,6 +11919,7 @@ MonoBehaviour:
   moneyLabel: {fileID: 646555034}
   buyPopup: {fileID: 1810650053}
   closeButton: {fileID: 269264451}
+  transition: {fileID: 1455415480}
   buyTabButton: {fileID: 1666459395}
   sellTabButton: {fileID: 1852732430}
   buyTabImage: {fileID: 1666459394}
@@ -11894,6 +11993,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 950923496}
   m_CullTransparentMesh: 1
+--- !u!225 &950923501
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950923496}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &958515440
 GameObject:
   m_ObjectHideFlags: 0
@@ -14353,6 +14464,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1176536019}
   m_CullTransparentMesh: 1
+--- !u!1 &1184276402
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1184276403}
+  - component: {fileID: 1184276404}
+  m_Layer: 0
+  m_Name: SettingsTransition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1184276403
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1184276402}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 773277430}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1184276404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1184276402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5020db082b34546b8c5135c9f5d76f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.UI.TitleLoadPanelTransition
+  panel: {fileID: 615042038}
+  menuButtons: []
+  panelGroup: {fileID: 615042042}
+  title: {fileID: 0}
+  duration: 0.5
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  menuSlideDistance: 600
+  menuStagger: 0.05
+  titleSlideDistance: 400
 --- !u!1 &1187386402
 GameObject:
   m_ObjectHideFlags: 0
@@ -22765,6 +22956,86 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &1455415478
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1455415479}
+  - component: {fileID: 1455415480}
+  m_Layer: 0
+  m_Name: ShopTransition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1455415479
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1455415478}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 773277430}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1455415480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1455415478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5020db082b34546b8c5135c9f5d76f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.UI.TitleLoadPanelTransition
+  panel: {fileID: 950923498}
+  menuButtons: []
+  panelGroup: {fileID: 950923501}
+  title: {fileID: 0}
+  duration: 0.5
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  menuSlideDistance: 600
+  menuStagger: 0.05
+  titleSlideDistance: 400
 --- !u!1 &1460017982
 GameObject:
   m_ObjectHideFlags: 0
@@ -23612,7 +23883,7 @@ MonoBehaviour:
   - {fileID: 504079992}
   titleLabel: {fileID: 860056756}
   confirmPopup: {fileID: 71108834}
-  transition: {fileID: 0}
+  transition: {fileID: 341601887}
   pager: {fileID: 255417830}
   saveTabButton: {fileID: 313472182}
   loadTabButton: {fileID: 587616069}
