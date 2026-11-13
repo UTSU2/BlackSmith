@@ -21,6 +21,17 @@ namespace BlackSmith.UI
         [Tooltip("보이고 숨기는 연출. Title 씬에서만 연결한다. 비워 두면 즉시 켜고 끈다(Game 씬).")]
         [SerializeField] private SaveLoadPanelTransition transition;
 
+        [Header("화면 (비워 두면 해당 항목은 동작하지 않는다)")]
+        [Tooltip("전체화면 선택 버튼. 선택된 쪽은 눌림 스프라이트로 보여준다.")]
+        [SerializeField] private Button fullscreenButton;
+        [SerializeField] private Button windowedButton;
+        [SerializeField] private Sprite buttonSprite;
+        [SerializeField] private Sprite buttonPressedSprite;
+        [Tooltip("창 모드 해상도를 한 칸씩 바꾸는 화살표 버튼과 현재 해상도 글자.")]
+        [SerializeField] private Button resolutionPrevButton;
+        [SerializeField] private Button resolutionNextButton;
+        [SerializeField] private Text resolutionLabel;
+
         [Header("타이틀로 돌아가기 (Game 씬에서만 연결. 비워 두면 동작하지 않는다)")]
         [SerializeField] private Button titleButton;
         [Tooltip("저장하지 않은 변경이 있을 때만 뜨는 확인 창. 기본은 꺼 둔다.")]
@@ -41,6 +52,10 @@ namespace BlackSmith.UI
             if (closeButton != null) closeButton.onClick.AddListener(Close);
             if (bgmSlider != null) bgmSlider.onValueChanged.AddListener(OnBgmChanged);
             if (sfxSlider != null) sfxSlider.onValueChanged.AddListener(OnSfxChanged);
+            if (fullscreenButton != null) fullscreenButton.onClick.AddListener(OnFullscreenClicked);
+            if (windowedButton != null) windowedButton.onClick.AddListener(OnWindowedClicked);
+            if (resolutionPrevButton != null) resolutionPrevButton.onClick.AddListener(OnResolutionPrev);
+            if (resolutionNextButton != null) resolutionNextButton.onClick.AddListener(OnResolutionNext);
             if (titleButton != null) titleButton.onClick.AddListener(OnTitleClicked);
             if (confirmYesButton != null) confirmYesButton.onClick.AddListener(GoToTitle);
             if (confirmNoButton != null) confirmNoButton.onClick.AddListener(CloseConfirm);
@@ -54,6 +69,10 @@ namespace BlackSmith.UI
             if (closeButton != null) closeButton.onClick.RemoveListener(Close);
             if (bgmSlider != null) bgmSlider.onValueChanged.RemoveListener(OnBgmChanged);
             if (sfxSlider != null) sfxSlider.onValueChanged.RemoveListener(OnSfxChanged);
+            if (fullscreenButton != null) fullscreenButton.onClick.RemoveListener(OnFullscreenClicked);
+            if (windowedButton != null) windowedButton.onClick.RemoveListener(OnWindowedClicked);
+            if (resolutionPrevButton != null) resolutionPrevButton.onClick.RemoveListener(OnResolutionPrev);
+            if (resolutionNextButton != null) resolutionNextButton.onClick.RemoveListener(OnResolutionNext);
             if (titleButton != null) titleButton.onClick.RemoveListener(OnTitleClicked);
             if (confirmYesButton != null) confirmYesButton.onClick.RemoveListener(GoToTitle);
             if (confirmNoButton != null) confirmNoButton.onClick.RemoveListener(CloseConfirm);
@@ -71,6 +90,7 @@ namespace BlackSmith.UI
 
             Show(bgmSlider, bgmValueLabel, SoundSettings.BgmVolume);
             Show(sfxSlider, sfxValueLabel, SoundSettings.SfxVolume);
+            RefreshDisplay(Screen.fullScreenMode == FullScreenMode.Windowed);
         }
 
         public void Close()
@@ -95,6 +115,55 @@ namespace BlackSmith.UI
         private void CloseConfirm()
         {
             if (confirmPopup != null) confirmPopup.SetActive(false);
+        }
+
+        private void OnFullscreenClicked()
+        {
+            DisplaySettings.SetWindowed(false);
+            RefreshDisplay(false);
+        }
+
+        private void OnWindowedClicked()
+        {
+            DisplaySettings.SetWindowed(true);
+            RefreshDisplay(true);
+        }
+
+        private void OnResolutionPrev() => StepResolution(-1);
+
+        private void OnResolutionNext() => StepResolution(1);
+
+        // 목록 끝에서는 멈춘다. 창 모드가 아닐 때는 값만 저장하고 화면은 바꾸지 않는다.
+        private void StepResolution(int step)
+        {
+            DisplaySettings.SetResolutionIndex(DisplaySettings.ResolutionIndex + step);
+            RefreshDisplay(DisplaySettings.IsWindowed);
+        }
+
+        // 버튼 모양과 해상도 글자를 갱신한다. SetResolution은 프레임 끝에 적용되므로, 클릭 직후에는
+        // Screen.fullScreenMode 대신 방금 정한 값을 넘기고, 패널을 열 때만 실제 화면 모드(Alt+Enter로 바뀐 것 포함)를 쓴다.
+        private void RefreshDisplay(bool windowed)
+        {
+            SetSelected(fullscreenButton, !windowed);
+            SetSelected(windowedButton, windowed);
+
+            int index = DisplaySettings.ResolutionIndex;
+            int count = DisplaySettings.AvailableResolutions.Count;
+            if (resolutionLabel != null)
+            {
+                Vector2Int size = DisplaySettings.CurrentResolution;
+                resolutionLabel.text = size.x + " x " + size.y;
+            }
+            if (resolutionPrevButton != null) resolutionPrevButton.interactable = windowed && index > 0;
+            if (resolutionNextButton != null) resolutionNextButton.interactable = windowed && index < count - 1;
+        }
+
+        // 선택된 버튼은 눌림 스프라이트로 보여준다. ButtonLabelPress가 이를 보고 글자도 함께 내린다.
+        private void SetSelected(Button button, bool selected)
+        {
+            if (button == null || button.image == null) return;
+            Sprite sprite = selected ? buttonPressedSprite : buttonSprite;
+            if (sprite != null) button.image.sprite = sprite;
         }
 
         private void OnBgmChanged(float value)
