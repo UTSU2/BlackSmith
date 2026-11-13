@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b072b6b7a67fda34aae8f56e6bf66ab6, type: 3}
+  m_Name: TutorialConfig
+  m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Tutorial.TutorialConfig
+  recipe: {fileID: 11400000, guid: 63388866d6b918d4a874e186172d21fb, type: 2}
+  steps:
+  - {fileID: 11400000, guid: de8fdbeee94beb94bad28b429706a330, type: 2}
+  - {fileID: 11400000, guid: 0b42b5e08022b914db40cb68569916ff, type: 2}
+  - {fileID: 11400000, guid: 41bc53481e860994886a6184502e5c15, type: 2}
+  - {fileID: 11400000, guid: f511ee55ca718f34cb5c183d2c20cbde, type: 2}
+  - {fileID: 11400000, guid: 31600f01e39cada4e80839b5a4102cfc, type: 2}
+  - {fileID: 11400000, guid: 1d2b8ecfe16cc05499a21911d833796a, type: 2}
+  completionMessage: "[\uC784\uC2DC] \uD29C\uD1A0\uB9AC\uC5BC \uC644\uB8CC, 1000\uC6D0
+    \uC9C0\uAE09"
