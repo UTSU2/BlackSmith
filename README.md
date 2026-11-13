@@ -54,24 +54,28 @@ BlackSmith는 **제작 중심**의 게임입니다. 플레이어는 대장간에
 - **타이틀 씬 (`TItle`)**
   - 대장간 배경: 기본 도형 스프라이트를 조합해 만든 벽, 바닥, 천장 들보, 화로, 모루, 선반
   - 조명과 연출: 화로 위치의 주황색 Point Light 2D, 불꽃 파티클
-  - 메뉴 버튼 3개 (우측 하단, Fantasy Wooden GUI 에셋 사용)
+  - 메뉴 버튼 4개 (우측 하단, Fantasy Wooden GUI 에셋 사용)
     - 새 게임: `Game` 씬으로 이동. 튜토리얼은 아직 없어 건너뛴 것으로 처리하고 시작 지급금 1000원을 받고 시작합니다. (튜토리얼이 생기면 완료·스킵 시 지급)
     - 로드 게임: 슬롯 8개(2페이지) 로드 패널에서 저장 파일을 불러와 `Game` 씬으로 이동
+    - 설정: BGM / 효과음 소리 크기 슬라이더 패널 (값은 `PlayerPrefs`에 저장)
     - 닫기: 게임 종료 (에디터에서는 플레이 모드 종료)
   - 버튼을 누르는 동안 글자도 함께 내려가는 눌림 연출
+  - 기본 BGM(`bgm_default`)이 재생됩니다. 씬마다 처음부터 재생합니다.
 - **게임 씬 (`Game`)**
   - 대장간 배경
   - 상점 (우측 상단 상점 버튼): 구매/판매 탭, 광물 구매, 완성품 판매, 구매/판매 팝업. 목록은 가격 낮은 순(같으면 ID 순)으로 정렬
   - 제작: 모루를 클릭해 재료를 넣고 시작. 가열, 단조, 열처리, 연마 4개 미니게임, 레시피 자동 매칭, 점수 → 품질, 완성품 지급
   - 저장/불러오기 (우측 상단 책 버튼): 저장/불러오기 탭, 슬롯 8개(2페이지), 덮어쓰기 확인 팝업. 불러오면 `Game` 씬을 다시 로드
   - 저장 파일은 `persistentDataPath/saves/slot_N.json`에 슬롯별로 저장
+  - 설정 (우상단 톱니바퀴 버튼): BGM / 효과음 슬라이더와 타이틀로 돌아가기. 저장 이후 금액·소지품이 바뀌었을 때만 확인 창이 뜹니다
+  - 사운드: 가열·단조·열처리·연마 적중 효과음 9종, 기본 BGM과 제작 중 BGM(제작 시작부터 완료까지만 제작 BGM). 파일은 임시입니다
 
 ### v1(MVP) 남은 작업
 
 MVP 완료 기준: 광물·제작품 임시 완성, 적중 사운드, BGM, 아주 기본적인 밸런스 조정. ([docs/MVP.md](docs/MVP.md) §5)
 
-- 적중 사운드, BGM 추가
-- 미니게임 판정·난이도 수치의 플레이 검증과 기본 조정 (특히 열처리 난이도 10, 연마 5초)
+- 적중 사운드와 BGM은 추가했습니다. 사운드 파일은 임시이며 최종 음색은 미정입니다. ([docs/SoundPlan.md](docs/SoundPlan.md))
+- 미니게임 판정·난이도 수치의 플레이 검증과 기본 조정 (특히 열처리 난이도 10). 제작 시간은 가열 5 / 단조 8 / 열처리 2 / 연마 5초로 조정했습니다.
 - 콘텐츠 확충: 현재 광물 48종(등급 분포 18/12/9/6/3, 값은 확정), 실제 이름의 장비 11종과 그 레시피 11개(`Medieval_Weapons` 스프라이트 사용, 가격은 재료 구매가 합으로 결정), 임시 제작품 5종(`temp_gear_*`)과 임시 레시피 38개가 있습니다. 임시 레시피는 아직 실제 장비에 쓰이지 않은 광물을 위한 것이며, 장비를 추가하면서 차례로 교체합니다. 장비 이름·재료 조합·난이도는 초안입니다.
 
 구현 예정 항목의 세부 사양은 아직 정해지지 않았습니다.
@@ -95,12 +99,13 @@ MVP 완료 기준: 광물·제작품 임시 완성, 적중 사운드, BGM, 아�
 
 | 파일 | 역할 |
 |---|---|
-| `Assets/Scripts/MainMenu.cs` | 타이틀 메뉴 버튼 동작 (새 게임, 로드 게임, 닫기) 과 버튼 글자 폰트 적용 |
-| `Assets/Scripts/GameHUD.cs` | `Game` 씬 HUD. 상점 버튼(`OnShop`)과 책 버튼(`OnBook`, 저장/불러오기 패널 열기)을 연결하고, 불러오기 성공 시 씬을 다시 로드 |
-| `Assets/Scripts/Data/` | `PlayerData`(돈·소지품), `InventoryEntry`, `GameSession`(현재 세션), `SaveSlotManager`(슬롯 8개 저장/불러오기), `SaveFile` |
+| `Assets/Scripts/MainMenu.cs` | 타이틀 메뉴 버튼 동작 (새 게임, 로드 게임, 설정, 닫기) 과 버튼 글자 폰트 적용 |
+| `Assets/Scripts/GameHUD.cs` | `Game` 씬 HUD. 상점 버튼(`OnShop`), 책 버튼(`OnBook`, 저장/불러오기 패널 열기), 톱니바퀴 버튼(`OnSettings`, 설정 패널 열기)을 연결하고, 불러오기 성공 시 씬을 다시 로드 |
+| `Assets/Scripts/Data/` | `PlayerData`(돈·소지품, 저장 이후 변경 여부, 튜토리얼 대기와 보상), `InventoryEntry`, `GameSession`(현재 세션, 새 게임 시작), `SaveSlotManager`(슬롯 8개 저장/불러오기), `SaveFile` |
+| `Assets/Scripts/Audio/` | 사운드: `SoundSettings`(BGM / 효과음 크기, `PlayerPrefs`), `SfxClips`(효과음 클립 모음), `SfxPlayer`, `BgmPlayer`(크로스페이드), `CraftingBgmSwitch`(제작 시작·완료에 따른 BGM 전환) |
 | `Assets/Scripts/Shop/ShopService.cs` | 구매/판매 규칙 |
-| `Assets/Scripts/Crafting/` | 제작 로직: `CraftRecipeData`, `RecipeDatabase`, `RecipeMatcher`, `CraftScoring`, `CraftDifficulty`, `CraftingSession`, `CraftingController`, 4개 미니게임(`HeatMinigame`, `ForgeMinigame`, `HeatTreatMinigame`, `PolishMinigame`), `AnvilInteractable` |
-| `Assets/Scripts/UI/` | 화면 표시: `ShopPanel`, `ShopItemView`, `ShopBuyPopup`, `CraftingPanel`, 미니게임 View 4종, `SaveLoadPanel`, `SaveSlotView`, `SaveSlotPager` 등 |
+| `Assets/Scripts/Crafting/` | 제작 로직: `CraftRecipeData`, `RecipeDatabase`, `RecipeMatcher`, `CraftScoring`, `CraftDifficulty`, `CraftingSession`, `CraftingController`, 4개 미니게임(`HeatMinigame`, `ForgeMinigame`, `HeatTreatMinigame`, `PolishMinigame`), `CraftingSfx`(미니게임 판정 효과음 연결), `AnvilInteractable` |
+| `Assets/Scripts/UI/` | 화면 표시: `ShopPanel`, `ShopItemView`, `ShopBuyPopup`, `CraftingPanel`, 미니게임 View 4종, `SaveLoadPanel`, `SaveSlotView`, `SaveSlotPager`, `SettingsPanel` 등 |
 | `Assets/Scripts/ButtonLabelPress.cs` | 버튼이 눌림 이미지일 때 글자를 함께 내리는 연출 |
 | `Assets/Scripts/Items/ItemData.cs` | 아이템 공통 데이터(ScriptableObject): ID, 이름, 아이콘, 설명, 최대 스택, 기본 등급(아이템당 하나), Common 기준 판매가 (등급 배율은 `ItemGradeInfo`) |
 | `Assets/Scripts/Items/MineralItemData.cs` | 광물 아이템. 구매와 판매 가능 (구매가 포함) |
@@ -126,7 +131,8 @@ MVP 완료 기준: 광물·제작품 임시 완성, 적중 사운드, BGM, 아�
 
 | 폴더 | 내용 |
 |---|---|
-| `Assets/Fantasy Wooden GUI  Free` | 나무 느낌의 UI 버튼과 패널 (현재 타이틀 버튼에 사용) |
+| `Assets/Fantasy Wooden GUI  Free` | 나무 느낌의 UI 버튼과 패널 (타이틀·Game UI의 버튼과 패널에 사용) |
+| `Assets/Audio` | 임시 효과음 9종(`Sfx/`), BGM 2곡(`Bgm/`), 효과음 클립 모음 `SfxClips.asset` |
 | `Assets/48 Free Minerals Pixel Art Icons Pack` | 광물 픽셀 아이콘 |
 | `Assets/Medieval_Weapons` | 중세 무기 이미지와 데모 씬 |
 | `Assets/Sprites` | 배경 제작에 쓴 흰색 사각형 / 원 도형 스프라이트 |
@@ -152,15 +158,17 @@ docs/              GameDesign.md, CoreLoop.md, MVP.md, Roadmap.md (기획 문서
 Assets/
 ├── Scenes/        TItle.unity, Game.unity
 ├── Scripts/       MainMenu.cs, GameHUD.cs, ButtonLabelPress.cs
+│   ├── Audio/     SoundSettings, SfxClips, SfxPlayer, BgmPlayer, CraftingBgmSwitch
 │   ├── Items/     ItemData, MineralItemData, CraftedItemData, ItemDatabase 등
 │   ├── Data/      PlayerData, GameSession, SaveSlotManager 등
 │   ├── Shop/      ShopService
 │   ├── Crafting/  레시피, 매칭, 점수, 미니게임
-│   └── UI/        상점, 제작, 저장/불러오기 UI
+│   └── UI/        상점, 제작, 저장/불러오기, 설정 UI
 ├── Editor/        ItemCreatorWindow, RecipeCreatorWindow, MoneyCheatMenu
 ├── Resources/
 │   ├── Items/     아이템 ScriptableObject 에셋 (Minerals/, Crafted/)
 │   └── Recipes/   레시피 ScriptableObject 에셋
+├── Audio/         Sfx/ (효과음), Bgm/ (BGM), SfxClips.asset
 ├── Sprites/       WhiteSquare.png, WhiteCircle.png
 ├── Fantasy Wooden GUI  Free/
 ├── 48 Free Minerals Pixel Art Icons Pack/
