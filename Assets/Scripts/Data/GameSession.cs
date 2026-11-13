@@ -1,3 +1,5 @@
+using BlackSmith.Tutorial;
+
 namespace BlackSmith.Data
 {
     /// <summary>
@@ -18,14 +20,23 @@ namespace BlackSmith.Data
         }
 
         /// <summary>
-        /// 새 게임: 빈 플레이어 데이터로 시작한다. 튜토리얼이 아직 없으므로 시작하자마자 건너뛴 것으로 처리해 보상을 바로 준다.
-        /// 튜토리얼이 생기면 StartTutorial까지만 하고, CompleteTutorial은 튜토리얼을 마치거나 건너뛰는 시점에서 부른다.
+        /// 새 게임: 빈 플레이어 데이터로 시작한다. 튜토리얼 설정(TutorialConfig)이 있으면 튜토리얼 시작 지급금만 주고
+        /// 튜토리얼을 대기 상태로 둔다. CompleteTutorial은 튜토리얼을 마치거나 건너뛰는 시점에서 부른다.
+        /// 설정이 없으면 튜토리얼을 건너뛴 것으로 보고 곧바로 완료 보상을 준다.
         /// </summary>
         public static void StartNew()
         {
             current = new PlayerData();
-            current.StartTutorial();
-            current.CompleteTutorial();
+            TutorialConfig config = TutorialConfig.Load();
+            if (config != null)
+            {
+                current.StartTutorial(config.CalculateStartMoney());
+            }
+            else
+            {
+                current.StartTutorial(0);
+                current.CompleteTutorial();
+            }
 
             // 시작 지급금은 저장하지 않은 변경으로 보지 않는다. (아무것도 안 하고 타이틀로 돌아갈 때 확인 창이 뜨지 않게)
             current.MarkSaved();

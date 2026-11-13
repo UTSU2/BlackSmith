@@ -39,10 +39,14 @@ namespace BlackSmith.Data
         /// <summary>튜토리얼이 아직 끝나지 않았는가. 기존 저장 파일은 항상 false(완료)다.</summary>
         public bool IsTutorialPending => tutorialPending;
 
-        /// <summary>새 게임에서 튜토리얼을 시작 상태로 만든다. 보상은 CompleteTutorial에서 받는다.</summary>
-        public void StartTutorial()
+        /// <summary>
+        /// 새 게임에서 튜토리얼을 시작 상태로 만들고, startMoney가 0보다 크면 튜토리얼용 시작 지급금으로 바로 받는다.
+        /// (튜토리얼에서 쓰는 재료 구매가 합. 계산은 TutorialConfig.CalculateStartMoney) 완료 보상은 CompleteTutorial에서 따로 받는다.
+        /// </summary>
+        public void StartTutorial(int startMoney)
         {
             tutorialPending = true;
+            if (startMoney > 0) AddMoney(startMoney);
         }
 
         /// <summary>
@@ -99,6 +103,17 @@ namespace BlackSmith.Data
         {
             InventoryEntry entry = Find(itemId, variant);
             return entry != null ? entry.Count : 0;
+        }
+
+        /// <summary>등급·품질 구분 없이 해당 아이템의 모든 ItemVariant 수량을 합한다. 없으면 0.</summary>
+        public int GetTotalCount(string itemId)
+        {
+            long total = 0;
+            foreach (InventoryEntry entry in items)
+            {
+                if (entry.ItemId == itemId) total += entry.Count;
+            }
+            return (int)Math.Min(total, int.MaxValue);
         }
 
         public bool HasItem(string itemId, ItemGrade grade, int count = 1) => HasItem(itemId, new ItemVariant(grade), count);
