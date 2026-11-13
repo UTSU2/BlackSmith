@@ -14,15 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MineralItemData
   id: 1
   displayName: "\uCCA0 \uC6D0\uC11D"
-  icon: {fileID: 0}
+  icon: {fileID: 1708141900530535132, guid: c9feb7bce63dc59428e55154c7a99c81, type: 3}
   description: "\uAC00\uC7A5 \uAE30\uBCF8\uC801\uC778 \uAD11\uC11D"
   maxStack: 99
   defaultGrade: 0
   sellPrice: 50
-  sellPriceMultipliers:
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1
   buyPrice: 100

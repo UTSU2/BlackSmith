@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bffba30a58ef0447b4ef10205a7ef95, type: 3}
+  m_Name: deepsea_jade_spear
+  m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Items.CraftedItemData
+  id: deepsea_jade_spear
+  displayName: "\uC2EC\uD574 \uBE44\uCDE8 \uCC3D"
+  icon: {fileID: 21300000, guid: fc73b1ca352ad9b4bb2eb830eab5ee20, type: 3}
+  description: "\uC2EC\uD574 \uBE44\uCDE8\uB97C \uBC15\uC740 \uCC3D."
+  maxStack: 1
+  defaultGrade: 3
+  sellPrice: 0

@@ -25,6 +25,9 @@ namespace BlackSmith.Crafting
         [SerializeField] private HeatTreatMinigameView heatTreatView;
         [SerializeField] private PolishMinigameView polishView;
 
+        [Header("효과음 (비워 두면 소리 없이 진행)")]
+        [SerializeField] private CraftingSfx sfx;
+
         [Header("미니게임 설정 (난이도 1 기준값. 난이도별 변화는 docs/GameDesign.md §4)")]
         [SerializeField] private HeatSettings heatSettings = new HeatSettings();
         [SerializeField] private ForgeSettings forgeSettings = new ForgeSettings();
@@ -40,6 +43,9 @@ namespace BlackSmith.Crafting
         private CraftStage activeStage;
 
         public bool IsCrafting { get; private set; }
+
+        /// <summary>제작이 시작됐을 때(재료가 소모되고 첫 단계로 들어가기 직전) 호출. BGM 전환용이다.</summary>
+        public event Action CraftStarted;
 
         /// <summary>모든 단계가 끝났을 때 호출.</summary>
         public event Action<CraftResult> CraftFinished;
@@ -84,6 +90,7 @@ namespace BlackSmith.Crafting
             difficulty = request.Difficulty;
             stageIndex = -1;
             result = new CraftResult(request);
+            CraftStarted?.Invoke();
             AdvanceStage();
         }
 
@@ -115,6 +122,7 @@ namespace BlackSmith.Crafting
                     // View가 Begin 이후의 값(랜덤 목표, 난이도 반영 값)을 읽도록 Run을 먼저 한다.
                     hideActiveView = heatView.Hide;
                     Run(heat);
+                    if (sfx != null) sfx.Bind(heat);
                     heatView.Show(heat);
                     return true;
 
@@ -123,6 +131,7 @@ namespace BlackSmith.Crafting
                     ForgeMinigame forge = new ForgeMinigame(forgeSettings);
                     hideActiveView = forgeView.Hide;
                     Run(forge);
+                    if (sfx != null) sfx.Bind(forge);
                     forgeView.Show(forge);
                     return true;
 
@@ -131,6 +140,7 @@ namespace BlackSmith.Crafting
                     HeatTreatMinigame heatTreat = new HeatTreatMinigame(heatTreatSettings);
                     hideActiveView = heatTreatView.Hide;
                     Run(heatTreat);
+                    if (sfx != null) sfx.Bind(heatTreat);
                     heatTreatView.Show(heatTreat);
                     return true;
 
@@ -139,6 +149,7 @@ namespace BlackSmith.Crafting
                     PolishMinigame polish = new PolishMinigame(polishSettings);
                     hideActiveView = polishView.Hide;
                     Run(polish);
+                    if (sfx != null) sfx.Bind(polish);
                     polishView.Show(polish);
                     return true;
 
@@ -167,6 +178,7 @@ namespace BlackSmith.Crafting
         {
             if (activeGame != null) activeGame.Completed -= OnStageCompleted;
             activeGame = null;
+            if (sfx != null) sfx.Unbind();
             HideActiveView();
 
             result.AddStage(new CraftStageResult(activeStage, completeness, false));
@@ -185,14 +197,14 @@ namespace BlackSmith.Crafting
         }
 
         /// <summary>
-        /// 완성품을 소지품에 지급한다. 등급은 레시피 결과물의 등급이고, 품질은 단계 점수 합계(+어드밴티지)로 정한다.
+        /// 완성품을 소지품에 지급한다. 등급은 레시피 결과물의 등급이고, 품질은 단계 점수 합계로 정한다.
         /// 재료 합산 가격은 제작을 시작할 때 계산해 둔 값을 쓴다 (재료는 이미 소모됐기 때문).
         /// </summary>
         private static void GrantResult(CraftResult finished)
         {
             CraftRequest request = finished.Request;
             CraftedItemData product = finished.Recipe.Result;
-            decimal score = CraftScoring.CalculateScore(finished.Stages, request.AdvantageTenths);
+            decimal score = CraftScoring.CalculateScore(finished.Stages);
             ItemQuality quality = ItemQualityInfo.FromScore(score);
             ItemVariant variant = new ItemVariant(product.DefaultGrade, quality, request.IngredientValue);
 
@@ -210,6 +222,7 @@ namespace BlackSmith.Crafting
                 activeGame.Completed -= OnStageCompleted;
                 activeGame = null;
             }
+            if (sfx != null) sfx.Unbind();
             HideAllViews();
             IsCrafting = false;
         }

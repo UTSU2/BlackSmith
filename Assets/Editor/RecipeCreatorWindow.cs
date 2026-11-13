@@ -89,7 +89,7 @@ namespace BlackSmith.EditorTools
                 EditorGUILayout.LabelField("결과물 등급", result.DefaultGrade.ToString());
             }
             baseDifficulty = EditorGUILayout.IntSlider(
-                new GUIContent("기본 난이도", "미니게임 기본 난이도(1~10). 레시피 등급보다 높은 재료를 쓰면 가중이 더해진다."),
+                new GUIContent("기본 난이도", "미니게임 기본 난이도(1~10). 재료의 등급·종류·개수와 상관없이 이 값이 그대로 적용된다."),
                 baseDifficulty, CraftDifficulty.MinLevel, CraftDifficulty.MaxLevel);
 
             EditorGUILayout.Space();

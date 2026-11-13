@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 224a485348572b54da245246ea05480e, type: 3}
+  m_Name: SfxClips
+  m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Audio.SfxClips
+  heatHold: {fileID: 8300000, guid: 1713773a2d2e3204c826df67625f5581, type: 3}
+  forgePerfect: {fileID: 8300000, guid: 44a67055cc59adf4caa065d4aaafbaed, type: 3}
+  forgeGood: {fileID: 8300000, guid: 3c20d2c9c6222f84b9fba66767f9727d, type: 3}
+  forgeMiss: {fileID: 8300000, guid: 428f30b69c9a4af46a4d612f190bea21, type: 3}
+  quenchFull: {fileID: 8300000, guid: 91272ae887987d84089ce9a46384f5ad, type: 3}
+  quenchHalf: {fileID: 8300000, guid: 988c9249598eb074db7d1bc02b9729c5, type: 3}
+  quenchFail: {fileID: 8300000, guid: 45b6b53106e1ef64f925504521322038, type: 3}
+  sandLoop: {fileID: 8300000, guid: 6957ce48c1200834081591fc6afd5523, type: 3}
+  flawCleared: {fileID: 8300000, guid: 29a2957d2da2c2948bf35861dd0c0af2, type: 3}

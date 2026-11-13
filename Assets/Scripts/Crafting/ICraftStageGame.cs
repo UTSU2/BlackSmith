@@ -8,7 +8,7 @@ namespace BlackSmith.Crafting
     /// </summary>
     public interface ICraftStageGame
     {
-        /// <summary>끝났을 때 호출 (완성도 0~1). 완성도 계산 규칙은 미정이라 임시다.</summary>
+        /// <summary>끝났을 때 호출 (완성도 0~1). 완성도 계산 규칙은 docs/GameDesign.md §4를 따른다.</summary>
         event Action<float> Completed;
 
         bool IsRunning { get; }

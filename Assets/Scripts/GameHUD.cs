@@ -8,6 +8,7 @@ namespace BlackSmith
     {
         [SerializeField] private ShopPanel shopPanel;
         [SerializeField] private SaveLoadPanel saveLoadPanel;
+        [SerializeField] private SettingsPanel settingsPanel;
 
         private void Awake()
         {
@@ -28,6 +29,12 @@ namespace BlackSmith
         public void OnBook()
         {
             if (saveLoadPanel != null) saveLoadPanel.OpenSave();
+        }
+
+        /// <summary>톱니바퀴 버튼 = 설정 패널(소리 크기) 열기.</summary>
+        public void OnSettings()
+        {
+            if (settingsPanel != null) settingsPanel.Open();
         }
 
         // 불러온 데이터는 GameSession에 이미 반영되어 있으므로, 열려 있는 UI가 이전 데이터를 쥐지 않도록 씬을 다시 로드한다.

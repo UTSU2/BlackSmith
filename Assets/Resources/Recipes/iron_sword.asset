@@ -18,3 +18,4 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: 52fe61322fcaf5d45be0c6891d4a53e1, type: 2}
     count: 1
   stages: 00000000010000000200000003000000
+  baseDifficulty: 1

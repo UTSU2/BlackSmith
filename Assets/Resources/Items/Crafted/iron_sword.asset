@@ -14,14 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Items.CraftedItemData
   id: iron_sword
   displayName: "\uCCA0\uAC80"
-  icon: {fileID: 0}
-  description: 
+  icon: {fileID: 21300000, guid: f0e0ff09f1775e048a5bcd39b270106f, type: 3}
+  description: "\uAC00\uC7A5 \uAE30\uBCF8\uC801\uC778 \uCCA0\uC81C \uAC80."
   maxStack: 1
   defaultGrade: 0
   sellPrice: 0
-  sellPriceMultipliers:
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1

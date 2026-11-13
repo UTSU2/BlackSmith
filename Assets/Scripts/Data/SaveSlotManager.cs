@@ -46,6 +46,7 @@ namespace BlackSmith.Data
                 // 임시 파일에 먼저 쓰고 교체해서 저장 도중 종료돼도 기존 파일이 깨지지 않게 한다.
                 if (File.Exists(path)) File.Delete(path);
                 File.Move(tempPath, path);
+                player.MarkSaved();
                 return true;
             }
             catch (Exception e)
