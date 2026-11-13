@@ -18,6 +18,8 @@ namespace BlackSmith.UI
         [SerializeField] private Text bgmValueLabel;
         [SerializeField] private Text sfxValueLabel;
         [SerializeField] private Button closeButton;
+        [Tooltip("보이고 숨기는 연출. Title 씬에서만 연결한다. 비워 두면 즉시 켜고 끈다(Game 씬).")]
+        [SerializeField] private SaveLoadPanelTransition transition;
 
         [Header("타이틀로 돌아가기 (Game 씬에서만 연결. 비워 두면 동작하지 않는다)")]
         [SerializeField] private Button titleButton;
@@ -30,6 +32,9 @@ namespace BlackSmith.UI
         private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
 
         public bool IsOpen => gameObject.activeSelf;
+
+        /// <summary>열고 닫는 연출이 재생 중인가. 타이틀 메뉴가 다른 패널 연출과 겹치지 않게 확인하는 데 쓴다.</summary>
+        public bool IsTransitionPlaying => transition != null && transition.IsPlaying;
 
         private void Awake()
         {
@@ -56,8 +61,11 @@ namespace BlackSmith.UI
 
         public void Open()
         {
-            // 처음 켜질 때 Awake가 불리므로 켠 뒤에 값을 채운다.
-            gameObject.SetActive(true);
+            if (transition != null && transition.IsPlaying) return;
+
+            // 처음 켜질 때 Awake가 불리므로 켠 뒤에 값을 채운다. (transition.Show도 즉시 활성화한다)
+            if (transition != null) transition.Show();
+            else gameObject.SetActive(true);
             transform.SetAsLastSibling();
             CloseConfirm();
 
@@ -68,7 +76,8 @@ namespace BlackSmith.UI
         public void Close()
         {
             CloseConfirm();
-            gameObject.SetActive(false);
+            if (transition != null) transition.Hide();
+            else gameObject.SetActive(false);
         }
 
         // 저장 이후 금액·소지품이 바뀌지 않았으면 바로 이동하고, 바뀌었으면 확인 창을 띄운다.

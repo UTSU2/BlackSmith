@@ -43,11 +43,15 @@ namespace BlackSmith
 
         public void OnLoadGame()
         {
+            // 설정 패널 연출이 끝나기 전에 누르면 두 연출이 같은 버튼을 동시에 움직이므로 무시한다.
+            if (settingsPanel != null && settingsPanel.IsTransitionPlaying) return;
             if (loadPanel != null) loadPanel.OpenLoad();
         }
 
         public void OnSettings()
         {
+            // 로드 패널 연출이 끝나기 전에 누르면 두 연출이 같은 버튼을 동시에 움직이므로 무시한다.
+            if (loadPanel != null && loadPanel.IsTransitionPlaying) return;
             if (settingsPanel != null) settingsPanel.Open();
         }
 

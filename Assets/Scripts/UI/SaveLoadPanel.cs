@@ -67,6 +67,9 @@ namespace BlackSmith.UI
             if (closeButton != null) closeButton.onClick.RemoveListener(Close);
         }
 
+        /// <summary>열고 닫는 연출이 재생 중인가. 타이틀 메뉴가 다른 패널 연출과 겹치지 않게 확인하는 데 쓴다.</summary>
+        public bool IsTransitionPlaying => transition != null && transition.IsPlaying;
+
         public void OpenSave() => Open(Mode.Save);
 
         public void OpenLoad() => Open(Mode.Load);

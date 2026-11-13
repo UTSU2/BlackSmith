@@ -5,9 +5,11 @@ using UnityEngine;
 namespace BlackSmith.UI
 {
     /// <summary>
-    /// 타이틀 씬 연출: 메뉴 버튼들이 오른쪽으로 밀려 나가고,
-    /// 패널(뒤로 가기 버튼 포함)이 위에서 화면 중앙으로 내려온다. Hide는 그 반대.
-    /// 패널이 비활성이 되어도 코루틴이 유지되도록 항상 활성인 오브젝트(MainMenuCanvas)에 붙인다.
+    /// 패널이 위에서 화면 중앙으로 내려오는 연출. Hide는 그 반대.
+    /// 타이틀 씬에서는 메뉴 버튼들이 오른쪽으로 밀려 나가고 제목이 위로 올라가며(menuButtons, title),
+    /// Game 씬에서는 둘 다 비워 두고 패널만 움직인다. (이름은 처음 쓰인 곳을 따른 것이다)
+    /// 패널 하나를 움직이므로 패널마다 이 컴포넌트를 하나씩 둔다. (타이틀: 로드·설정, Game: 상점·저장/불러오기·설정)
+    /// 패널이 비활성이 되어도 코루틴이 유지되도록 항상 활성인 오브젝트(MainMenuCanvas 또는 그 자식)에 붙인다.
     /// </summary>
     public class TitleLoadPanelTransition : SaveLoadPanelTransition
     {
@@ -18,6 +20,8 @@ namespace BlackSmith.UI
         [SerializeField] private RectTransform[] menuButtons;
         [Tooltip("연출 중 입력을 막는 데 쓴다. 패널에 붙은 CanvasGroup.")]
         [SerializeField] private CanvasGroup panelGroup;
+        [Tooltip("패널이 열리면 위로 올라가 사라질 제목. 비워 두면 움직이지 않는다.")]
+        [SerializeField] private RectTransform title;
 
         [Header("연출")]
         [SerializeField, Min(0.05f)] private float duration = 0.5f;
@@ -26,8 +30,11 @@ namespace BlackSmith.UI
         [SerializeField] private float menuSlideDistance = 600f;
         [Tooltip("메뉴 버튼 사이의 시작 시간 차이(초).")]
         [SerializeField, Min(0f)] private float menuStagger = 0.05f;
+        [Tooltip("제목이 위로 올라가는 거리(px, 캔버스 기준). 제목이 화면 밖으로 완전히 나가야 한다.")]
+        [SerializeField] private float titleSlideDistance = 400f;
 
         private Vector2[] menuHomePositions;
+        private Vector2 titleHomePosition;
         private Vector2 panelShownPosition;
         private Coroutine running;
         private bool isShown;
@@ -49,6 +56,7 @@ namespace BlackSmith.UI
                 if (menuButtons[i] != null) menuHomePositions[i] = menuButtons[i].anchoredPosition;
             }
             if (panel != null) panelShownPosition = panel.anchoredPosition;
+            if (title != null) titleHomePosition = title.anchoredPosition;
         }
 
         public override void Show(Action onDone = null)
@@ -69,8 +77,12 @@ namespace BlackSmith.UI
 
         private IEnumerator Play(bool show, Action onDone)
         {
+            // 패널이 화면 위로 완전히 벗어나는 거리. 화면 전체 크기의 패널은 패널 높이와 같고,
+            // 중앙에 놓인 작은 패널은 (화면 높이 + 패널 높이) / 2가 필요하다.
+            RectTransform parent = panel.parent as RectTransform;
+            float parentHeight = parent != null && parent.rect.height > 0f ? parent.rect.height : 1080f;
             float panelHeight = panel.rect.height > 0f ? panel.rect.height : 1080f;
-            Vector2 panelHidden = panelShownPosition + new Vector2(0f, panelHeight);
+            Vector2 panelHidden = panelShownPosition + new Vector2(0f, (parentHeight + panelHeight) * 0.5f);
 
             if (panelGroup != null) panelGroup.blocksRaycasts = false;
 
@@ -85,6 +97,8 @@ namespace BlackSmith.UI
                 float panelT = curve.Evaluate(Mathf.Clamp01(elapsed / duration));
                 float panelBlend = show ? panelT : 1f - panelT;
                 panel.anchoredPosition = Vector2.LerpUnclamped(panelHidden, panelShownPosition, panelBlend);
+                // 제목은 패널이 내려오는 동안 위로 올라가고, 닫으면 내려온다.
+                if (title != null) title.anchoredPosition = titleHomePosition + new Vector2(0f, titleSlideDistance * (show ? panelT : 1f - panelT));
 
                 for (int i = 0; i < count; i++)
                 {
@@ -100,6 +114,7 @@ namespace BlackSmith.UI
 
             // 최종 위치를 정확히 맞춘다.
             panel.anchoredPosition = show ? panelShownPosition : panelHidden;
+            if (title != null) title.anchoredPosition = show ? titleHomePosition + new Vector2(0f, titleSlideDistance) : titleHomePosition;
             for (int i = 0; i < count; i++)
             {
                 if (menuButtons[i] == null) continue;
