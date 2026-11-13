@@ -45,7 +45,7 @@ BlackSmith는 **제작 중심**의 게임입니다. 플레이어는 대장간에
 - 미니게임 난이도는 1~10단계이고 레시피에 정의된 값 그대로 쓰며 재료 등급에 따른 가중이나 품질 보정은 없습니다. 난이도는 4개 미니게임에 같이 적용하며 플레이어에게 표시하지 않습니다.
 - 재료를 넣으면 가장 가까운 레시피가 자동으로 선택됩니다(레시피 북은 보이지 않음). 세부 규칙은 [docs/GameDesign.md](docs/GameDesign.md)의 "레시피 매칭"을 참고하세요.
 - Common 가격은 전역 기준값이 없고, 아이템마다 생성할 때(Item Creator) 정합니다.
-- 단계별 완성도 판정, 난이도 1~10단계별 수치, 1회 제작 시간(4개 합계 20초)은 확정이며 [docs/GameDesign.md](docs/GameDesign.md) §4에 있고 코드와 `Game` 씬 설정에 반영돼 있습니다. 실제 손맛과 난이도 체감은 플레이로 검증이 필요합니다.
+- 단계별 완성도 판정, 난이도 1~10단계별 수치, 1회 제작 시간(4개 합계 20초)은 확정이며 [docs/GameDesign.md](docs/GameDesign.md) §4에 있고 코드와 `Game` 씬 설정에 반영돼 있습니다. 기본 밸런스 조정은 마쳤고, 정밀 조정은 v2에서 합니다.
 
 ## 현재 구현 현황
 
@@ -70,12 +70,12 @@ BlackSmith는 **제작 중심**의 게임입니다. 플레이어는 대장간에
   - 설정 (우상단 톱니바퀴 버튼): BGM / 효과음 슬라이더와 타이틀로 돌아가기. 저장 이후 금액·소지품이 바뀌었을 때만 확인 창이 뜹니다
   - 사운드: 가열·단조·열처리·연마 적중 효과음 9종, 기본 BGM과 제작 중 BGM(제작 시작부터 완료까지만 제작 BGM). 파일은 임시입니다
 
-### v1(MVP) 남은 작업
+### v1(MVP) 상태
 
-MVP 완료 기준: 광물·제작품 임시 완성, 적중 사운드, BGM, 아주 기본적인 밸런스 조정. ([docs/MVP.md](docs/MVP.md) §5)
+MVP 완료 기준(광물·제작품 임시 완성, 적중 사운드, BGM, 아주 기본적인 밸런스 조정)을 모두 충족해 v1은 완료입니다. ([docs/MVP.md](docs/MVP.md) §5) 아래는 완료 기준에는 들어 있지 않은 후속 작업입니다.
 
-- 적중 사운드와 BGM은 추가했습니다. 사운드 파일은 임시이며 최종 음색은 미정입니다. ([docs/SoundPlan.md](docs/SoundPlan.md))
-- 미니게임 판정·난이도 수치의 플레이 검증과 기본 조정 (특히 열처리 난이도 10). 제작 시간은 가열 5 / 단조 8 / 열처리 2 / 연마 5초로 조정했습니다.
+- 적중 사운드와 BGM 파일은 임시이며 최종 음색은 미정입니다. ([docs/SoundPlan.md](docs/SoundPlan.md))
+- 기본 밸런스 조정은 마쳤습니다. 제작 시간은 가열 5 / 단조 8 / 열처리 2 / 연마 5초입니다. 정밀 조정은 v2입니다.
 - 콘텐츠 확충: 현재 광물 48종(등급 분포 18/12/9/6/3, 값은 확정), 실제 이름의 장비 11종과 그 레시피 11개(`Medieval_Weapons` 스프라이트 사용, 가격은 재료 구매가 합으로 결정), 임시 제작품 5종(`temp_gear_*`)과 임시 레시피 38개가 있습니다. 임시 레시피는 아직 실제 장비에 쓰이지 않은 광물을 위한 것이며, 장비를 추가하면서 차례로 교체합니다. 장비 이름·재료 조합·난이도는 초안입니다.
 
 구현 예정 항목의 세부 사양은 아직 정해지지 않았습니다.
@@ -135,7 +135,7 @@ MVP 완료 기준: 광물·제작품 임시 완성, 적중 사운드, BGM, 아�
 | `Assets/Audio` | 임시 효과음 9종(`Sfx/`), BGM 2곡(`Bgm/`), 효과음 클립 모음 `SfxClips.asset` |
 | `Assets/48 Free Minerals Pixel Art Icons Pack` | 광물 픽셀 아이콘 |
 | `Assets/Medieval_Weapons` | 중세 무기 이미지와 데모 씬 |
-| `Assets/Sprites` | 배경 제작에 쓴 흰색 사각형 / 원 도형 스프라이트 |
+| `Assets/Sprites` | 배경과 일부 UI(톱니바퀴 아이콘, 슬라이더) 제작에 쓴 흰색 사각형 / 원 / 링 도형 스프라이트 |
 
 - 폴더 이름 `Fantasy Wooden GUI  Free`에는 "Free" 앞에 공백이 두 칸 있습니다.
 - 외부 에셋의 라이선스와 출처는 이 문서에서 확인하지 않았습니다. 배포 전에 각 에셋의 라이선스를 확인해야 합니다.
@@ -169,7 +169,10 @@ Assets/
 │   ├── Items/     아이템 ScriptableObject 에셋 (Minerals/, Crafted/)
 │   └── Recipes/   레시피 ScriptableObject 에셋
 ├── Audio/         Sfx/ (효과음), Bgm/ (BGM), SfxClips.asset
-├── Sprites/       WhiteSquare.png, WhiteCircle.png
+├── Prefabs/UI/    ShopItemView, CraftingIngredientView
+├── UI/            상점 화살표 등 UI 스프라이트
+├── Screenshots/   개발 중 캡처 이미지
+├── Sprites/       WhiteSquare.png, WhiteCircle.png, WhiteRing.png
 ├── Fantasy Wooden GUI  Free/
 ├── 48 Free Minerals Pixel Art Icons Pack/
 └── Medieval_Weapons/
