@@ -82,6 +82,9 @@ namespace BlackSmith.Crafting
         /// <summary>누른 위치 - 목표 위치. 음수는 목표보다 앞(왼쪽)에서 누른 것.</summary>
         public float Error { get; private set; }
 
+        /// <summary>판정이 나왔을 때(눌렀거나 시간 초과). 인자는 완성도 0 / 0.5 / 1. 효과음 등 연출용이다.</summary>
+        public event Action<float> Judged;
+
         public float Time => elapsed;
 
         /// <summary>오브젝트의 현재 위치 0~1. 왼쪽 끝에서 시작해 오른쪽으로 먼저 움직인다.</summary>
@@ -127,6 +130,7 @@ namespace BlackSmith.Crafting
                     Completeness = 0f;
                     TimedOut = true;
                     IsJudged = true;
+                    Judged?.Invoke(Completeness);
                 }
                 return;
             }
@@ -148,6 +152,7 @@ namespace BlackSmith.Crafting
             Error = ClickedPosition - TargetPosition;
             Completeness = Score(Mathf.Abs(Error));
             IsJudged = true;
+            Judged?.Invoke(Completeness);
         }
 
         public void Cancel()

@@ -11,6 +11,7 @@ namespace BlackSmith
     {
         [SerializeField] private string gameSceneName = "Game";
         [SerializeField] private SaveLoadPanel loadPanel;
+        [SerializeField] private SettingsPanel settingsPanel;
 
         private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
 
@@ -40,6 +41,11 @@ namespace BlackSmith
         public void OnLoadGame()
         {
             if (loadPanel != null) loadPanel.OpenLoad();
+        }
+
+        public void OnSettings()
+        {
+            if (settingsPanel != null) settingsPanel.Open();
         }
 
         private void OnPanelLoaded(PlayerData data)

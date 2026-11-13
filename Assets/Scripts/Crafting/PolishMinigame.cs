@@ -61,6 +61,15 @@ namespace BlackSmith.Crafting
 
         public event Action<float> Completed;
 
+        /// <summary>흠집 하나를 다 지웠을 때. 효과음 등 연출용이다.</summary>
+        public event Action FlawCleared;
+
+        /// <summary>마지막으로 흠집을 실제로 문지른 게임 시각. 아직 없으면 음수.</summary>
+        private float lastSandTime = -1f;
+
+        /// <summary>문지르는 동안 이 시간(초) 안에 진행이 있었으면 "문지르는 중"으로 본다.</summary>
+        private const float SandingGrace = 0.12f;
+
         public PolishMinigame(PolishSettings settings, int? seed = null)
         {
             this.settings = settings ?? new PolishSettings();
@@ -78,6 +87,11 @@ namespace BlackSmith.Crafting
 
         /// <summary>전부 지웠거나 시간이 다 돼서 끝난 상태인가. (결과를 보여주는 중)</summary>
         public bool IsFinished => finished;
+
+        /// <summary>
+        /// 흠집 안에서 실제로 문지르고 있는가. 누르고만 있거나 흠집 밖에서 움직이면 false다. (문지르는 소리용)
+        /// </summary>
+        public bool IsSanding => IsRunning && !finished && activeFlaw != null && time - lastSandTime <= SandingGrace;
 
         public int ClearedCount
         {
@@ -117,6 +131,7 @@ namespace BlackSmith.Crafting
             time = 0f;
             endTimer = 0f;
             finished = false;
+            lastSandTime = -1f;
 
             for (int i = 0; i < count; i++)
             {
@@ -181,8 +196,13 @@ namespace BlackSmith.Crafting
             lastPosition = position;
             if (inside <= 0f) return;
 
+            lastSandTime = time;
             activeFlaw.Amount = Mathf.Max(0f, activeFlaw.Amount - inside * sandPerUnit);
-            if (activeFlaw.IsCleared) activeFlaw = null;
+            if (activeFlaw.IsCleared)
+            {
+                activeFlaw = null;
+                FlawCleared?.Invoke();
+            }
         }
 
         /// <summary>뗐다. 고른 흠집을 놓는다. (다시 눌러서 이어서 문지를 수 있다)</summary>

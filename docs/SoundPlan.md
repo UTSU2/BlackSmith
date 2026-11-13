@@ -49,3 +49,10 @@ UI 버튼·상점 소리(문서에 언급 없음), 품질별 완성음, 이펙�
 ## 검증
 - 컴파일 체크 후 Title/Game 씬 Missing Script·콘솔 확인 (Unity MCP는 현재 연결 실패 상태라 재연결 필요).
 - 플레이 모드에서 4개 미니게임을 각각 돌려 판정별 소리, 루프 시작·정지(누름 해제·`Hide`·`Cancel` 시 반드시 정지)를 확인하고, 플레이 모드를 종료한다.
+
+## E. 확정 사항 (설정 화면 / 연결 방식)
+- 소리 크기: 슬라이더 2개(BGM / 효과음), AudioMixer 없이 각 재생기 볼륨에 곱함. `PlayerPrefs`에 저장, 기본값 BGM 0.7 / 효과음 1.0 (임시).
+- BGM은 씬마다 처음부터 재생한다 (DontDestroyOnLoad 사용 안 함). Title과 Game 모두 `bgm_default`로 시작하고, 제작 시작부터 완료까지만 `bgm_crafting`.
+- 설정 진입: Title은 로드 게임과 닫기 버튼 사이의 설정 버튼, Game은 우상단 톱니바퀴 버튼(상점·책 버튼 왼쪽). 설정 패널을 열어도 게임은 일시정지하지 않는다.
+- 코드: `Assets/Scripts/Audio` (`SoundSettings`, `SfxClips`, `SfxPlayer`, `BgmPlayer`, `CraftingBgmSwitch`), `Crafting/CraftingSfx`, `UI/SettingsPanel`.
+

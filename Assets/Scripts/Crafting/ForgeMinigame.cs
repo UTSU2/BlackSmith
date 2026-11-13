@@ -111,6 +111,12 @@ namespace BlackSmith.Crafting
             }
         }
 
+        /// <summary>원 하나가 판정됐을 때(눌러서든 놓쳐서든). 효과음 등 연출용이다.</summary>
+        public event Action<CircleState> Judged;
+
+        /// <summary>눌렀지만 판정할 원이 없었을 때.</summary>
+        public event Action EmptyClicked;
+
         public bool IsRunning { get; private set; }
         public float Time => time;
         public ForgeSettings Settings => settings;
@@ -166,6 +172,7 @@ namespace BlackSmith.Crafting
                     circle.JudgedTime = time;
                     circle.TimingError = 0f;
                     lastJudgedTime = time;
+                    Judged?.Invoke(circle.State);
                 }
                 else
                 {
@@ -200,8 +207,11 @@ namespace BlackSmith.Crafting
                 circle.TimingError = error;
                 circle.JudgedTime = time;
                 lastJudgedTime = time;
+                Judged?.Invoke(circle.State);
                 return;
             }
+
+            EmptyClicked?.Invoke();
         }
 
         /// <summary>지금 줄어드는 원의 반지름. 안쪽 원과 겹치는 시각에 targetRadius가 된다.</summary>
