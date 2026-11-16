@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using BlackSmith.Tutorial;
 using BlackSmith.UI;
 
 namespace BlackSmith
@@ -9,6 +10,8 @@ namespace BlackSmith
         [SerializeField] private ShopPanel shopPanel;
         [SerializeField] private SaveLoadPanel saveLoadPanel;
         [SerializeField] private SettingsPanel settingsPanel;
+        [Tooltip("비워 두면 제한 없음.")]
+        [SerializeField] private TutorialController tutorial;
 
         private void Awake()
         {
@@ -28,6 +31,7 @@ namespace BlackSmith
         /// <summary>책 버튼 = 저장/불러오기 패널 열기. 기본 탭은 저장.</summary>
         public void OnBook()
         {
+            if (tutorial != null && tutorial.IsActive) return; // 튜토리얼 중에는 저장·불러오기 잠금
             if (saveLoadPanel != null) saveLoadPanel.OpenSave();
         }
 

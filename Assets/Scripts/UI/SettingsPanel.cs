@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using BlackSmith.Audio;
 using BlackSmith.Data;
+using BlackSmith.Tutorial;
 
 namespace BlackSmith.UI
 {
@@ -39,6 +40,13 @@ namespace BlackSmith.UI
         [SerializeField] private Button confirmYesButton;
         [SerializeField] private Button confirmNoButton;
         [SerializeField] private string titleSceneName = "TItle";
+        [Tooltip("확인 창의 안내 글자. 튜토리얼 중에만 아래 문구로 바꾼다. 비워 두면 글자를 바꾸지 않는다.")]
+        [SerializeField] private Text confirmMessage;
+        [SerializeField] private string tutorialConfirmMessage = "[임시] 튜토리얼 도중에 나가면 처음부터 다시 시작합니다";
+        [Tooltip("비워 두면 튜토리얼 제한 없음. Title 씬에서는 연결하지 않는다.")]
+        [SerializeField] private TutorialController tutorial;
+
+        private string originalConfirmMessage;
 
         private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
 
@@ -59,6 +67,8 @@ namespace BlackSmith.UI
             if (titleButton != null) titleButton.onClick.AddListener(OnTitleClicked);
             if (confirmYesButton != null) confirmYesButton.onClick.AddListener(GoToTitle);
             if (confirmNoButton != null) confirmNoButton.onClick.AddListener(CloseConfirm);
+
+            if (confirmMessage != null) originalConfirmMessage = confirmMessage.text;
 
             Font font = Font.CreateDynamicFontFromOSFont(KoreanFonts, 36);
             foreach (Text text in GetComponentsInChildren<Text>(true)) text.font = font;
@@ -103,7 +113,12 @@ namespace BlackSmith.UI
         // 저장 이후 금액·소지품이 바뀌지 않았으면 바로 이동하고, 바뀌었으면 확인 창을 띄운다.
         private void OnTitleClicked()
         {
-            if (GameSession.Current.HasUnsavedChanges && confirmPopup != null) confirmPopup.SetActive(true);
+            bool tutorialActive = tutorial != null && tutorial.IsActive;
+            if ((tutorialActive || GameSession.Current.HasUnsavedChanges) && confirmPopup != null)
+            {
+                if (confirmMessage != null) confirmMessage.text = tutorialActive ? tutorialConfirmMessage : originalConfirmMessage;
+                confirmPopup.SetActive(true);
+            }
             else GoToTitle();
         }
 

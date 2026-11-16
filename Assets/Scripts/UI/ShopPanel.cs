@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using BlackSmith.Data;
 using BlackSmith.Items;
 using BlackSmith.Shop;
+using BlackSmith.Tutorial;
 
 namespace BlackSmith.UI
 {
@@ -34,6 +35,9 @@ namespace BlackSmith.UI
         [SerializeField] private Sprite tabSelectedSprite;
         [Tooltip("목록이 비었을 때 보여줄 안내 글자. 비워 두면 표시하지 않는다.")]
         [SerializeField] private Text emptyLabel;
+
+        [Header("튜토리얼 (비워 두면 제한 없음)")]
+        [SerializeField] private TutorialController tutorial;
 
         private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
 
@@ -126,6 +130,7 @@ namespace BlackSmith.UI
                 {
                     foreach (ItemData item in service.GetStock())
                     {
+                        if (tutorial != null && !tutorial.IsBuyAllowed(item)) continue;
                         ShopItemView view = CreateView();
                         view.Bind(item);
                         hasItems = true;
@@ -135,6 +140,7 @@ namespace BlackSmith.UI
                 {
                     foreach (ShopService.SellEntry entry in service.GetSellList())
                     {
+                        if (tutorial != null && !tutorial.IsSellAllowed(entry.Item)) continue;
                         ShopItemView view = CreateView();
                         view.Bind(entry.Item, entry.Variant, entry.Count);
                         hasItems = true;

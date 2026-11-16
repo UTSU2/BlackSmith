@@ -7687,6 +7687,10 @@ MonoBehaviour:
   confirmYesButton: {fileID: 536099044}
   confirmNoButton: {fileID: 909855384}
   titleSceneName: TItle
+  confirmMessage: {fileID: 709200927}
+  tutorialConfirmMessage: "[\uC784\uC2DC] \uD29C\uD1A0\uB9AC\uC5BC \uB3C4\uC911\uC5D0
+    \uB098\uAC00\uBA74 \uCC98\uC74C\uBD80\uD130 \uB2E4\uC2DC \uC2DC\uC791\uD569\uB2C8\uB2E4"
+  tutorial: {fileID: 647041186}
 --- !u!114 &615042040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9719,6 +9723,7 @@ MonoBehaviour:
   shopPanel: {fileID: 950923497}
   saveLoadPanel: {fileID: 1547114866}
   settingsPanel: {fileID: 615042039}
+  tutorial: {fileID: 647041186}
 --- !u!114 &773277427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12761,6 +12766,7 @@ MonoBehaviour:
   tabNormalSprite: {fileID: 21300000, guid: efee20b64d1e73942a29ba61ce3379c3, type: 3}
   tabSelectedSprite: {fileID: 21300000, guid: 047b929beb10565479851d39b452dfb6, type: 3}
   emptyLabel: {fileID: 1241348967}
+  tutorial: {fileID: 647041186}
 --- !u!224 &950923498
 RectTransform:
   m_ObjectHideFlags: 0
