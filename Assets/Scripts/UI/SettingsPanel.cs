@@ -35,7 +35,7 @@ namespace BlackSmith.UI
 
         [Header("타이틀로 돌아가기 (Game 씬에서만 연결. 비워 두면 동작하지 않는다)")]
         [SerializeField] private Button titleButton;
-        [Tooltip("저장하지 않은 변경이 있을 때만 뜨는 확인 창. 기본은 꺼 둔다.")]
+        [Tooltip("저장하지 않은 변경이 있거나 튜토리얼 진행 중일 때 뜨는 확인 창. 기본은 꺼 둔다.")]
         [SerializeField] private GameObject confirmPopup;
         [SerializeField] private Button confirmYesButton;
         [SerializeField] private Button confirmNoButton;

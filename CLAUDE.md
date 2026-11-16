@@ -103,6 +103,7 @@ BlackSmith core loop: buy minerals → craft (heat → forge → heat-treat → 
   | `Assets/Scripts/UI/` | `BlackSmith.UI` |
   | `Assets/Scripts/Crafting/` | `BlackSmith.Crafting` |
   | `Assets/Scripts/Audio/` | `BlackSmith.Audio` |
+  | `Assets/Scripts/Tutorial/` | `BlackSmith.Tutorial` |
   | `Assets/Editor/` | `BlackSmith.EditorTools` |
 
 - One namespace per file, **block style** (`namespace X { ... }`). Unity 6 compiles C# 9, so file-scoped `namespace X;` (C# 10) does not compile.
