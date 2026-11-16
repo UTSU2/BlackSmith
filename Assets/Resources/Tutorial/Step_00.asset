@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04cb8acee6862d541b98586180dc365a, type: 3}
   m_Name: Step_00
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Tutorial.TutorialStepData
-  message: "[\uC784\uC2DC] \uD658\uC601 \uBB38\uAD6C"
+  message: "\uC548\uB155\uD558\uC138\uC694, \uB300\uC7A5\uAC04\uC5D0 \uCC98\uC74C
+    \uC624\uC2DC\uAC8C \uB41C \uAC78 \uD658\uC601\uD569\uB2C8\uB2E4! \uCCAB \uC7A5\uBE44
+    \uC81C\uC791\uC744 \uB3C4\uC640\uB4DC\uB9B4\uAC8C\uC694!"
   condition: 0
   itemId: 

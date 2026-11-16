@@ -15499,6 +15499,8 @@ MonoBehaviour:
   messageLabel: {fileID: 729616454}
   confirmButton: {fileID: 88542295}
   backdrop: {fileID: 1448900430}
+  box: {fileID: 506389606}
+  edgeMargin: 8
 --- !u!224 &1201920537
 RectTransform:
   m_ObjectHideFlags: 0

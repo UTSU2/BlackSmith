@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04cb8acee6862d541b98586180dc365a, type: 3}
   m_Name: Step_04
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Tutorial.TutorialStepData
-  message: "[\uC784\uC2DC] \uB9E4\uCE6D \uADDC\uCE59 \uC124\uBA85(\uC218\uB7C9\uB9CC
-    \uBCF8\uB2E4 / \uAC00\uC7A5 \uAC00\uAE4C\uC6B4 \uB808\uC2DC\uD53C / \uC7AC\uB8CC\uB294
-    \uBAA8\uB450 \uC18C\uBAA8)"
+  message: "\uC81C\uC791 \uC2DC \uB123\uC740 \uC7AC\uB8CC\uC5D0 \uB530\uB77C \uAC00\uC7A5
+    \uAC00\uAE4C\uC6B4 \uC81C\uC791\uBC95\uC5D0 \uB530\uB77C \uC81C\uC791\uC774 \uC9C4\uD589\uB418\uACE0
+    \uB123\uC740 \uC7AC\uB8CC\uB294 \uBAA8\uB450 \uC18C\uBAA8\uB429\uB2C8\uB2E4."
   condition: 0
   itemId: 

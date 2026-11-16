@@ -20,5 +20,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f511ee55ca718f34cb5c183d2c20cbde, type: 2}
   - {fileID: 11400000, guid: 31600f01e39cada4e80839b5a4102cfc, type: 2}
   - {fileID: 11400000, guid: 1d2b8ecfe16cc05499a21911d833796a, type: 2}
-  completionMessage: "[\uC784\uC2DC] \uD29C\uD1A0\uB9AC\uC5BC \uC644\uB8CC, 1000\uC6D0
-    \uC9C0\uAE09"
+  completionMessage: "\uCCAB \uC81C\uC791\uC744 \uC131\uACF5\uD558\uC2E0 \uAC83\uC744
+    \uCD95\uD558\uB4DC\uB9AC\uBA70 \uB300\uC7A5\uC7A5\uC774\uB2D8\uAED8 \uC18C\uC815\uC758
+    \uC9C0\uC6D0\uAE08\uC744 \uB4DC\uB9AC\uB3C4\uB85D \uD558\uACA0\uC2B5\uB2C8\uB2E4!"

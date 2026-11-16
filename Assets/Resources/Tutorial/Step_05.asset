@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04cb8acee6862d541b98586180dc365a, type: 3}
   m_Name: Step_05
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Tutorial.TutorialStepData
-  message: "[\uC784\uC2DC] \uC0C1\uC810 \uD310\uB9E4 \uD0ED\uC5D0\uC11C \uCCA0\uAC80\uC744
-    \uD310\uB9E4\uD558\uC138\uC694"
+  message: "\uC0C1\uC810 \uD310\uB9E4 \uD0ED\uC5D0\uC11C \uCCA0\uAC80\uC744 \uD310\uB9E4\uD574
+    \uBCF4\uC138\uC694."
   condition: 4
   itemId: iron_sword
+  popupPosition: 1

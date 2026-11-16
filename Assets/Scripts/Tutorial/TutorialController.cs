@@ -95,7 +95,7 @@ namespace BlackSmith.Tutorial
         {
             // 마지막 단계 뒤의 StepChanged는 Current가 null이다. 완료는 Finished에서 처리한다.
             if (flow == null || flow.Current == null) return;
-            if (popup != null) popup.Show(flow.Current.Message, flow.Current.Condition == TutorialCondition.Confirm);
+            if (popup != null) popup.Show(flow.Current.Message, flow.Current.Condition == TutorialCondition.Confirm, flow.Current.PopupPosition);
         }
 
         private void OnFinished()

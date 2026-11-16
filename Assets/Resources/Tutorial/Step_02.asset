@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04cb8acee6862d541b98586180dc365a, type: 3}
   m_Name: Step_02
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Tutorial.TutorialStepData
-  message: "[\uC784\uC2DC] \uBAA8\uB8E8\uB97C \uB20C\uB7EC \uCCA0 \uC6D0\uC11D 1\uAC1C\uB97C
-    \uB123\uACE0 \uC81C\uC791\uC744 \uC2DC\uC791\uD558\uC138\uC694"
+  message: "\uBAA8\uB8E8\uB97C \uB20C\uB7EC \uCCA0 \uC6D0\uC11D 1\uAC1C\uB97C \uB123\uACE0
+    \uC81C\uC791\uC744 \uC2DC\uC791\uD558\uC138\uC694"
   condition: 2
   itemId: 
