@@ -16,6 +16,8 @@ namespace BlackSmith.Tutorial
         private TutorialFlow flow;
         private PlayerData player;
 
+        private bool completePending;
+
         public bool IsActive { get; private set; }
 
         private void Start()
@@ -23,8 +25,17 @@ namespace BlackSmith.Tutorial
             Begin(GameSession.Current);
         }
 
+        private void LateUpdate()
+        {
+            if (!completePending) return;
+            completePending = false;
+            if (player != null) player.CompleteTutorial();
+        }
+
         private void OnDisable()
         {
+            // 완료 대기 중에 꺼져도 보상을 놓치지 않게 먼저 처리한다.
+            LateUpdate();
             Unsubscribe();
         }
 
@@ -36,6 +47,7 @@ namespace BlackSmith.Tutorial
         /// <summary>튜토리얼을 시작한다. 설정이 없거나 이미 끝난 저장이면 아무것도 하지 않는다.</summary>
         public void Begin(PlayerData playerData)
         {
+            LateUpdate();
             Unsubscribe();
             IsActive = false;
 
@@ -98,9 +110,11 @@ namespace BlackSmith.Tutorial
             if (popup != null) popup.Show(flow.Current.Message, flow.Current.Condition == TutorialCondition.Confirm, flow.Current.PopupPosition);
         }
 
+        // 판매는 아이템을 먼저 빼고(이때 이 이벤트가 온다) 그 다음에 판매금을 더한다. 여기서 바로 CompleteTutorial을 부르면
+        // 판매금이 보상 뒤에 더해져 1000이 넘으므로, 같은 프레임의 판매 처리가 끝난 뒤(LateUpdate)에 완료한다.
         private void OnFinished()
         {
-            player.CompleteTutorial();
+            completePending = true;
             IsActive = false;
             if (popup != null) popup.Show(config.CompletionMessage, true);
         }
