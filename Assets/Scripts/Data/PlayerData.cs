@@ -50,13 +50,14 @@ namespace BlackSmith.Data
         }
 
         /// <summary>
-        /// 튜토리얼을 마쳤거나 건너뛰었을 때 부른다. 진행 중일 때 한 번만 TutorialRewardMoney를 지급하고,
-        /// 이미 끝났으면 아무것도 하지 않는다. (완료든 스킵이든 같은 보상)
+        /// 튜토리얼을 마쳤거나 건너뛰었을 때 부른다. 진행 중일 때 한 번만 실행한다. 튜토리얼에서 번 돈(철검 판매금 등)은 회수하고
+        /// 소지금을 정확히 TutorialRewardMoney로 맞춘다. 이미 끝났으면 아무것도 하지 않는다. (완료든 스킵이든 같은 결과)
         /// </summary>
         public void CompleteTutorial()
         {
             if (!tutorialPending) return;
             tutorialPending = false;
+            TrySpendMoney(money);
             AddMoney(TutorialRewardMoney);
         }
 
