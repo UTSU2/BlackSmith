@@ -19,6 +19,8 @@ namespace BlackSmith.UI
         [SerializeField] private CraftingController crafting;
 
         [Header("표시")]
+        [Tooltip("완성품 아이콘. 아이콘이 없는 아이템이면 숨긴다.")]
+        [SerializeField] private Image iconImage;
         [SerializeField] private Text itemLabel;
         [SerializeField] private Text proficiencyLabel;
         [Tooltip("진행도 게이지(막대와 숫자)를 묶은 오브젝트. 변화가 없거나 Master면 숨긴다.")]
@@ -69,6 +71,12 @@ namespace BlackSmith.UI
 
             gameObject.SetActive(true);
             transform.SetAsLastSibling();
+
+            if (iconImage != null)
+            {
+                iconImage.sprite = result.Product.Icon;
+                iconImage.enabled = result.Product.Icon != null;
+            }
 
             if (itemLabel != null)
             {
