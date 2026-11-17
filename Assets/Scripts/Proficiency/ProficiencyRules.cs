@@ -75,7 +75,8 @@ namespace BlackSmith.Proficiency
 
             int stage = index / settings.LevelsPerStage;
             int level = index % settings.LevelsPerStage + 1;
-            decimal bonus = settings.BonusPerLevel * (index + 1);
+            // 첫 레벨(초급 Lv1)은 보너스가 없다. 그 뒤는 레벨 순번 × 레벨당 보너스(초급 Lv2 0.2 … 고급 Lv9 2.7). (docs/V2.md §2)
+            decimal bonus = index == 0 ? 0m : settings.BonusPerLevel * (index + 1);
             string label = $"{settings.StageNames[stage]} Lv.{level}";
             return new ProficiencyState(points, stage, level, false, remaining, thresholds[index], bonus, label);
         }
