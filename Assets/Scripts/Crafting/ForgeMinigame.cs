@@ -72,6 +72,9 @@ namespace BlackSmith.Crafting
 
             /// <summary>누른 시각 - 겹치는 시각. 음수는 일찍 누른 것. 누르지 못하고 놓쳤으면 0.</summary>
             public float TimingError { get; internal set; }
+
+            /// <summary>눌러서 판정됐는가. 누르지 못하고 놓친 Miss면 false다. (적중 이펙트가 놓친 Miss를 구분하는 데 쓴다)</summary>
+            public bool Clicked { get; internal set; }
         }
 
         private readonly ForgeSettings settings;
@@ -113,6 +116,9 @@ namespace BlackSmith.Crafting
 
         /// <summary>원 하나가 판정됐을 때(눌러서든 놓쳐서든). 효과음 등 연출용이다.</summary>
         public event Action<CircleState> Judged;
+
+        /// <summary>Judged 직후, 판정된 원을 넘긴다. 위치와 눌렀는지(Clicked)가 필요한 연출(적중 이펙트)용이다.</summary>
+        public event Action<Circle> CircleJudged;
 
         /// <summary>눌렀지만 판정할 원이 없었을 때.</summary>
         public event Action EmptyClicked;
@@ -171,8 +177,10 @@ namespace BlackSmith.Crafting
                     circle.State = CircleState.Miss;
                     circle.JudgedTime = time;
                     circle.TimingError = 0f;
+                    circle.Clicked = false;
                     lastJudgedTime = time;
                     Judged?.Invoke(circle.State);
+                    CircleJudged?.Invoke(circle);
                 }
                 else
                 {
@@ -205,9 +213,11 @@ namespace BlackSmith.Crafting
                 float error = time - circle.HitTime;
                 circle.State = Judge(Mathf.Abs(error));
                 circle.TimingError = error;
+                circle.Clicked = true;
                 circle.JudgedTime = time;
                 lastJudgedTime = time;
                 Judged?.Invoke(circle.State);
+                CircleJudged?.Invoke(circle);
                 return;
             }
 

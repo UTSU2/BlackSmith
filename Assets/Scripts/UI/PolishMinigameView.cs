@@ -31,6 +31,10 @@ namespace BlackSmith.UI
         [Range(0f, 1f)]
         [SerializeField] private float minVisibleAlpha = 0.25f;
 
+        [Header("적중 이펙트 (비워 두면 이펙트 없이 진행)")]
+        [Tooltip("흠집 하나를 다 지울 때마다 그 자리에 띄울 반짝임.")]
+        [SerializeField] private HitEffectSpawner clearEffects;
+
         private readonly List<Image> flawViews = new List<Image>();
         private PolishMinigame game;
 
@@ -48,8 +52,11 @@ namespace BlackSmith.UI
         /// <summary>미니게임을 보여주기 시작한다. 게임 시작(Begin)은 호출한 쪽이 한다.</summary>
         public void Show(PolishMinigame polish)
         {
+            Unsubscribe();
             ClearFlaws();
+            if (clearEffects != null) clearEffects.Clear();
             game = polish;
+            if (game != null) game.FlawClearedAt += OnFlawCleared;
             Root.SetActive(true);
             // Awake가 아직 안 불렸을 수 있으므로(처음 활성화) 활성화한 뒤에 확인한다.
             if (playArea == null) playArea = (RectTransform)transform;
@@ -57,10 +64,30 @@ namespace BlackSmith.UI
 
         public void Hide()
         {
+            Unsubscribe();
             if (game != null) game.PointerUp();
             game = null;
             ClearFlaws();
+            if (clearEffects != null) clearEffects.Clear();
             Root.SetActive(false);
+        }
+
+        private void Unsubscribe()
+        {
+            if (game != null) game.FlawClearedAt -= OnFlawCleared;
+        }
+
+        private void OnFlawCleared(PolishMinigame.Flaw flaw)
+        {
+            if (clearEffects != null) clearEffects.Play(ToPlayAreaPoint(flaw.Position), 1f);
+        }
+
+        /// <summary>미니게임 공간(왼쪽 아래 기준) 좌표 → PlayArea rect 좌표(피벗 기준 로컬).</summary>
+        private Vector2 ToPlayAreaPoint(Vector2 gamePosition)
+        {
+            Rect rect = playArea.rect;
+            float scale = rect.width / PolishMinigame.AreaSize.x;
+            return new Vector2(rect.xMin + gamePosition.x * scale, rect.yMin + gamePosition.y * scale);
         }
 
         private void Update()
@@ -81,8 +108,7 @@ namespace BlackSmith.UI
                 view.gameObject.SetActive(!flaw.IsCleared);
                 if (flaw.IsCleared) continue;
 
-                Vector2 local = new Vector2(rect.xMin + flaw.Position.x * scale, rect.yMin + flaw.Position.y * scale);
-                view.rectTransform.anchoredPosition = local - rect.center;
+                view.rectTransform.anchoredPosition = ToPlayAreaPoint(flaw.Position) - rect.center;
                 view.rectTransform.sizeDelta = new Vector2(diameter, diameter);
 
                 Color color = flaw == game.ActiveFlaw ? activeFlawColor : flawColor;

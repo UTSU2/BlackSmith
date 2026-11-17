@@ -32,6 +32,13 @@ namespace BlackSmith.UI
         [Tooltip("판정 뒤 결과 색으로 남아 있는 시간(초).")]
         [SerializeField] private float resultLingerTime = 0.3f;
 
+        [Header("적중 이펙트 (비워 두면 이펙트 없이 진행)")]
+        [SerializeField] private HitEffectSpawner hitEffects;
+        [SerializeField] private float perfectEffectScale = 1f;
+        [SerializeField] private float goodEffectScale = 0.65f;
+        [Tooltip("눌렀지만 Miss일 때. 누르지 못하고 놓친 Miss는 이펙트가 없다.")]
+        [SerializeField] private float missEffectScale = 0.35f;
+
         private class CircleView
         {
             public RectTransform Root;
@@ -54,8 +61,11 @@ namespace BlackSmith.UI
         /// <summary>미니게임을 보여주기 시작한다. 게임 시작(Begin)은 호출한 쪽이 한다.</summary>
         public void Show(ForgeMinigame forge)
         {
+            Unsubscribe();
             ClearCircles();
+            if (hitEffects != null) hitEffects.Clear();
             game = forge;
+            if (game != null) game.CircleJudged += OnCircleJudged;
             Root.SetActive(true);
             // Awake가 아직 안 불렸을 수 있으므로(처음 활성화) 활성화한 뒤에 확인한다.
             if (playArea == null) playArea = (RectTransform)transform;
@@ -63,9 +73,35 @@ namespace BlackSmith.UI
 
         public void Hide()
         {
+            Unsubscribe();
             game = null;
             ClearCircles();
+            if (hitEffects != null) hitEffects.Clear();
             Root.SetActive(false);
+        }
+
+        private void Unsubscribe()
+        {
+            if (game != null) game.CircleJudged -= OnCircleJudged;
+        }
+
+        // 판정된 원 자리에 판정별 크기로 빛을 띄운다. 놓친 Miss(누르지 않음)는 띄우지 않는다.
+        private void OnCircleJudged(ForgeMinigame.Circle circle)
+        {
+            if (hitEffects == null || !circle.Clicked) return;
+
+            float effectScale = circle.State == ForgeMinigame.CircleState.Perfect ? perfectEffectScale
+                : circle.State == ForgeMinigame.CircleState.Good ? goodEffectScale
+                : missEffectScale;
+            hitEffects.Play(ToPlayAreaPoint(circle.Position), effectScale);
+        }
+
+        /// <summary>미니게임 공간(왼쪽 아래 기준) 좌표 → PlayArea rect 좌표(피벗 기준 로컬).</summary>
+        private Vector2 ToPlayAreaPoint(Vector2 gamePosition)
+        {
+            Rect rect = playArea.rect;
+            float scale = rect.width / ForgeMinigame.AreaSize.x;
+            return new Vector2(rect.xMin + gamePosition.x * scale, rect.yMin + gamePosition.y * scale);
         }
 
         private GameObject Root => panelRoot != null ? panelRoot : gameObject;
@@ -94,12 +130,7 @@ namespace BlackSmith.UI
             view.Root.gameObject.SetActive(visible);
             if (!visible) return;
 
-            // 미니게임 공간(왼쪽 아래 기준) → PlayArea 로컬 좌표
-            Rect rect = playArea.rect;
-            Vector2 local = new Vector2(
-                rect.xMin + circle.Position.x * scale,
-                rect.yMin + circle.Position.y * scale);
-            view.Root.anchoredPosition = local - rect.center;
+            view.Root.anchoredPosition = ToPlayAreaPoint(circle.Position) - playArea.rect.center;
 
             float targetSize = game.Settings.targetRadius * 2f * scale;
             view.Target.rectTransform.sizeDelta = new Vector2(targetSize, targetSize);

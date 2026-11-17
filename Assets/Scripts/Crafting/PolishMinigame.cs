@@ -64,6 +64,9 @@ namespace BlackSmith.Crafting
         /// <summary>흠집 하나를 다 지웠을 때. 효과음 등 연출용이다.</summary>
         public event Action FlawCleared;
 
+        /// <summary>FlawCleared 직후, 지운 흠집을 넘긴다. 위치가 필요한 연출(적중 이펙트)용이다.</summary>
+        public event Action<Flaw> FlawClearedAt;
+
         /// <summary>마지막으로 흠집을 실제로 문지른 게임 시각. 아직 없으면 음수.</summary>
         private float lastSandTime = -1f;
 
@@ -200,8 +203,10 @@ namespace BlackSmith.Crafting
             activeFlaw.Amount = Mathf.Max(0f, activeFlaw.Amount - inside * sandPerUnit);
             if (activeFlaw.IsCleared)
             {
+                Flaw cleared = activeFlaw;
                 activeFlaw = null;
                 FlawCleared?.Invoke();
+                FlawClearedAt?.Invoke(cleared);
             }
         }
 
