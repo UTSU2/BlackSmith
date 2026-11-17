@@ -141,10 +141,10 @@ BlackSmith core loop: buy minerals → craft (heat → forge → heat-treat → 
 
 ## Hit effects architecture
 
-- Game's `GameUICanvas` is **Screen Space - Camera** (`Main Camera`, plane distance 5, sorting order 0) so particles can draw over UI. `CraftResultPopup` and `TutorialPopup` carry their own `Canvas` (override sorting, order 20) + `GraphicRaycaster` so they stay above effects. Background sprites use orders -10 to -1. Title is still Overlay.
+- Game's `GameUICanvas` is **Screen Space - Camera** (`Main Camera`, plane distance 5) so particles can draw over UI. Sorting layers: `Default` (all world renderers: background sprites -10 to -1, forge fire particle 5) < `UI`. On `UI`: `GameUICanvas` order 0 < hit effects order 10 < `CraftResultPopup`/`TutorialPopup` (own `Canvas`, override sorting, order 20, + `GraphicRaycaster`). Keep world renderers on `Default` and UI-space renderers on `UI`; with the same layer a world renderer's order ≥ 0 would draw over panels. Title is still Overlay.
 - Models only raise events: `ForgeMinigame.CircleJudged(Circle)` (with `Circle.Clicked`: false for a circle missed by timeout) and `PolishMinigame.FlawClearedAt(Flaw)`, after the existing `Judged`/`FlawCleared` used by `CraftingSfx`.
 - `ForgeMinigameView` / `PolishMinigameView` subscribe in `Show`, unsubscribe and `Clear()` in `Hide`, and call `HitEffectSpawner.Play(localPoint, scale)` (`BlackSmith.UI`, on each PlayArea). Forge scales per judgment are serialized on the view (1 / 0.65 / 0.35).
-- Effects are prefabs in `Assets/Effects` (`ForgeHitGlow` gold, `PolishSparkle` silver; material `HitEffect.mat` = URP Particles/Unlit additive, texture `SoftGlow.png`): `scalingMode = Hierarchy` (sizes in canvas px), root `stopAction = Destroy`, renderer sorting order 10, no Graphic/Collider. Swap the art by editing or replacing the prefabs.
+- Effects are prefabs in `Assets/Effects` (`ForgeHitGlow` gold, `PolishSparkle` silver; material `HitEffect.mat` = URP Particles/Unlit additive, texture `SoftGlow.png`): `scalingMode = Hierarchy` (sizes in canvas px), root `stopAction = Destroy`, renderer sorting layer `UI` order 10, no Graphic/Collider. Swap the art by editing or replacing the prefabs.
 - MCP play-mode raycast checks need `Camera.main.Render()` first (graphics have depth -1 until rendered); that manual render logs harmless `RenderPass` size-mismatch errors.
 
 ## Audio & settings architecture
