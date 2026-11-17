@@ -8,5 +8,7 @@ namespace BlackSmith.Tutorial
         CraftStarted = 2,
         CraftFinished = 3,
         ItemGone = 4,
+        /// <summary>제작 결과 팝업이 닫혔을 때(확인). 결과 팝업과 함께 보이는 안내 단계에 쓴다.</summary>
+        CraftResultClosed = 5,
     }
 }

@@ -18,6 +18,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0b42b5e08022b914db40cb68569916ff, type: 2}
   - {fileID: 11400000, guid: 41bc53481e860994886a6184502e5c15, type: 2}
   - {fileID: 11400000, guid: f511ee55ca718f34cb5c183d2c20cbde, type: 2}
+  - {fileID: 11400000, guid: 3d6c2e5ff174dbc46aa37cd5c16f4d43, type: 2}
   - {fileID: 11400000, guid: 31600f01e39cada4e80839b5a4102cfc, type: 2}
   - {fileID: 11400000, guid: 1d2b8ecfe16cc05499a21911d833796a, type: 2}
   completionMessage: "\uCCAB \uC81C\uC791\uC744 \uC131\uACF5\uD558\uC2E0 \uAC83\uC744

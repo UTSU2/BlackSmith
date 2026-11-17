@@ -41,6 +41,7 @@ namespace BlackSmith.Tutorial
         public void NotifyConfirm() => Notify(TutorialCondition.Confirm);
         public void NotifyCraftStarted() => Notify(TutorialCondition.CraftStarted);
         public void NotifyCraftFinished() => Notify(TutorialCondition.CraftFinished);
+        public void NotifyCraftResultClosed() => Notify(TutorialCondition.CraftResultClosed);
 
         public void NotifyInventoryChanged()
         {

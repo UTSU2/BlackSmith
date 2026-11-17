@@ -11,7 +11,7 @@ namespace BlackSmith.Tutorial
     {
         [SerializeField] private CraftingController crafting;
         [SerializeField] private TutorialPopup popup;
-        [Tooltip("제작 결과 팝업. 연결돼 있으면 제작 완료 단계는 결과 팝업이 닫힐 때 넘어간다(결과 팝업이 먼저 보이게). 비워 두면 제작 완료 즉시 넘어간다.")]
+        [Tooltip("제작 결과 팝업. 닫힐 때 '결과 팝업 닫힘'(CraftResultClosed) 단계를 넘긴다. 비워 두면 그 단계는 제작 완료 직후 바로 넘어간다.")]
         [SerializeField] private CraftResultPopup resultPopup;
 
         private TutorialConfig config;
@@ -144,16 +144,18 @@ namespace BlackSmith.Tutorial
             if (flow != null) flow.NotifyCraftStarted();
         }
 
+        // 제작 완료 단계는 바로 넘긴다. 다음 단계(숙련도 안내)가 결과 팝업과 동시에 보이고, 결과 팝업이 닫히면 넘어간다.
         private void OnCraftFinished(CraftResult result)
         {
-            // 결과 팝업이 있으면 그 팝업이 닫힐 때 넘어간다(OnResultPopupClosed).
-            if (resultPopup != null) return;
-            if (flow != null) flow.NotifyCraftFinished();
+            if (flow == null) return;
+            flow.NotifyCraftFinished();
+            // 결과 팝업이 없으면 기다릴 대상이 없으므로 안내 단계도 바로 넘긴다.
+            if (resultPopup == null) flow.NotifyCraftResultClosed();
         }
 
         private void OnResultPopupClosed()
         {
-            if (flow != null) flow.NotifyCraftFinished();
+            if (flow != null) flow.NotifyCraftResultClosed();
         }
     }
 }
