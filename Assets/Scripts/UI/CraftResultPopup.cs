@@ -21,7 +21,10 @@ namespace BlackSmith.UI
         [Header("표시")]
         [Tooltip("완성품 아이콘. 아이콘이 없는 아이템이면 숨긴다.")]
         [SerializeField] private Image iconImage;
+        [Tooltip("완성품 이름. 긴 이름도 한 줄에 들어가도록 등급·품질은 detailLabel에 따로 둔다.")]
         [SerializeField] private Text itemLabel;
+        [Tooltip("등급·품질. 비워 두면 아이템명 줄에 함께 표시한다.")]
+        [SerializeField] private Text detailLabel;
         [SerializeField] private Text proficiencyLabel;
         [Tooltip("진행도 게이지(막대와 숫자)를 묶은 오브젝트. 변화가 없거나 Master면 숨긴다.")]
         [SerializeField] private GameObject progressRoot;
@@ -78,9 +81,11 @@ namespace BlackSmith.UI
                 iconImage.enabled = result.Product.Icon != null;
             }
 
+            string detail = $"({result.Grade}) {ItemQualityInfo.DisplayName(result.Quality)}";
+            if (detailLabel != null) detailLabel.text = detail;
             if (itemLabel != null)
             {
-                itemLabel.text = $"{result.Product.DisplayName} ({result.Grade}) {ItemQualityInfo.DisplayName(result.Quality)}";
+                itemLabel.text = detailLabel != null ? result.Product.DisplayName : $"{result.Product.DisplayName} {detail}";
             }
 
             ProficiencyState after = result.ProficiencyAfter;
