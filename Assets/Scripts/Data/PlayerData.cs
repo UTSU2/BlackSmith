@@ -24,6 +24,8 @@ namespace BlackSmith.Data
         // 불러올 때 보상이 다시 지급되지 않게 하기 위해서다.
         [SerializeField] private bool tutorialPending;
         [SerializeField] private List<InventoryEntry> items = new List<InventoryEntry>();
+        // 레시피별 누적 숙련도. 이 필드가 없는 기존 저장 파일은 빈 목록으로 읽힌다.
+        [SerializeField] private List<ProficiencyEntry> proficiencies = new List<ProficiencyEntry>();
 
         /// <summary>금액이 바뀔 때 호출 (새 금액).</summary>
         [field: NonSerialized] public event Action<int> OnMoneyChanged;
@@ -167,6 +169,46 @@ namespace BlackSmith.Data
             hasUnsavedChanges = true;
             OnInventoryChanged?.Invoke();
             return true;
+        }
+
+        // ---- 숙련도 ----
+
+        /// <summary>레시피의 누적 숙련도. 기록이 없으면 0.</summary>
+        public int GetProficiencyPoints(string recipeId)
+        {
+            ProficiencyEntry entry = FindProficiency(recipeId);
+            return entry != null ? entry.Points : 0;
+        }
+
+        /// <summary>누적 숙련도를 더한다(maxPoints를 넘지 않음). 실제로 바뀐 양을 돌려준다.</summary>
+        public int AddProficiencyPoints(string recipeId, int amount, int maxPoints)
+        {
+            if (string.IsNullOrEmpty(recipeId) || amount <= 0) return 0;
+
+            ProficiencyEntry entry = FindProficiency(recipeId);
+            int before = entry != null ? entry.Points : 0;
+            int after = (int)Math.Min((long)before + amount, maxPoints);
+            if (after <= before) return 0;
+
+            if (entry != null) entry.SetPoints(after);
+            else
+            {
+                if (proficiencies == null) proficiencies = new List<ProficiencyEntry>();
+                proficiencies.Add(new ProficiencyEntry(recipeId, after));
+            }
+
+            hasUnsavedChanges = true;
+            return after - before;
+        }
+
+        private ProficiencyEntry FindProficiency(string recipeId)
+        {
+            if (proficiencies == null) return null;
+            foreach (ProficiencyEntry entry in proficiencies)
+            {
+                if (entry != null && entry.RecipeId == recipeId) return entry;
+            }
+            return null;
         }
 
         private InventoryEntry Find(string itemId, ItemVariant variant)
