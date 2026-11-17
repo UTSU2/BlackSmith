@@ -34,6 +34,8 @@ namespace BlackSmith.UI
         [Header("적중 이펙트 (비워 두면 이펙트 없이 진행)")]
         [Tooltip("흠집 하나를 다 지울 때마다 그 자리에 띄울 반짝임.")]
         [SerializeField] private HitEffectSpawner clearEffects;
+        [Tooltip("이펙트 프리팹이 맞춰 만든 흠집 지름(px). 실제 흠집 지름 ÷ 이 값으로 키우거나 줄인다.")]
+        [SerializeField] private float effectReferenceDiameter = 180f;
 
         private readonly List<Image> flawViews = new List<Image>();
         private PolishMinigame game;
@@ -79,7 +81,9 @@ namespace BlackSmith.UI
 
         private void OnFlawCleared(PolishMinigame.Flaw flaw)
         {
-            if (clearEffects != null) clearEffects.Play(ToPlayAreaPoint(flaw.Position), 1f);
+            if (clearEffects == null || game == null || effectReferenceDiameter <= 0f) return;
+            float flawDiameter = game.Settings.flawRadius * 2f * playArea.rect.width / PolishMinigame.AreaSize.x;
+            clearEffects.Play(ToPlayAreaPoint(flaw.Position), flawDiameter / effectReferenceDiameter);
         }
 
         /// <summary>미니게임 공간(왼쪽 아래 기준) 좌표 → PlayArea rect 좌표(피벗 기준 로컬).</summary>

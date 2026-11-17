@@ -34,10 +34,13 @@ namespace BlackSmith.UI
 
         [Header("적중 이펙트 (비워 두면 이펙트 없이 진행)")]
         [SerializeField] private HitEffectSpawner hitEffects;
-        [SerializeField] private float perfectEffectScale = 1f;
-        [SerializeField] private float goodEffectScale = 0.65f;
+        [Tooltip("판정별 도넛형 이펙트. 기준 지름(effectReferenceDiameter) 원의 바깥으로만 퍼지게 만든 프리팹이다.")]
+        [SerializeField] private ParticleSystem perfectEffect;
+        [SerializeField] private ParticleSystem goodEffect;
         [Tooltip("눌렀지만 Miss일 때. 누르지 못하고 놓친 Miss는 이펙트가 없다.")]
-        [SerializeField] private float missEffectScale = 0.35f;
+        [SerializeField] private ParticleSystem missEffect;
+        [Tooltip("이펙트 프리팹이 맞춰 만든 판정 원 지름(px). 실제 원 지름 ÷ 이 값으로 키우거나 줄여 구멍이 원에 맞게 한다.")]
+        [SerializeField] private float effectReferenceDiameter = 160f;
 
         private class CircleView
         {
@@ -85,15 +88,16 @@ namespace BlackSmith.UI
             if (game != null) game.CircleJudged -= OnCircleJudged;
         }
 
-        // 판정된 원 자리에 판정별 크기로 빛을 띄운다. 놓친 Miss(누르지 않음)는 띄우지 않는다.
+        // 판정된 원 자리에 판정별 도넛형 빛을 띄운다. 크기는 판정 원 지름에 맞춘다. 놓친 Miss(누르지 않음)는 띄우지 않는다.
         private void OnCircleJudged(ForgeMinigame.Circle circle)
         {
-            if (hitEffects == null || !circle.Clicked) return;
+            if (hitEffects == null || game == null || !circle.Clicked || effectReferenceDiameter <= 0f) return;
 
-            float effectScale = circle.State == ForgeMinigame.CircleState.Perfect ? perfectEffectScale
-                : circle.State == ForgeMinigame.CircleState.Good ? goodEffectScale
-                : missEffectScale;
-            hitEffects.Play(ToPlayAreaPoint(circle.Position), effectScale);
+            ParticleSystem effect = circle.State == ForgeMinigame.CircleState.Perfect ? perfectEffect
+                : circle.State == ForgeMinigame.CircleState.Good ? goodEffect
+                : missEffect;
+            float circleDiameter = game.Settings.targetRadius * 2f * playArea.rect.width / ForgeMinigame.AreaSize.x;
+            hitEffects.Play(effect, ToPlayAreaPoint(circle.Position), circleDiameter / effectReferenceDiameter);
         }
 
         /// <summary>미니게임 공간(왼쪽 아래 기준) 좌표 → PlayArea rect 좌표(피벗 기준 로컬).</summary>

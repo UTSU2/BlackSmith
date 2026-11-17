@@ -9147,9 +9147,10 @@ MonoBehaviour:
   missColor: {r: 1, g: 0.3, b: 0.3, a: 0.8}
   resultLingerTime: 0.3
   hitEffects: {fileID: 662190372}
-  perfectEffectScale: 1
-  goodEffectScale: 0.65
-  missEffectScale: 0.35
+  perfectEffect: {fileID: 2211807950004768204, guid: 6146138a1f056fd4196258c2e9fee902, type: 3}
+  goodEffect: {fileID: 817805437181838861, guid: 911d6279e71b0c141a907613101f3691, type: 3}
+  missEffect: {fileID: 3976258489308472609, guid: 4d4af3c21ec955e46880efe6aa51e1d7, type: 3}
+  effectReferenceDiameter: 160
 --- !u!224 &662190369
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9221,7 +9222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 570f1323761d5f74683aac66d130c088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.UI.HitEffectSpawner
-  prefab: {fileID: 8698762158194994759, guid: 2a158429dc659f243839337663b91c0d, type: 3}
+  prefab: {fileID: 2211807950004768204, guid: 6146138a1f056fd4196258c2e9fee902, type: 3}
   container: {fileID: 662190369}
 --- !u!1 &667985541
 GameObject:
@@ -30355,6 +30356,7 @@ MonoBehaviour:
   activeFlawColor: {r: 0.9, g: 0.45, b: 0.15, a: 1}
   minVisibleAlpha: 0.25
   clearEffects: {fileID: 1980745586}
+  effectReferenceDiameter: 180
 --- !u!224 &1980745583
 RectTransform:
   m_ObjectHideFlags: 0

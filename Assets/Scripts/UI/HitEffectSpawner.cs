@@ -27,13 +27,22 @@ namespace BlackSmith.UI
             }
         }
 
-        /// <summary>container 로컬 위치에 scale 배율로 이펙트를 띄운다. scale이 0 이하이거나 프리팹이 없으면 아무것도 하지 않는다.</summary>
+        /// <summary>기본 프리팹을 container 로컬 위치에 scale 배율로 띄운다.</summary>
         public void Play(Vector2 localPosition, float scale)
         {
-            if (prefab == null || scale <= 0f) return;
+            Play(prefab, localPosition, scale);
+        }
+
+        /// <summary>
+        /// 지정한 프리팹을 container 로컬 위치에 scale 배율로 띄운다. (판정별로 다른 이펙트를 쓸 때)
+        /// 프리팹이 없거나 scale이 0 이하이면 아무것도 하지 않는다.
+        /// </summary>
+        public void Play(ParticleSystem effectPrefab, Vector2 localPosition, float scale)
+        {
+            if (effectPrefab == null || scale <= 0f) return;
 
             Transform parent = container != null ? container : transform;
-            ParticleSystem effect = Instantiate(prefab, parent);
+            ParticleSystem effect = Instantiate(effectPrefab, parent);
             effect.transform.localPosition = new Vector3(localPosition.x, localPosition.y, 0f);
             effect.transform.localRotation = Quaternion.identity;
             effect.transform.localScale = Vector3.one * scale;
