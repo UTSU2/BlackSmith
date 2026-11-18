@@ -42,7 +42,7 @@ namespace BlackSmith.UI
         [SerializeField] private string titleSceneName = "TItle";
         [Tooltip("확인 창의 안내 글자. 튜토리얼 중에만 아래 문구로 바꾼다. 비워 두면 글자를 바꾸지 않는다.")]
         [SerializeField] private Text confirmMessage;
-        [SerializeField] private string tutorialConfirmMessage = "[임시] 튜토리얼 도중에 나가면 처음부터 다시 시작합니다";
+        [SerializeField] private string tutorialConfirmMessage = "튜토리얼 도중에 나가면 처음부터 다시 시작합니다";
         [Tooltip("비워 두면 튜토리얼 제한 없음. Title 씬에서는 연결하지 않는다.")]
         [SerializeField] private TutorialController tutorial;
 

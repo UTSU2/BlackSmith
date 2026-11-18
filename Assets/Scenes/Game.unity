@@ -15301,8 +15301,8 @@ MonoBehaviour:
   confirmNoButton: {fileID: 909855384}
   titleSceneName: TItle
   confirmMessage: {fileID: 709200927}
-  tutorialConfirmMessage: "[\uC784\uC2DC] \uD29C\uD1A0\uB9AC\uC5BC \uB3C4\uC911\uC5D0
-    \uB098\uAC00\uBA74 \uCC98\uC74C\uBD80\uD130 \uB2E4\uC2DC \uC2DC\uC791\uD569\uB2C8\uB2E4"
+  tutorialConfirmMessage: "\uD29C\uD1A0\uB9AC\uC5BC \uB3C4\uC911\uC5D0 \uB098\uAC00\uBA74
+    \uCC98\uC74C\uBD80\uD130 \uB2E4\uC2DC \uC2DC\uC791\uD569\uB2C8\uB2E4"
   tutorial: {fileID: 647041186}
 --- !u!114 &615042040
 MonoBehaviour:

@@ -1,6 +1,6 @@
 # Tutorial — 튜토리얼 설계
 
-> **상태: 확정, 구현 완료** (단계·완료·미니게임 조작 안내 문구는 사용자가 작성 완료. 미정/임시: 설정 화면 타이틀 복귀 확인 문구, 팝업 디자인). v2 범위. 아래 **[미정]** 항목은 임의로 정하지 않는다.
+> **상태: 확정, 구현 완료** (튜토리얼 문구는 모두 확정: 단계·완료·미니게임 조작 안내는 사용자가 작성, 설정 화면 타이틀 복귀 확인 문구는 [임시] 표기만 지워 확정. 미정/임시: 팝업 디자인). v2 범위. 아래 **[미정]** 항목은 임의로 정하지 않는다.
 
 ## 1. 목적
 
@@ -44,7 +44,7 @@
 ## 6. 미정 / 빌더 몫
 
 - 튜토리얼 장비·레시피: **철검(`iron_sword`)** — **[확정]** (§7 참고)
-- 팝업 문구 — 단계 문구(`Step_*.asset`)와 완료 문구(`TutorialConfig.completionMessage`)는 사용자가 작성 완료(2026-11-18). 설정 화면 타이틀 복귀 확인 문구(`SettingsPanel.tutorialConfirmMessage`)는 아직 `[임시]`.
+- 팝업 문구 — 단계 문구(`Step_*.asset`)와 완료 문구(`TutorialConfig.completionMessage`)는 사용자가 작성 완료(2026-11-18). 설정 화면 타이틀 복귀 확인 문구(`SettingsPanel.tutorialConfirmMessage`, "튜토리얼 도중에 나가면 처음부터 다시 시작합니다")는 `[임시]` 표기만 지워 확정(2026-11-18).
 - **미니게임 조작 안내 [확정, 2026-11-18, 구현됨]:** 튜토리얼 제작(철검) 중에만 화면 **왼쪽 상단**에 반투명 안내 상자(`MinigameGuidePopup`)를 띄우고, 가열·단조·열처리·연마 **단계가 시작될 때마다 바로 바뀐다**(`CraftingController.StageStarted`). 제작이 끝나면 사라지고, 튜토리얼이 아닌 제작에서는 나오지 않는다. 상자는 미니게임 영역 왼쪽 위를 일부 덮지만 **클릭을 막지 않는다**(레이캐스트 대상 아님). 문구는 `TutorialConfig`의 `heatGuide`·`forgeGuide`·`heatTreatGuide`·`polishGuide`(사용자가 작성 완료. 비우면 그 단계는 안내 없음). 크기 440×150·위치(16, -16)·색은 임시. 그리기 순서는 자체 캔버스 15(적중 이펙트 10 < 안내 15 < 결과 팝업 20 < 튜토리얼 팝업 21).
 - 팝업 디자인(위치, 화면을 가리는지, 해당 UI 강조 여부) — **[미정]**
 - 잠긴 책 버튼의 피드백(튜토리얼 중 책 버튼이 눌려도 아무 일도 없음) — **[미정]**
@@ -56,7 +56,7 @@
 
 구현됨: `TutorialConfig`/`TutorialStepData`/`TutorialCondition`과 에셋(`Assets/Resources/Tutorial/`, 6단계), `TutorialFlow`(순수 C#), `TutorialController`, `TutorialPopup`, 상점 필터, 책 버튼 잠금, 설정 패널 타이틀 복귀 확인창.
 
-- 팝업 문구는 `Assets/Resources/Tutorial/Step_*.asset`, `TutorialConfig.asset`(완료 문구, 미니게임 조작 안내), `SettingsPanel.tutorialConfirmMessage`에 있다. 단계·완료·조작 안내 문구는 사용자가 작성했고, 설정 확인 문구만 `[임시]`다.
+- 팝업 문구는 `Assets/Resources/Tutorial/Step_*.asset`, `TutorialConfig.asset`(완료 문구, 미니게임 조작 안내), `SettingsPanel.tutorialConfirmMessage`에 있다. 모두 확정되었다(설정 확인 문구는 `[임시]` 표기만 지움).
 - 저장 막기는 책 버튼(저장·불러오기 탭 모두)을 튜토리얼 중 완전히 잠그는 방식으로 구현했다.
 - 보상은 철검을 판매한 직후 지급하고, 완료 안내 팝업은 그 뒤에 뜬다. 철검 판매금은 회수하고 소지금을 정확히 1000원으로 맞춘다(`CompleteTutorial`).
 - 설계에 없던 항목: 판매 목록도 철검만 보이게 필터링한다(철 원석을 되팔아 흐름이 깨지는 것을 막기 위함). 구매 목록은 철 원석만 보인다.
