@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04cb8acee6862d541b98586180dc365a, type: 3}
   m_Name: Step_04
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Tutorial.TutorialStepData
-  message: "\uC81C\uC791 \uC2DC \uB123\uC740 \uC7AC\uB8CC\uC5D0 \uB530\uB77C \uAC00\uC7A5
-    \uAC00\uAE4C\uC6B4 \uC81C\uC791\uBC95\uC5D0 \uB530\uB77C \uC81C\uC791\uC774 \uC9C4\uD589\uB418\uACE0
-    \uB123\uC740 \uC7AC\uB8CC\uB294 \uBAA8\uB450 \uC18C\uBAA8\uB429\uB2C8\uB2E4."
+  message: "\uC81C\uC791 \uC2DC \uB123\uC740 \uC7AC\uB8CC\uC5D0 \uB530\uB77C \uCC3E\uC544\uB0B8
+    \uC81C\uC791\uBC95\uC5D0 \uB530\uB77C \uC81C\uC791\uC774 \uC9C4\uD589\uB418\uACE0
+    \uB3C4\uAC10\uC5D0 \uB4F1\uB85D\uB429\uB2C8\uB2E4. \uB123\uC740 \uC7AC\uB8CC\uB294
+    \uBAA8\uB450 \uC18C\uBAA8\uB429\uB2C8\uB2E4."
   condition: 0
   itemId: 
+  popupPosition: 0
