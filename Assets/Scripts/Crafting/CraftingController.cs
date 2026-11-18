@@ -54,6 +54,9 @@ namespace BlackSmith.Crafting
         /// <summary>모든 단계가 끝났을 때 호출.</summary>
         public event Action<CraftResult> CraftFinished;
 
+        /// <summary>단계의 미니게임이 시작될 때마다 호출(건너뛴 단계는 제외). 앞 단계가 끝나면 같은 프레임에 다음 단계가 시작된다. 튜토리얼 조작 안내용이다.</summary>
+        public event Action<CraftStage> StageStarted;
+
         private void Awake()
         {
             HideAllViews();
@@ -112,7 +115,9 @@ namespace BlackSmith.Crafting
             {
                 result.AddStage(new CraftStageResult(activeStage, 0f, true));
                 AdvanceStage();
+                return;
             }
+            StageStarted?.Invoke(activeStage);
         }
 
         /// <summary>단계의 미니게임을 시작한다. 시작할 수 없으면(미구현, 뷰 없음) false.</summary>

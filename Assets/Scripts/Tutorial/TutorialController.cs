@@ -13,6 +13,8 @@ namespace BlackSmith.Tutorial
         [SerializeField] private TutorialPopup popup;
         [Tooltip("제작 결과 팝업. 닫힐 때 '결과 팝업 닫힘'(CraftResultClosed) 단계를 넘긴다. 비워 두면 그 단계는 제작 완료 직후 바로 넘어간다.")]
         [SerializeField] private CraftResultPopup resultPopup;
+        [Tooltip("튜토리얼 제작 중 왼쪽 상단에 미니게임 조작 안내를 보여 줄 상자. 비워 두면 안내 없음.")]
+        [SerializeField] private MinigameGuidePopup guidePopup;
 
         private TutorialConfig config;
         private TutorialFlow flow;
@@ -70,6 +72,7 @@ namespace BlackSmith.Tutorial
             {
                 crafting.CraftStarted += OnCraftStarted;
                 crafting.CraftFinished += OnCraftFinished;
+                crafting.StageStarted += OnStageStarted;
             }
             if (resultPopup != null) resultPopup.Closed += OnResultPopupClosed;
             if (popup != null) popup.Confirmed += OnPopupConfirmed;
@@ -100,9 +103,11 @@ namespace BlackSmith.Tutorial
             {
                 crafting.CraftStarted -= OnCraftStarted;
                 crafting.CraftFinished -= OnCraftFinished;
+                crafting.StageStarted -= OnStageStarted;
             }
             if (resultPopup != null) resultPopup.Closed -= OnResultPopupClosed;
             if (popup != null) popup.Confirmed -= OnPopupConfirmed;
+            if (guidePopup != null) guidePopup.Hide();
             flow = null;
             player = null;
         }
@@ -147,10 +152,23 @@ namespace BlackSmith.Tutorial
         // 제작 완료 단계는 바로 넘긴다. 다음 단계(숙련도 안내)가 결과 팝업과 동시에 보이고, 결과 팝업이 닫히면 넘어간다.
         private void OnCraftFinished(CraftResult result)
         {
+            if (guidePopup != null) guidePopup.Hide();
             if (flow == null) return;
             flow.NotifyCraftFinished();
             // 결과 팝업이 없으면 기다릴 대상이 없으므로 안내 단계도 바로 넘긴다.
             if (resultPopup == null) flow.NotifyCraftResultClosed();
+        }
+
+        // 튜토리얼 제작 중에만 단계마다 조작 안내를 바꿔 보여 준다. 앞 단계가 끝나면 같은 프레임에 다음 단계가 시작되므로 바로 바뀐다.
+        private void OnStageStarted(CraftStage stage)
+        {
+            if (guidePopup == null) return;
+            if (!IsActive || flow == null || config == null)
+            {
+                guidePopup.Hide();
+                return;
+            }
+            guidePopup.Show(config.GetStageGuide(stage));
         }
 
         private void OnResultPopupClosed()
