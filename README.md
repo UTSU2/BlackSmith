@@ -43,7 +43,7 @@ BlackSmith는 **제작 중심**의 게임입니다. 플레이어는 대장간에
 - 등급은 Common, Uncommon, Rare, Unique, Legendary 5단계이며 재료와 완성품이 같은 이름을 씁니다. 한 아이템에는 등급이 하나뿐이며(광물도 마찬가지), 등급은 가격 배율과 표시에만 쓰이고 레시피 매칭·난이도·품질에는 영향을 주지 않습니다.
 - 재료 가격은 Common을 1배로 Uncommon 1.2 / Rare 1.5 / Unique 1.8 / Legendary 2배이며 소수점은 반올림합니다. 완성품 판매가는 레시피에 적힌 재료의 구매가 합 × 품질 배율입니다.
 - 미니게임 난이도는 1~10단계이고 레시피에 정의된 값 그대로 쓰며 재료 등급에 따른 가중이나 품질 보정은 없습니다. 난이도는 4개 미니게임에 같이 적용하며 플레이어에게 표시하지 않습니다.
-- 재료를 넣으면 가장 가까운 레시피가 자동으로 선택됩니다(레시피 북은 보이지 않음). 세부 규칙은 [docs/GameDesign.md](docs/GameDesign.md)의 "레시피 매칭"을 참고하세요.
+- 재료의 종류와 수량이 레시피와 정확히 같아야 그 장비가 만들어지고, 맞지 않으면 "알 수 없는 제작품"(판매가 50골드)이 나옵니다. 제작해 본 레시피는 레시피 도감(HUD의 초록 책 버튼)에 재료 구성·숙련도와 함께 기록됩니다. 세부 규칙은 [docs/GameDesign.md](docs/GameDesign.md)의 "레시피 매칭"과 [docs/V2.md](docs/V2.md) §3을 참고하세요.
 - Common 가격은 전역 기준값이 없고, 아이템마다 생성할 때(Item Creator) 정합니다.
 - 단계별 완성도 판정, 난이도 1~10단계별 수치, 1회 제작 시간(4개 합계 20초)은 확정이며 [docs/GameDesign.md](docs/GameDesign.md) §4에 있고 코드와 `Game` 씬 설정에 반영돼 있습니다. 기본 밸런스 조정은 마쳤고, 정밀 조정은 v2에서 합니다.
 
@@ -77,7 +77,7 @@ MVP 완료 기준(광물·제작품 임시 완성, 적중 사운드, BGM, 아주
 
 - 적중 사운드와 BGM 파일은 임시이며 최종 음색은 미정입니다. ([docs/SoundPlan.md](docs/SoundPlan.md))
 - 기본 밸런스 조정은 마쳤습니다. 제작 시간은 가열 5 / 단조 8 / 열처리 2 / 연마 5초입니다. 정밀 조정은 v2입니다.
-- 콘텐츠 확충: 현재 광물 48종(등급 분포 18/12/9/6/3, 값은 확정), 실제 이름의 장비 11종과 그 레시피 11개(`Medieval_Weapons` 스프라이트 사용, 가격은 재료 구매가 합으로 결정), 임시 제작품 5종(`temp_gear_*`)과 임시 레시피 38개가 있습니다. 임시 레시피는 아직 실제 장비에 쓰이지 않은 광물을 위한 것이며, 장비를 추가하면서 차례로 교체합니다. 장비 이름·재료 조합·난이도는 초안입니다.
+- 콘텐츠 확충: 현재 광물 48종(등급 분포 18/12/9/6/3, 값은 확정), 실제 이름의 장비 11종과 그 레시피 11개(`Medieval_Weapons` 스프라이트 사용, 가격은 재료 구매가 합으로 결정), 임시 제작품 5종(`temp_gear_*`)과 임시 레시피 38개가 있습니다. 레시피 49종은 v2에서 완성으로 보고, 재료 구성 조정은 v3에서 합니다. 레시피 외 제작품으로 알 수 없는 제작품(999) 1종이 있습니다. 임시 레시피는 아직 실제 장비에 쓰이지 않은 광물을 위한 것이며, 장비를 추가하면서 차례로 교체합니다. 장비 이름·재료 조합·난이도는 초안입니다.
 
 구현 예정 항목의 세부 사양은 아직 정해지지 않았습니다.
 
@@ -85,7 +85,7 @@ MVP 완료 기준(광물·제작품 임시 완성, 적중 사운드, BGM, 아주
 
 - 숙련도 시스템 — 구현됨: 레시피별 누적, 초급·중급·고급 Lv1~9와 Master, 품질 보너스, 제작 결과 팝업 ([docs/V2.md](docs/V2.md) §2. 팝업 배치 원칙은 확정, 디자인은 임시)
 - 적중 이펙트 — 구현됨: 단조 판정 시 원 바깥으로 퍼지는 금색 도넛형 빛(Perfect > Good > 눌렀지만 Miss, 놓친 Miss는 없음), 연마 흠집 제거 시 흠집 크기의 은색 반짝임. 파티클이며 현재 수치로 확정, 프리팹에서 조정 가능 ([docs/V2.md](docs/V2.md) §4)
-- 레시피 습득: 레시피 도감, 정확 일치 매칭, 알 수 없는 제작품 (세부는 미정)
+- 레시피 습득 — 구현됨: 정확 일치 매칭(재료 종류+수량), 맞지 않으면 알 수 없는 제작품(ID 999, 50골드 고정), 레시피 도감(7×7 격자, "해금 n / 49", 재료 구성·숙련도, 제작 결과 팝업의 해금 알림). 도감 번호는 임시값, 알 수 없는 제작품 아이콘과 도감 비주얼은 미정 ([docs/V2.md](docs/V2.md) §3)
 - 정밀 밸런스 조정
 - (장비 강화는 v2에서 제외했습니다. 이후 도입 여부는 미정입니다.)
 
@@ -105,8 +105,8 @@ MVP 완료 기준(광물·제작품 임시 완성, 적중 사운드, BGM, 아주
 | `Assets/Scripts/Data/` | `PlayerData`(돈·소지품, 저장 이후 변경 여부, 튜토리얼 대기와 보상), `InventoryEntry`, `GameSession`(현재 세션, 새 게임 시작), `SaveSlotManager`(슬롯 8개 저장/불러오기), `SaveFile` |
 | `Assets/Scripts/Audio/` | 사운드: `SoundSettings`(BGM / 효과음 크기, `PlayerPrefs`), `SfxClips`(효과음 클립 모음), `SfxPlayer`, `BgmPlayer`(크로스페이드), `CraftingBgmSwitch`(제작 시작·완료에 따른 BGM 전환) |
 | `Assets/Scripts/Shop/ShopService.cs` | 구매/판매 규칙 |
-| `Assets/Scripts/Crafting/` | 제작 로직: `CraftRecipeData`, `RecipeDatabase`, `RecipeMatcher`, `CraftScoring`, `CraftDifficulty`, `CraftingSession`, `CraftingController`, 4개 미니게임(`HeatMinigame`, `ForgeMinigame`, `HeatTreatMinigame`, `PolishMinigame`), `CraftingSfx`(미니게임 판정 효과음 연결), `AnvilInteractable` |
-| `Assets/Scripts/UI/` | 화면 표시: `ShopPanel`, `ShopItemView`, `ShopBuyPopup`, `CraftingPanel`, 미니게임 View 4종, `SaveLoadPanel`, `SaveSlotView`, `SaveSlotPager`, `SettingsPanel`, `TutorialPopup`(튜토리얼 안내 팝업), `PanelInputBlocker`, `DisplaySettings` 등 |
+| `Assets/Scripts/Crafting/` | 제작 로직: `CraftRecipeData`, `RecipeDatabase`, `RecipeMatcher`(정확 일치), `RecipeCodex`(도감 순서), `UnknownCraftSettings`(알 수 없는 제작), `CraftScoring`, `CraftDifficulty`, `CraftingSession`, `CraftingController`, 4개 미니게임(`HeatMinigame`, `ForgeMinigame`, `HeatTreatMinigame`, `PolishMinigame`), `CraftingSfx`(미니게임 판정 효과음 연결), `AnvilInteractable` |
+| `Assets/Scripts/UI/` | 화면 표시: `ShopPanel`, `ShopItemView`, `ShopBuyPopup`, `CraftingPanel`, 미니게임 View 4종, `SaveLoadPanel`, `SaveSlotView`, `SaveSlotPager`, `SettingsPanel`, `TutorialPopup`(튜토리얼 안내 팝업), `CodexPanel`·`CodexSlotView`(레시피 도감), `PanelInputBlocker`, `DisplaySettings` 등 |
 | `Assets/Scripts/Tutorial/` | 튜토리얼: `TutorialFlow`(순수 C# 단계 진행), `TutorialController`(이벤트 연결, 제한 질의), `TutorialConfig`/`TutorialStepData`/`TutorialCondition`(데이터). 에셋은 `Assets/Resources/Tutorial/` |
 | `Assets/Scripts/ButtonLabelPress.cs` | 버튼이 눌림 이미지일 때 글자를 함께 내리는 연출 |
 | `Assets/Scripts/Items/ItemData.cs` | 아이템 공통 데이터(ScriptableObject): ID, 이름, 아이콘, 설명, 최대 스택, 기본 등급(아이템당 하나), Common 기준 판매가 (등급 배율은 `ItemGradeInfo`) |
