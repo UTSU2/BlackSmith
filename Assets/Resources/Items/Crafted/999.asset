@@ -15,8 +15,8 @@ MonoBehaviour:
   id: 999
   displayName: "\uC54C \uC218 \uC5C6\uB294 \uC81C\uC791\uD488"
   icon: {fileID: 0}
-  description: "[\uC784\uC2DC] \uBB34\uC5C7\uC744 \uB9CC\uB4E4\uB824\uB358 \uAC83\uC778\uC9C0
-    \uC54C \uC218 \uC5C6\uB294 \uBB3C\uAC74."
+  description: "\uBB34\uC5C7\uC744 \uB9CC\uB4E4\uB824\uB358 \uAC83\uC778\uC9C0 \uC54C
+    \uC218 \uC5C6\uB294 \uBB3C\uAC74."
   maxStack: 1
   defaultGrade: 0
   sellPrice: 0
