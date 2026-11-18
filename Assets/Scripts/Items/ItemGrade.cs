@@ -30,6 +30,16 @@ namespace BlackSmith.Items
             return index >= 0 && index < PriceMultipliers.Length ? PriceMultipliers[index] : 1m;
         }
 
+        // 완성품 등급 배율(상품 이상에만 적용). ItemGrade 순서와 같다. (docs/V2.md §5 "정밀 밸런스")
+        private static readonly decimal[] CraftedGradeMultipliers = { 1m, 1.1m, 1.3m, 1.7m, 2.5m };
+
+        /// <summary>완성품 등급 배율. 품질이 상품 이상일 때 판매가에 곱한다. Common 1, Uncommon 1.1, Rare 1.3, Unique 1.7, Legendary 2.5.</summary>
+        public static decimal CraftedGradeMultiplier(ItemGrade grade)
+        {
+            int index = (int)grade;
+            return index >= 0 && index < CraftedGradeMultipliers.Length ? CraftedGradeMultipliers[index] : 1m;
+        }
+
         /// <summary>Common 기준 가격에 등급 배율을 곱해 반올림한 가격.</summary>
         public static int ScalePrice(int commonPrice, ItemGrade grade)
         {

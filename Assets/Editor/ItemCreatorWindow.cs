@@ -121,8 +121,8 @@ namespace BlackSmith.EditorTools
             }
             else
             {
-                EditorGUILayout.HelpBox("제작품 판매가는 보통 입력하지 않습니다. 제작할 때 (레시피에 적힌 재료 구매가 합) x 품질 배율로 정해집니다. 등급은 위 '기본 등급' 하나뿐입니다.\n고정 판매가를 0보다 크게 두면 품질과 관계없이 그 값으로 팔립니다(알 수 없는 제작품).", MessageType.Info);
-                fixedSellPrice = Mathf.Max(0, EditorGUILayout.IntField(new GUIContent("고정 판매가 (0 = 재료가 × 품질)", "0보다 크면 품질과 관계없이 이 값으로 팔린다."), fixedSellPrice));
+                EditorGUILayout.HelpBox("제작품 판매가는 보통 입력하지 않습니다. 제작할 때 (레시피에 적힌 재료 구매가 합) x 품질 배율로 정해지고, 상품 이상이면 완성품 등급 배율(1 / 1.1 / 1.3 / 1.7 / 2.5)을 더 곱합니다. 등급은 위 '기본 등급' 하나뿐입니다.\n고정 판매가를 0보다 크게 두면 품질과 관계없이 그 값으로 팔립니다(알 수 없는 제작품).", MessageType.Info);
+                fixedSellPrice = Mathf.Max(0, EditorGUILayout.IntField(new GUIContent("고정 판매가 (0 = 재료가 × 품질 × 등급)", "0보다 크면 품질과 관계없이 이 값으로 팔린다."), fixedSellPrice));
             }
 
             EditorGUILayout.Space();

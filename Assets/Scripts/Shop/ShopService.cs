@@ -119,7 +119,7 @@ namespace BlackSmith.Shop
             return item == null ? 0 : player.GetCount(item.Id, variant);
         }
 
-        /// <summary>판매 단가. 광물은 Common 기준 판매가 x 등급 배율, 제작품은 재료 합산 가격 x 품질 배율.</summary>
+        /// <summary>판매 단가. 광물은 Common 기준 판매가 x 등급 배율, 제작품은 재료 합산 가격 x 품질 배율(상품 이상은 x 완성품 등급 배율).</summary>
         public int GetSellUnitPrice(ItemData item, ItemVariant variant)
         {
             return item == null ? 0 : item.GetSellUnitPrice(variant);

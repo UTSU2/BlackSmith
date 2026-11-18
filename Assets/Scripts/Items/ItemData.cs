@@ -54,7 +54,7 @@ namespace BlackSmith.Items
         /// <summary>기본 등급 기준 판매가.</summary>
         public int GetSellPrice() => GetSellPrice(defaultGrade);
 
-        /// <summary>보유한 항목 하나(개별 상태 포함)의 판매 단가. 제작품은 재료 합산 가격 x 품질 배율로 덮어쓴다.</summary>
+        /// <summary>보유한 항목 하나(개별 상태 포함)의 판매 단가. 제작품은 재료 합산 가격 x 품질 배율(상품 이상은 x 완성품 등급 배율)로 덮어쓴다.</summary>
         public virtual int GetSellUnitPrice(ItemVariant variant) => GetSellPrice(variant.Grade);
 
         protected virtual void OnValidate()
