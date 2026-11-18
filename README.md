@@ -106,7 +106,7 @@ MVP 완료 기준(광물·제작품 임시 완성, 적중 사운드, BGM, 아주
 | `Assets/Scripts/Audio/` | 사운드: `SoundSettings`(BGM / 효과음 크기, `PlayerPrefs`), `SfxClips`(효과음 클립 모음), `SfxPlayer`, `BgmPlayer`(크로스페이드), `CraftingBgmSwitch`(제작 시작·완료에 따른 BGM 전환) |
 | `Assets/Scripts/Shop/ShopService.cs` | 구매/판매 규칙 |
 | `Assets/Scripts/Crafting/` | 제작 로직: `CraftRecipeData`, `RecipeDatabase`, `RecipeMatcher`(정확 일치), `RecipeCodex`(도감 순서), `UnknownCraftSettings`(알 수 없는 제작), `CraftScoring`, `CraftDifficulty`, `CraftingSession`, `CraftingController`, 4개 미니게임(`HeatMinigame`, `ForgeMinigame`, `HeatTreatMinigame`, `PolishMinigame`), `CraftingSfx`(미니게임 판정 효과음 연결), `AnvilInteractable` |
-| `Assets/Scripts/UI/` | 화면 표시: `ShopPanel`, `ShopItemView`, `ShopBuyPopup`, `CraftingPanel`, 미니게임 View 4종, `SaveLoadPanel`, `SaveSlotView`, `SaveSlotPager`, `SettingsPanel`, `TutorialPopup`(튜토리얼 안내 팝업), `CodexPanel`·`CodexSlotView`(레시피 도감), `PanelInputBlocker`, `DisplaySettings` 등 |
+| `Assets/Scripts/UI/` | 화면 표시: `ShopPanel`, `ShopItemView`, `ShopBuyPopup`, `CraftingPanel`, 미니게임 View 4종, `SaveLoadPanel`, `SaveSlotView`, `SaveSlotPager`, `SettingsPanel`, `TutorialPopup`(튜토리얼 안내 팝업), `MinigameGuidePopup`(튜토리얼 제작 중 미니게임 조작 안내), `CodexPanel`·`CodexSlotView`(레시피 도감), `PanelInputBlocker`, `DisplaySettings` 등 |
 | `Assets/Scripts/Tutorial/` | 튜토리얼: `TutorialFlow`(순수 C# 단계 진행), `TutorialController`(이벤트 연결, 제한 질의), `TutorialConfig`/`TutorialStepData`/`TutorialCondition`(데이터). 에셋은 `Assets/Resources/Tutorial/` |
 | `Assets/Scripts/ButtonLabelPress.cs` | 버튼이 눌림 이미지일 때 글자를 함께 내리는 연출 |
 | `Assets/Scripts/Items/ItemData.cs` | 아이템 공통 데이터(ScriptableObject): ID, 이름, 아이콘, 설명, 최대 스택, 기본 등급(아이템당 하나), Common 기준 판매가 (등급 배율은 `ItemGradeInfo`) |
