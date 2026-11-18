@@ -7,9 +7,9 @@ namespace BlackSmith.Crafting
     /// <summary>
     /// 제작 레시피. 레시피 하나가 ScriptableObject 에셋 하나다.
     /// "어떤 재료 조합이 → 어떤 장비가 되고 → 어떤 단계를 거치는가"를 정의만 하며 로직은 없다.
-    /// 해금 개념은 없다: 에셋 폴더(Assets/Resources/Recipes/)에 있으면 모두 개방된 레시피다.
+    /// 에셋 폴더(Assets/Resources/Recipes/)에 있으면 모두 제작할 수 있다. 플레이어에게는 제작해 해금한 레시피만 도감에 보인다(id 기준 저장).
     /// 에셋은 직접 만들지 말고 Tools > BlackSmith > Recipe Creator 창을 사용한다.
-    /// 주의: Recipe Creator 창이 아래 private 필드 이름(id, result, ingredients, stages)으로 값을 기록하므로
+    /// 주의: Recipe Creator 창이 아래 private 필드 이름(id, result, ingredients, stages, baseDifficulty, codexNumber)으로 값을 기록하므로
     /// 필드 이름을 바꾸면 창도 같이 수정해야 한다.
     /// </summary>
     [CreateAssetMenu(fileName = "new_recipe", menuName = "BlackSmith/Crafting/Recipe")]
@@ -30,7 +30,11 @@ namespace BlackSmith.Crafting
         [Tooltip("미니게임 기본 난이도(1~10). 재료의 등급·종류·개수와 상관없이 이 값이 그대로 적용된다.")]
         [SerializeField, Range(1, 10)] private int baseDifficulty = 1;
 
+        [Tooltip("도감 번호(1부터). 낮은 등급이 앞 번호. 해금 기록은 id로 저장되므로 번호를 바꿔도 해금은 유지된다.")]
+        [SerializeField, Min(0)] private int codexNumber;
+
         public string Id => id;
+        public int CodexNumber => codexNumber;
         public int BaseDifficulty => baseDifficulty;
         public CraftedItemData Result => result;
         public IReadOnlyList<CraftIngredient> Ingredients => ingredients;

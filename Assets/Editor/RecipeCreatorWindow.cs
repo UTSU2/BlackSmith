@@ -33,6 +33,7 @@ namespace BlackSmith.EditorTools
         private List<IngredientInput> ingredients = new List<IngredientInput>();
         private List<CraftStage> stages = DefaultStages();
         private int baseDifficulty = 1;
+        private int codexNumber;
 
         /// <summary>null이면 새로 만들기 모드, 아니면 이 레시피를 수정 중.</summary>
         private CraftRecipeData editing;
@@ -51,7 +52,12 @@ namespace BlackSmith.EditorTools
             window.RefreshList();
         }
 
-        private void OnEnable() { RefreshList(); }
+        private void OnEnable()
+        {
+            RefreshList();
+            // 처음 열면 새로 만들기 모드이므로 도감 번호 기본값을 채운다.
+            if (editing == null) codexNumber = NextCodexNumber();
+        }
         private void OnFocus() { RefreshList(); }
         private void OnProjectChange() { RefreshList(); Repaint(); }
 
@@ -91,6 +97,12 @@ namespace BlackSmith.EditorTools
             baseDifficulty = EditorGUILayout.IntSlider(
                 new GUIContent("기본 난이도", "미니게임 기본 난이도(1~10). 재료의 등급·종류·개수와 상관없이 이 값이 그대로 적용된다."),
                 baseDifficulty, CraftDifficulty.MinLevel, CraftDifficulty.MaxLevel);
+            codexNumber = Mathf.Max(0, EditorGUILayout.IntField(
+                new GUIContent("도감 번호", "도감 칸 순서(1부터). 낮은 등급이 앞 번호. 해금 기록은 id로 저장되므로 번호를 바꿔도 해금은 유지된다."), codexNumber));
+            if (isEditing && id != null && id.Trim() != editing.Id)
+            {
+                EditorGUILayout.HelpBox("레시피 id를 바꾸면 이 레시피의 도감 해금과 숙련도 기록이 끊깁니다.", MessageType.Warning);
+            }
 
             EditorGUILayout.Space();
             DrawIngredients();
@@ -180,7 +192,7 @@ namespace BlackSmith.EditorTools
         private void OnCreateClicked()
         {
             string error;
-            CraftRecipeData created = CreateRecipe(id, result, ingredients, stages, baseDifficulty, out error);
+            CraftRecipeData created = CreateRecipe(id, result, ingredients, stages, baseDifficulty, out error, codexNumber);
             if (created == null)
             {
                 SetMessage(error, MessageType.Error);
@@ -188,6 +200,8 @@ namespace BlackSmith.EditorTools
             else
             {
                 SetMessage("생성 완료: " + AssetDatabase.GetAssetPath(created), MessageType.Info);
+                // 새 번호 기본값(NextCodexNumber)이 방금 만든 레시피를 보도록 목록을 먼저 갱신한다.
+                RefreshList();
                 ResetForm();
                 Selection.activeObject = created;
                 EditorGUIUtility.PingObject(created);
@@ -198,7 +212,7 @@ namespace BlackSmith.EditorTools
         private void OnSaveClicked()
         {
             string error;
-            if (UpdateRecipe(editing, id, result, ingredients, stages, baseDifficulty, out error))
+            if (UpdateRecipe(editing, id, result, ingredients, stages, baseDifficulty, out error, codexNumber))
             {
                 SetMessage("저장 완료: " + AssetDatabase.GetAssetPath(editing), MessageType.Info);
             }
@@ -257,6 +271,7 @@ namespace BlackSmith.EditorTools
 
             stages = new List<CraftStage>(recipe.Stages);
             baseDifficulty = recipe.BaseDifficulty;
+            codexNumber = recipe.CodexNumber;
         }
 
         // ───────────────────────── 왼쪽: 목록 ─────────────────────────
@@ -277,7 +292,7 @@ namespace BlackSmith.EditorTools
             {
                 if (recipe == null) continue;
                 string resultName = recipe.Result != null ? recipe.Result.DisplayName : "결과물 없음";
-                string label = $"{recipe.Id}  ({resultName})";
+                string label = $"No.{recipe.CodexNumber}  {recipe.Id}  ({resultName})";
 
                 bool selected = recipe == editing;
                 Color previous = GUI.backgroundColor;
@@ -335,14 +350,64 @@ namespace BlackSmith.EditorTools
                     bySignature.Add(signature, recipe);
                 }
             }
+
+            AddCodexProblems(problems);
             return problems;
+        }
+
+        /// <summary>도감 번호 경고: 번호 없음, 번호 중복, 번호 순서와 결과 등급 순서가 어긋남(낮은 등급이 앞 번호여야 한다).</summary>
+        private void AddCodexProblems(List<string> problems)
+        {
+            Dictionary<int, CraftRecipeData> byNumber = new Dictionary<int, CraftRecipeData>();
+            List<CraftRecipeData> numbered = new List<CraftRecipeData>();
+            foreach (CraftRecipeData recipe in existing)
+            {
+                if (recipe == null || string.IsNullOrWhiteSpace(recipe.Id)) continue;
+                if (recipe.CodexNumber <= 0)
+                {
+                    problems.Add($"'{recipe.Id}': 도감 번호가 없습니다.");
+                    continue;
+                }
+                if (byNumber.TryGetValue(recipe.CodexNumber, out CraftRecipeData other))
+                {
+                    problems.Add($"도감 번호 No.{recipe.CodexNumber}이(가) '{other.Id}'와(과) '{recipe.Id}'에 겹칩니다.");
+                    continue;
+                }
+                byNumber.Add(recipe.CodexNumber, recipe);
+                if (recipe.Result != null) numbered.Add(recipe);
+            }
+
+            numbered = RecipeCodex.GetOrdered(numbered);
+            for (int i = 1; i < numbered.Count; i++)
+            {
+                CraftRecipeData a = numbered[i - 1];
+                CraftRecipeData b = numbered[i];
+                if (a.Result.DefaultGrade > b.Result.DefaultGrade)
+                {
+                    problems.Add($"도감 번호 순서가 등급 순서와 맞지 않습니다: No.{a.CodexNumber} '{a.Id}'({a.Result.DefaultGrade}) > No.{b.CodexNumber} '{b.Id}'({b.Result.DefaultGrade})");
+                }
+            }
+        }
+
+        /// <summary>새 레시피의 기본 도감 번호: 지금 가장 큰 번호 + 1. 등급에 맞게 직접 고친다.</summary>
+        private int NextCodexNumber()
+        {
+            int max = 0;
+            foreach (CraftRecipeData recipe in existing)
+            {
+                if (recipe != null && recipe.CodexNumber > max) max = recipe.CodexNumber;
+            }
+            return max + 1;
         }
 
         private void RefreshList()
         {
             existing.Clear();
             existing.AddRange(FindAllRecipes());
-            existing.Sort((a, b) => string.CompareOrdinal(a.Id, b.Id));
+            // 도감 순서(번호 → id)로 보여 준다.
+            List<CraftRecipeData> ordered = RecipeCodex.GetOrdered(existing);
+            existing.Clear();
+            existing.AddRange(ordered);
 
             // 수정 중이던 에셋이 삭제됐으면 새로 만들기 모드로 복귀
             if (editing != null && !existing.Contains(editing))
@@ -359,6 +424,7 @@ namespace BlackSmith.EditorTools
             ingredients = new List<IngredientInput>();
             stages = DefaultStages();
             baseDifficulty = CraftDifficulty.MinLevel;
+            codexNumber = NextCodexNumber();
         }
 
         /// <summary>GameDesign.md의 확정 순서: 가열 → 단조 → 열처리 → 연마.</summary>
@@ -437,7 +503,7 @@ namespace BlackSmith.EditorTools
 
         /// <summary>레시피 에셋을 검증하고 만든다. 실패하면 null을 반환하고 error에 이유를 담는다.</summary>
         public static CraftRecipeData CreateRecipe(string id, CraftedItemData result, IList<IngredientInput> ingredients,
-            IList<CraftStage> stages, int baseDifficulty, out string error)
+            IList<CraftStage> stages, int baseDifficulty, out string error, int codexNumber = -1)
         {
             if (!Validate(ref id, result, ingredients, stages, null, out error)) return null;
 
@@ -447,14 +513,14 @@ namespace BlackSmith.EditorTools
             string path = AssetDatabase.GenerateUniqueAssetPath(RootFolder + "/" + id + ".asset");
             AssetDatabase.CreateAsset(asset, path);
 
-            ApplyFields(asset, id, result, ingredients, stages, baseDifficulty);
+            ApplyFields(asset, id, result, ingredients, stages, baseDifficulty, codexNumber);
             error = null;
             return asset;
         }
 
         /// <summary>기존 레시피 에셋을 수정한다. 실패하면 false와 이유를 반환한다.</summary>
         public static bool UpdateRecipe(CraftRecipeData recipe, string id, CraftedItemData result,
-            IList<IngredientInput> ingredients, IList<CraftStage> stages, int baseDifficulty, out string error)
+            IList<IngredientInput> ingredients, IList<CraftStage> stages, int baseDifficulty, out string error, int codexNumber = -1)
         {
             if (recipe == null) { error = "수정할 레시피가 없습니다."; return false; }
             if (!Validate(ref id, result, ingredients, stages, recipe, out error)) return false;
@@ -471,15 +537,17 @@ namespace BlackSmith.EditorTools
                 }
             }
 
-            ApplyFields(recipe, id, result, ingredients, stages, baseDifficulty);
+            ApplyFields(recipe, id, result, ingredients, stages, baseDifficulty, codexNumber);
             error = null;
             return true;
         }
 
         private static void ApplyFields(CraftRecipeData asset, string id, CraftedItemData result,
-            IList<IngredientInput> ingredients, IList<CraftStage> stages, int baseDifficulty)
+            IList<IngredientInput> ingredients, IList<CraftStage> stages, int baseDifficulty, int codexNumber)
         {
             SerializedObject so = new SerializedObject(asset);
+            // 음수(인자 생략)는 현재 값을 유지한다.
+            if (codexNumber >= 0) so.FindProperty("codexNumber").intValue = codexNumber;
             so.FindProperty("id").stringValue = id;
             so.FindProperty("baseDifficulty").intValue = Mathf.Clamp(baseDifficulty, CraftDifficulty.MinLevel, CraftDifficulty.MaxLevel);
             so.FindProperty("result").objectReferenceValue = result;

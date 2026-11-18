@@ -26,6 +26,10 @@ namespace BlackSmith.Data
         [SerializeField] private List<InventoryEntry> items = new List<InventoryEntry>();
         // 레시피별 누적 숙련도. 이 필드가 없는 기존 저장 파일은 빈 목록으로 읽힌다.
         [SerializeField] private List<ProficiencyEntry> proficiencies = new List<ProficiencyEntry>();
+        // 도감에 해금한 레시피 id. 도감 번호가 아니라 id로 저장하므로 번호가 바뀌어도 해금이 다른 레시피로 옮겨 가지 않는다.
+        [SerializeField] private List<string> unlockedRecipes = new List<string>();
+        // 도감 목록을 준비했는가. 이 필드가 없던 기존 저장 파일은 false로 읽혀, 처음 불러올 때 숙련도 기록으로 해금을 채운다.
+        [SerializeField] private bool codexInitialized;
 
         /// <summary>금액이 바뀔 때 호출 (새 금액).</summary>
         [field: NonSerialized] public event Action<int> OnMoneyChanged;
@@ -199,6 +203,43 @@ namespace BlackSmith.Data
 
             hasUnsavedChanges = true;
             return after - before;
+        }
+
+        // ---- 도감 (레시피 해금) ----
+
+        /// <summary>
+        /// 도감 목록을 처음 한 번 준비한다. 도감이 생기기 전의 저장 파일은 숙련도 기록이 있는 레시피를 해금된 것으로 본다.
+        /// 새 게임·불러오기 때 GameSession이 부른다. 저장하지 않은 변경으로 보지 않는다. (docs/V2.md §3)
+        /// </summary>
+        public void EnsureCodexInitialized()
+        {
+            if (codexInitialized) return;
+            codexInitialized = true;
+            if (unlockedRecipes == null) unlockedRecipes = new List<string>();
+            if (proficiencies == null) return;
+            foreach (ProficiencyEntry entry in proficiencies)
+            {
+                if (entry != null && !string.IsNullOrEmpty(entry.RecipeId) && !unlockedRecipes.Contains(entry.RecipeId))
+                {
+                    unlockedRecipes.Add(entry.RecipeId);
+                }
+            }
+        }
+
+        public bool IsRecipeUnlocked(string recipeId)
+        {
+            return !string.IsNullOrEmpty(recipeId) && unlockedRecipes != null && unlockedRecipes.Contains(recipeId);
+        }
+
+        /// <summary>레시피를 도감에 해금한다. 새로 해금했으면 true, 이미 해금돼 있으면 false.</summary>
+        public bool UnlockRecipe(string recipeId)
+        {
+            if (string.IsNullOrEmpty(recipeId)) return false;
+            if (unlockedRecipes == null) unlockedRecipes = new List<string>();
+            if (unlockedRecipes.Contains(recipeId)) return false;
+            unlockedRecipes.Add(recipeId);
+            hasUnsavedChanges = true;
+            return true;
         }
 
         private ProficiencyEntry FindProficiency(string recipeId)

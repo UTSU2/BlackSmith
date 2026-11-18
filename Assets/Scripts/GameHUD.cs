@@ -10,6 +10,7 @@ namespace BlackSmith
         [SerializeField] private ShopPanel shopPanel;
         [SerializeField] private SaveLoadPanel saveLoadPanel;
         [SerializeField] private SettingsPanel settingsPanel;
+        [SerializeField] private CodexPanel codexPanel;
         [Tooltip("비워 두면 제한 없음.")]
         [SerializeField] private TutorialController tutorial;
 
@@ -33,6 +34,12 @@ namespace BlackSmith
         {
             if (tutorial != null && tutorial.IsActive) return; // 튜토리얼 중에는 저장·불러오기 잠금
             if (saveLoadPanel != null) saveLoadPanel.OpenSave();
+        }
+
+        /// <summary>도감 버튼 = 레시피 도감 패널 열기. 튜토리얼 중에도 열린다(저장과 달리 흐름을 바꾸지 않음).</summary>
+        public void OnCodex()
+        {
+            if (codexPanel != null) codexPanel.Open();
         }
 
         /// <summary>톱니바퀴 버튼 = 설정 패널(소리 크기) 열기.</summary>

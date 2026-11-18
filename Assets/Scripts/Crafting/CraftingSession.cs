@@ -24,14 +24,17 @@ namespace BlackSmith.Crafting
         }
 
         private readonly PlayerData player;
+        private readonly UnknownCraftSettings unknownCraft;
         private readonly List<Slot> slots = new List<Slot>();
 
         /// <summary>투입 내용이 바뀔 때 호출.</summary>
         public event Action Changed;
 
-        public CraftingSession(PlayerData player)
+        /// <param name="unknownCraft">레시피와 일치하지 않는 조합의 설정. null이면 일치하는 조합만 제작할 수 있다.</param>
+        public CraftingSession(PlayerData player, UnknownCraftSettings unknownCraft = null)
         {
             this.player = player ?? throw new ArgumentNullException(nameof(player));
+            this.unknownCraft = unknownCraft;
         }
 
         public IReadOnlyList<Slot> Inserted => slots;
@@ -39,7 +42,13 @@ namespace BlackSmith.Crafting
         /// <summary>현재 투입한 재료와 일치하는 레시피. 없으면 null. (플레이어에게는 보여주지 않는다)</summary>
         public CraftRecipeData Recipe { get; private set; }
 
-        public bool CanStart => Recipe != null;
+        /// <summary>
+        /// 재료가 하나 이상이면 시작할 수 있다. 레시피와 일치하지 않으면 알 수 없는 제작품이 된다.
+        /// 단서를 주지 않으므로 이 값으로 일치 여부를 알 수 없다(설정 에셋이 없을 때만 일치 여부와 같아진다).
+        /// </summary>
+        public bool CanStart => !IsEmpty && (Recipe != null || HasUnknownCraft);
+
+        private bool HasUnknownCraft => unknownCraft != null && unknownCraft.Result != null;
 
         public bool IsEmpty => slots.Count == 0;
 
@@ -87,13 +96,13 @@ namespace BlackSmith.Crafting
 
         /// <summary>
         /// 제작을 시작할 수 있으면 재료를 모두 소모하고 제작 요청(레시피, 난이도, 재료 합산 가격)을 돌려준다.
-        /// 투입량이 레시피 요구량보다 많아도 투입한 재료는 전부 소모된다.
+        /// 일치하는 레시피가 없으면 알 수 없는 제작 요청(레시피 null)을 만든다. 투입한 재료는 전부 소모된다.
         /// </summary>
         public bool TryStart(out CraftRequest request)
         {
             request = null;
+            if (!CanStart) return false;
             CraftRecipeData recipe = Recipe;
-            if (recipe == null) return false;
 
             foreach (Slot slot in slots)
             {
@@ -102,7 +111,9 @@ namespace BlackSmith.Crafting
 
             // 소모하면 소지품이 바뀌므로 계산에 쓸 입력은 소모 전에 스냅샷으로 만든다.
             List<CraftInput> inputs = GetInputs();
-            request = CraftScoring.CreateRequest(recipe, inputs);
+            request = recipe != null
+                ? CraftScoring.CreateRequest(recipe, inputs)
+                : CraftScoring.CreateUnknownRequest(unknownCraft, inputs);
             Commit();
             return true;
         }

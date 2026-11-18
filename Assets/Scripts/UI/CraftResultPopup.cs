@@ -10,6 +10,7 @@ namespace BlackSmith.UI
 {
     /// <summary>
     /// 제작 결과 팝업. 제작이 끝나면 완성품·품질·숙련도 변화를 보여 주고 확인 버튼으로 닫는다. (docs/V2.md §2)
+    /// 처음 만든 레시피면 도감 해금 줄을, 알 수 없는 제작품이면 숙련도 대신 판매가를 보여 준다. (docs/V2.md §3)
     /// 숙련도가 쌓이지 않았거나 이미 Master면 현재 단계·레벨만 보여 준다. 배치·디자인은 임시값이다.
     /// </summary>
     public class CraftResultPopup : MonoBehaviour
@@ -25,6 +26,8 @@ namespace BlackSmith.UI
         [SerializeField] private Text itemLabel;
         [Tooltip("등급·품질. 비워 두면 아이템명 줄에 함께 표시한다.")]
         [SerializeField] private Text detailLabel;
+        [Tooltip("레시피를 처음 만들어 도감에 해금했을 때만 보인다.")]
+        [SerializeField] private Text unlockLabel;
         [SerializeField] private Text proficiencyLabel;
         [Tooltip("진행도 게이지(막대와 숫자)를 묶은 오브젝트. 변화가 없거나 Master면 숨긴다.")]
         [SerializeField] private GameObject progressRoot;
@@ -32,6 +35,8 @@ namespace BlackSmith.UI
         [SerializeField] private Image progressFill;
         [SerializeField] private Text progressLabel;
         [SerializeField] private Text bonusLabel;
+        [Tooltip("알 수 없는 제작품일 때만 판매가를 보여 준다(숙련도 줄 대신).")]
+        [SerializeField] private Text priceLabel;
 
         [Header("닫기")]
         [SerializeField] private Button confirmButton;
@@ -88,6 +93,13 @@ namespace BlackSmith.UI
                 itemLabel.text = detailLabel != null ? result.Product.DisplayName : $"{result.Product.DisplayName} {detail}";
             }
 
+            if (unlockLabel != null)
+            {
+                bool unlocked = result.NewlyUnlocked && result.Recipe != null;
+                unlockLabel.gameObject.SetActive(unlocked);
+                if (unlocked) unlockLabel.text = $"새 레시피 해금! (No.{result.Recipe.CodexNumber})";
+            }
+
             ProficiencyState after = result.ProficiencyAfter;
             bool changed = after != null && result.ProficiencyGain > 0 && !after.IsMaster;
             // Master에 막 도달한 경우도 "Master"만 보여 준다(강조 없음).
@@ -111,6 +123,17 @@ namespace BlackSmith.UI
             {
                 bonusLabel.gameObject.SetActive(after != null);
                 bonusLabel.text = "품질 보너스 +" + result.Bonus.ToString("0.#", CultureInfo.InvariantCulture);
+            }
+
+            // 알 수 없는 제작품은 숙련도가 없으므로(ProficiencyAfter == null) 위 줄들이 숨고 판매가를 보여 준다.
+            if (priceLabel != null)
+            {
+                priceLabel.gameObject.SetActive(result.IsUnknown);
+                if (result.IsUnknown)
+                {
+                    int price = result.Product.GetSellUnitPrice(new ItemVariant(result.Grade, result.Quality, result.Request.IngredientValue));
+                    priceLabel.text = $"판매가 {price} G";
+                }
             }
         }
 

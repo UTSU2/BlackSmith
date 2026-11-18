@@ -5,6 +5,7 @@ namespace BlackSmith.Data
     /// <summary>
     /// 현재 진행 중인 게임의 런타임 데이터 보관소. 씬이 바뀌어도 유지된다.
     /// 타이틀에서 슬롯을 불러오면 Set으로 넣고, 게임 씬은 Current를 사용한다.
+    /// 데이터가 들어올 때마다 도감 목록을 준비한다(옛 저장 파일은 숙련도 기록으로 해금을 채운다).
     /// </summary>
     public static class GameSession
     {
@@ -14,7 +15,11 @@ namespace BlackSmith.Data
         {
             get
             {
-                if (current == null) current = new PlayerData();
+                if (current == null)
+                {
+                    current = new PlayerData();
+                    current.EnsureCodexInitialized();
+                }
                 return current;
             }
         }
@@ -27,6 +32,7 @@ namespace BlackSmith.Data
         public static void StartNew()
         {
             current = new PlayerData();
+            current.EnsureCodexInitialized();
             TutorialConfig config = TutorialConfig.Load();
             if (config != null)
             {
@@ -45,6 +51,7 @@ namespace BlackSmith.Data
         public static void Set(PlayerData data)
         {
             current = data ?? new PlayerData();
+            current.EnsureCodexInitialized();
         }
     }
 }

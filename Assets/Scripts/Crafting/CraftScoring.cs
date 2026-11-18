@@ -73,7 +73,14 @@ namespace BlackSmith.Crafting
         {
             int difficulty = CraftDifficulty.Calculate(recipe.BaseDifficulty);
             int value = CalculateIngredientValue(recipe);
-            return new CraftRequest(recipe, difficulty, value, inputs);
+            return new CraftRequest(recipe, recipe.Result, recipe.Stages, difficulty, value, inputs);
+        }
+
+        /// <summary>레시피와 일치하지 않는 조합의 제작 요청(알 수 없는 제작품). 재료 합산 가격은 0이다(판매가는 고정가).</summary>
+        public static CraftRequest CreateUnknownRequest(UnknownCraftSettings settings, IReadOnlyList<CraftInput> inputs)
+        {
+            int difficulty = CraftDifficulty.Calculate(settings.BaseDifficulty);
+            return new CraftRequest(null, settings.Result, settings.Stages, difficulty, 0, inputs);
         }
     }
 }

@@ -32,7 +32,10 @@ namespace BlackSmith.Crafting
         private readonly List<CraftStageResult> stages = new List<CraftStageResult>();
 
         public CraftRequest Request { get; }
+        /// <summary>일치한 레시피. 알 수 없는 제작이면 null.</summary>
         public CraftRecipeData Recipe => Request.Recipe;
+        /// <summary>레시피와 일치하지 않는 조합으로 만든 알 수 없는 제작품인가.</summary>
+        public bool IsUnknown => Request.IsUnknown;
         public int Difficulty => Request.Difficulty;
         public IReadOnlyList<CraftStageResult> Stages => stages;
 
@@ -76,6 +79,14 @@ namespace BlackSmith.Crafting
             RawScore = rawScore;
             FinalScore = finalScore;
             Bonus = bonus;
+        }
+
+        /// <summary>이번 제작으로 레시피가 도감에 처음 해금됐는가. 알 수 없는 제작은 항상 false.</summary>
+        public bool NewlyUnlocked { get; private set; }
+
+        public void SetUnlocked(bool newlyUnlocked)
+        {
+            NewlyUnlocked = newlyUnlocked;
         }
 
         public void SetProficiency(ProficiencyState before, ProficiencyState after, int gain)
