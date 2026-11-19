@@ -16,15 +16,24 @@ MonoBehaviour:
   - displayName: "\uACAC\uC2B5"
     requiredCodex: -1
     requiredMasters: -1
+    benefitText: 
   - displayName: "\uCD08\uAE09"
-    requiredCodex: -1
-    requiredMasters: -1
+    requiredCodex: 10
+    requiredMasters: 5
+    benefitText: "\uCD95\uD558\uB4DC\uB9BD\uB2C8\uB2E4! \uB300\uC7A5\uC7A5\uC774\uB85C\uC11C
+      \uD55C\uBC1C \uB098\uC544\uAC00\uC168\uC2B5\uB2C8\uB2E4!"
   - displayName: "\uC219\uB828"
-    requiredCodex: -1
-    requiredMasters: -1
+    requiredCodex: 25
+    requiredMasters: 15
+    benefitText: "\uCD95\uD558\uB4DC\uB9BD\uB2C8\uB2E4! \uC219\uB828\uB41C \uB300\uC7A5\uC7A5\uC774\uC758
+      \uCE6D\uD638\uB97C \uC5BB\uC73C\uC168\uC2B5\uB2C8\uB2E4!"
   - displayName: "\uC7A5\uC778"
-    requiredCodex: -1
-    requiredMasters: -1
+    requiredCodex: 49
+    requiredMasters: 30
+    benefitText: "\uCD95\uD558\uB4DC\uB9BD\uB2C8\uB2E4! \uC7A5\uC778\uC758 \uBC18\uC5F4\uC5D0
+      \uB2E4\uB2E4\uB974\uC168\uC2B5\uB2C8\uB2E4!"
   - displayName: "\uBA85\uC7A5"
-    requiredCodex: -1
-    requiredMasters: -1
+    requiredCodex: 49
+    requiredMasters: 49
+    benefitText: "\uCD95\uD558\uB4DC\uB9BD\uB2C8\uB2E4! \uBA85\uC7A5\uC758 \uBC18\uC5F4\uC5D0
+      \uB2E4\uB2E4\uB974\uC168\uC2B5\uB2C8\uB2E4!"

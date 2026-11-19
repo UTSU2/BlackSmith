@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Rank.RankQuestSettings
   entries:
   - targetRank: 1
-    description: 
-    recipeId: 
-    minQuality: 0
+    description: "\uC625 \uC7A5\uAC80 : \uC911\uD488 \uC81C\uC791"
+    recipeId: recipe_jade_longsword
+    minQuality: 3
   - targetRank: 2
-    description: 
-    recipeId: 
-    minQuality: 0
+    description: "\uCCAD\uC625 \uC0AC\uBE0C\uB974 : \uC911\uD488 \uC81C\uC791"
+    recipeId: recipe_azure_saber
+    minQuality: 3
   - targetRank: 3
-    description: 
-    recipeId: 
-    minQuality: 0
+    description: "\uD751\uC694 \uD560\uBC84\uB4DC : \uC0C1\uD488 \uC81C\uC791"
+    recipeId: recipe_obsidian_halberd
+    minQuality: 4
   - targetRank: 4
-    description: 
-    recipeId: 
-    minQuality: 0
+    description: "\uC6A9\uC2EC \uB8E8\uBE44 \uB300\uAC80 : \uCD5C\uC0C1\uD488 \uC81C\uC791"
+    recipeId: recipe_dragonheart_greatsword
+    minQuality: 5

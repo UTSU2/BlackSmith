@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: SkipGearSettings
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Rank.SkipGearSettings
   scores: 0500000006000000070000000800000009000000
-  upgradeCosts: ffffffffffffffffffffffffffffffff
+  upgradeCosts: 204e0000409c000070110100c0d40100
   heatUnlockRank: 2
   heatTreatUnlockRank: 4
