@@ -21,6 +21,8 @@ namespace BlackSmith.Rank
             public int requiredCodex = -1;
             [Tooltip("이 등급에 오르려면 필요한 master 숙련도 수. -1 = 미정(승급 불가).")]
             public int requiredMasters = -1;
+            [Tooltip("승급 팝업에 보이는 혜택 문구. 비어 있으면 혜택 줄을 숨긴다(미정).")]
+            [TextArea] public string benefitText;
         }
 
         [Tooltip("BlacksmithRank 순서(견습, 초급, 숙련, 장인, 명장). 견습의 필요 개수는 쓰지 않는다.")]
@@ -51,6 +53,13 @@ namespace BlackSmith.Rank
         {
             RankEntry entry = Get(target);
             return entry != null ? entry.requiredMasters : -1;
+        }
+
+        /// <summary>rank 등급에 오를 때 보여 주는 혜택 문구. 없으면 빈 문자열.</summary>
+        public string GetBenefit(BlacksmithRank rank)
+        {
+            RankEntry entry = Get(rank);
+            return entry != null && entry.benefitText != null ? entry.benefitText : string.Empty;
         }
 
         private RankEntry Get(BlacksmithRank rank)
