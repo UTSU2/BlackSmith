@@ -8,22 +8,24 @@ namespace BlackSmith.Rank
 {
     /// <summary>
     /// 등급 진행을 게임 이벤트에 연결하는 씬 오브젝트. 규칙은 BlacksmithRankRules가 갖는다.
-    /// 승급 퀘스트가 생기기 전까지(출하 3단계) allowDirectPromotion이 켜져 있으면 조건을 채우는 즉시 승급한다(개발용 임시).
+    /// 승급 조건을 채우면 퀘스트(RankQuestSettings)가 자동으로 시작되고, 제작 결과가 퀘스트를 클리어하면 한 단계 승급한다.
     /// 튜토리얼 중에는 승급하지 않는다.
     /// </summary>
     public class RankController : MonoBehaviour
     {
         [SerializeField] private CraftingController crafting;
-        [Tooltip("개발용 임시: 조건을 채우면 퀘스트 없이 바로 승급. 승급 퀘스트를 붙일 때 제거한다.")]
-        [SerializeField] private bool allowDirectPromotion = true;
 
         private BlacksmithRankRules rules;
         private ProficiencyRules proficiencyRules;
         private SkipGearRules gearRules;
+        private RankQuestRules questRules;
         private PlayerData subscribed;
 
         /// <summary>진행도나 등급이 바뀌었을 때(제작 종료, 승급).</summary>
         public event Action Changed;
+
+        /// <summary>승급했을 때(이전 등급, 새 등급).</summary>
+        public event Action<BlacksmithRank, BlacksmithRank> Promoted;
 
         private void OnEnable()
         {
@@ -43,9 +45,14 @@ namespace BlackSmith.Rank
             if (gear == null) Debug.LogWarning($"[Rank] 스킵 장비 설정({SkipGearSettings.ResourcePath})이 없어 장비를 지급하지 않습니다.");
             else gearRules = new SkipGearRules(gear);
 
+            RankQuestSettings quest = RankQuestSettings.Load();
+            if (quest == null) Debug.LogWarning($"[Rank] 승급 퀘스트 설정({RankQuestSettings.ResourcePath})이 없어 승급할 수 없습니다.");
+            questRules = new RankQuestRules(quest);
+
             Subscribe(GameSession.Current);
             SkipGearService.SyncGrants(GameSession.Current, gearRules);
-            Evaluate();
+            Subscribe(GameSession.Current);
+            Changed?.Invoke();
         }
 
         private void OnDisable()
@@ -62,9 +69,43 @@ namespace BlackSmith.Rank
             return rules.Evaluate(player.Rank, player.UnlockedRecipeCount, RankCounter.CountMasters(player, proficiencyRules));
         }
 
+        /// <summary>현재 승급 퀘스트 상태. 설정이 없으면 다음 등급이 없는 것으로 본다.</summary>
+        public RankQuestState GetQuestState()
+        {
+            if (questRules == null || GameSession.Current == null) return RankQuestState.None;
+            return questRules.GetState(GetProgress());
+        }
+
+        /// <summary>진행 중인 퀘스트(Active)일 때만 그 내용을 돌려준다.</summary>
+        public bool TryGetActiveQuest(out RankQuestSettings.QuestEntry entry)
+        {
+            entry = null;
+            return questRules != null && GameSession.Current != null && questRules.TryGetActive(GetProgress(), out entry);
+        }
+
         private void OnCraftFinished(CraftResult result)
         {
-            Evaluate();
+            HandleCraftResult(result);
+        }
+
+        /// <summary>
+        /// 제작 결과가 승급 퀘스트를 클리어하면 한 단계 승급한다. 튜토리얼 중, 알 수 없는 제작품, 조건 미달, 퀘스트가 비어 있으면 승급하지 않는다.
+        /// </summary>
+        public void HandleCraftResult(CraftResult result)
+        {
+            PlayerData player = GameSession.Current;
+            Subscribe(player);
+            if (player != null && result != null && questRules != null && !player.IsTutorialPending)
+            {
+                RankProgress progress = GetProgress();
+                string recipeId = result.Recipe != null ? result.Recipe.Id : null;
+                if (progress.HasNext && progress.IsMet && questRules.IsCleared(progress.Next, recipeId, result.IsUnknown, result.Quality))
+                {
+                    BlacksmithRank from = player.Rank;
+                    if (player.SetRank(progress.Next)) Promoted?.Invoke(from, progress.Next);
+                }
+            }
+            Changed?.Invoke();
         }
 
         private void OnRankChanged(BlacksmithRank rank)
@@ -79,23 +120,6 @@ namespace BlackSmith.Rank
             if (subscribed != null) subscribed.OnRankChanged -= OnRankChanged;
             subscribed = player;
             if (subscribed != null) subscribed.OnRankChanged += OnRankChanged;
-        }
-
-        private void Evaluate()
-        {
-            PlayerData player = GameSession.Current;
-            Subscribe(player);
-            if (player != null && allowDirectPromotion && !player.IsTutorialPending)
-            {
-                // 한 번에 여러 등급의 조건을 채웠으면 이어서 올린다.
-                while (true)
-                {
-                    RankProgress progress = GetProgress();
-                    if (!progress.HasNext || !progress.IsMet) break;
-                    if (!player.SetRank(progress.Next)) break;
-                }
-            }
-            Changed?.Invoke();
         }
     }
 }
