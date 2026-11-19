@@ -119,10 +119,15 @@ namespace BlackSmith.UI
                 if (progressLabel != null) progressLabel.text = $"{after.Progress} / {after.Required}";
             }
 
+            // 품질 보너스 줄에 스킵 장비로 건너뛴 단계를 덧붙인다(줄을 새로 늘리면 상자 배치가 바뀌므로 기존 줄을 쓴다).
+            // 알 수 없는 제작품(숙련도 없음)이라도 스킵을 썼으면 이 줄에 스킵만 보여 준다.
             if (bonusLabel != null)
             {
-                bonusLabel.gameObject.SetActive(after != null);
-                bonusLabel.text = "품질 보너스 +" + result.Bonus.ToString("0.#", CultureInfo.InvariantCulture);
+                string skipText = DescribeSkips(result);
+                bool hasBonus = after != null;
+                bonusLabel.gameObject.SetActive(hasBonus || skipText.Length > 0);
+                string bonusText = hasBonus ? "품질 보너스 +" + result.Bonus.ToString("0.#", CultureInfo.InvariantCulture) : string.Empty;
+                bonusLabel.text = hasBonus && skipText.Length > 0 ? bonusText + " · " + skipText : bonusText + skipText;
             }
 
             // 알 수 없는 제작품은 숙련도가 없으므로(ProficiencyAfter == null) 위 줄들이 숨고 판매가를 보여 준다.
@@ -135,6 +140,19 @@ namespace BlackSmith.UI
                     priceLabel.text = $"판매가 {price} G";
                 }
             }
+        }
+
+        // 스킵 장비로 건너뛴 단계 이름. 없으면 빈 문자열. 예: "스킵 가열·열처리"
+        private static string DescribeSkips(CraftResult result)
+        {
+            string names = string.Empty;
+            foreach (CraftStageResult stage in result.Stages)
+            {
+                if (stage == null || !stage.IsFixed) continue;
+                string name = stage.Stage == CraftStage.Heat ? "가열" : (stage.Stage == CraftStage.HeatTreat ? "열처리" : stage.Stage.ToString());
+                names = names.Length > 0 ? names + "·" + name : name;
+            }
+            return names.Length > 0 ? "스킵 " + names : string.Empty;
         }
 
         public void Hide()

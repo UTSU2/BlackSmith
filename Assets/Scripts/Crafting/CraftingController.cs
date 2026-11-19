@@ -5,6 +5,7 @@ using UnityEngine;
 using BlackSmith.Data;
 using BlackSmith.Items;
 using BlackSmith.Proficiency;
+using BlackSmith.Rank;
 using BlackSmith.UI;
 
 namespace BlackSmith.Crafting
@@ -45,6 +46,8 @@ namespace BlackSmith.Crafting
         private CraftStage activeStage;
         private ProficiencyRules proficiencyRules;
         private bool proficiencyLoaded;
+        private SkipGearRules skipGearRules;
+        private bool skipGearLoaded;
 
         public bool IsCrafting { get; private set; }
 
@@ -111,6 +114,13 @@ namespace BlackSmith.Crafting
             }
 
             activeStage = stages[stageIndex];
+            if (TryGetSkipScore(activeStage, out int skipScore))
+            {
+                // 스킵 장비: 미니게임 없이 고정 점수를 넣고 다음 단계로 간다(StageStarted는 일으키지 않는다).
+                result.AddStage(new CraftStageResult(activeStage, skipScore));
+                AdvanceStage();
+                return;
+            }
             if (!TryStartStage(activeStage))
             {
                 result.AddStage(new CraftStageResult(activeStage, 0f, true));
@@ -118,6 +128,23 @@ namespace BlackSmith.Crafting
                 return;
             }
             StageStarted?.Invoke(activeStage);
+        }
+
+        // 스킵 장비 설정은 처음 필요할 때 한 번 불러온다. 없으면 스킵 없이 진행한다. 튜토리얼 제작에서는 스킵하지 않는다.
+        private bool TryGetSkipScore(CraftStage stage, out int score)
+        {
+            score = 0;
+            PlayerData player = GameSession.Current;
+            if (player == null || player.IsTutorialPending) return false;
+
+            if (!skipGearLoaded)
+            {
+                skipGearLoaded = true;
+                SkipGearSettings settings = SkipGearSettings.Load();
+                if (settings == null) Debug.LogWarning($"[Crafting] 스킵 장비 설정({SkipGearSettings.ResourcePath})이 없어 스킵 없이 진행합니다.");
+                else skipGearRules = new SkipGearRules(settings);
+            }
+            return SkipGearService.TryGetSkipScore(player, stage, skipGearRules, out score);
         }
 
         /// <summary>단계의 미니게임을 시작한다. 시작할 수 없으면(미구현, 뷰 없음) false.</summary>
@@ -296,7 +323,8 @@ namespace BlackSmith.Crafting
             {
                 if (text.Length > 0) text.Append(", ");
                 text.Append(stage.Stage).Append(' ');
-                text.Append(stage.Skipped ? "건너뜀" : stage.Completeness.ToString("P0"));
+                if (stage.IsFixed) text.Append($"스킵({stage.FixedScore}점)");
+                else text.Append(stage.Skipped ? "건너뜀" : stage.Completeness.ToString("P0"));
             }
             return text.Length == 0 ? "단계 없음" : text.ToString();
         }

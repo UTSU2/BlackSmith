@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using BlackSmith.Items;
+using BlackSmith.Rank;
 
 namespace BlackSmith.Data
 {
@@ -30,6 +31,10 @@ namespace BlackSmith.Data
         [SerializeField] private List<string> unlockedRecipes = new List<string>();
         // 도감 목록을 준비했는가. 이 필드가 없던 기존 저장 파일은 false로 읽혀, 처음 불러올 때 숙련도 기록으로 해금을 채운다.
         [SerializeField] private bool codexInitialized;
+        // 대장장이 등급(BlacksmithRank의 정수 값). 이 필드가 없는 기존 저장 파일은 0(견습)으로 읽힌다.
+        [SerializeField] private int rank;
+        // 스킵 장비(가열·열처리). 이 필드가 없는 기존 저장 파일은 빈 목록으로 읽힌다.
+        [SerializeField] private List<SkipGearEntry> skipGears = new List<SkipGearEntry>();
 
         /// <summary>금액이 바뀔 때 호출 (새 금액).</summary>
         [field: NonSerialized] public event Action<int> OnMoneyChanged;
@@ -40,7 +45,74 @@ namespace BlackSmith.Data
         // 저장 이후 금액·소지품이 바뀌었는지. [SerializeField]가 아니므로 저장 파일에 들어가지 않는다.
         private bool hasUnsavedChanges;
 
+        /// <summary>대장장이 등급이 바뀔 때 호출 (새 등급).</summary>
+        [field: NonSerialized] public event Action<BlacksmithRank> OnRankChanged;
+
         public int Money => money;
+
+        /// <summary>대장장이 등급. 기존 저장 파일은 견습이다.</summary>
+        public BlacksmithRank Rank => (BlacksmithRank)rank;
+
+        /// <summary>도감에 해금한 레시피 수.</summary>
+        public int UnlockedRecipeCount => unlockedRecipes != null ? unlockedRecipes.Count : 0;
+
+        /// <summary>숙련도 기록(읽기 전용). master 개수 세기 등에 쓴다.</summary>
+        public IReadOnlyList<ProficiencyEntry> Proficiencies => proficiencies;
+
+        /// <summary>
+        /// 등급을 올린다. 현재보다 높을 때만 바꾸고 true를 돌려준다(낮추기·같은 등급은 false).
+        /// 저장하지 않은 변경으로 표시한다.
+        /// </summary>
+        public bool SetRank(BlacksmithRank newRank)
+        {
+            if ((int)newRank <= rank) return false;
+            rank = (int)newRank;
+            hasUnsavedChanges = true;
+            OnRankChanged?.Invoke(newRank);
+            return true;
+        }
+
+        // ---- 스킵 장비 ----
+
+        /// <summary>가진 스킵 장비. 없으면 null.</summary>
+        public SkipGearEntry GetSkipGear(SkipGearKind kind)
+        {
+            if (skipGears == null) return null;
+            foreach (SkipGearEntry entry in skipGears)
+            {
+                if (entry != null && entry.Kind == kind) return entry;
+            }
+            return null;
+        }
+
+        /// <summary>스킵 장비를 준다(Lv1, 켜짐). 새로 줬으면 true, 이미 있으면 false.</summary>
+        public bool GrantSkipGear(SkipGearKind kind)
+        {
+            if (GetSkipGear(kind) != null) return false;
+            if (skipGears == null) skipGears = new List<SkipGearEntry>();
+            skipGears.Add(new SkipGearEntry(kind));
+            hasUnsavedChanges = true;
+            return true;
+        }
+
+        /// <summary>스킵 장비를 켜거나 끈다. 장비가 없거나 값이 같으면 아무것도 하지 않는다.</summary>
+        public void SetSkipGearEnabled(SkipGearKind kind, bool enabled)
+        {
+            SkipGearEntry entry = GetSkipGear(kind);
+            if (entry == null || entry.Enabled == enabled) return;
+            entry.SetEnabled(enabled);
+            hasUnsavedChanges = true;
+        }
+
+        /// <summary>스킵 장비 레벨을 올린다(현재보다 높고 최대 이하일 때만). 바뀌었으면 true.</summary>
+        public bool SetSkipGearLevel(SkipGearKind kind, int level)
+        {
+            SkipGearEntry entry = GetSkipGear(kind);
+            if (entry == null || level <= entry.Level || level > SkipGearRules.MaxLevel) return false;
+            entry.SetLevel(level);
+            hasUnsavedChanges = true;
+            return true;
+        }
 
         /// <summary>튜토리얼이 아직 끝나지 않았는가. 기존 저장 파일은 항상 false(완료)다.</summary>
         public bool IsTutorialPending => tutorialPending;
