@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using BlackSmith.Data;
+using BlackSmith.Items;
 using BlackSmith.Rank;
 
 namespace BlackSmith.UI
@@ -63,12 +64,33 @@ namespace BlackSmith.UI
             if (controller != null)
             {
                 RankProgress progress = controller.GetProgress();
-                if (progress.HasNext)
-                {
-                    line2 = $"도감 {progress.Codex}/{Format(progress.RequiredCodex)} · master {progress.Masters}/{Format(progress.RequiredMasters)}";
-                }
+                string progressLine = progress.HasNext
+                    ? $"도감 {progress.Codex}/{Format(progress.RequiredCodex)} · master {progress.Masters}/{Format(progress.RequiredMasters)}"
+                    : string.Empty;
+                RankQuestSettings.QuestEntry quest;
+                controller.TryGetActiveQuest(out quest);
+                line2 = DescribeQuest(controller.GetQuestState(), quest, progressLine);
             }
             label.text = $"대장장이 등급: {rankName}\n{line2}";
+        }
+
+        /// <summary>
+        /// HUD 둘째 줄. 조건 미달이면 진행도, 퀘스트 진행 중이면 퀘스트 설명, 조건은 채웠는데 퀘스트가 비어 있으면 준비 중, 최고 등급이면 최고 등급.
+        /// 설명이 비어 있으면 레시피 id와 품질로 임시 표기한다. 문구는 임시이며 미정이다.
+        /// </summary>
+        public static string DescribeQuest(RankQuestState state, RankQuestSettings.QuestEntry quest, string progressLine)
+        {
+            switch (state)
+            {
+                case RankQuestState.Locked: return progressLine;
+                case RankQuestState.Preparing: return "승급 퀘스트 준비 중";
+                case RankQuestState.Active:
+                    if (quest == null) return "승급 퀘스트 준비 중";
+                    return !string.IsNullOrEmpty(quest.description)
+                        ? $"승급 퀘스트: {quest.description}"
+                        : $"승급 퀘스트: {quest.recipeId} {ItemQualityInfo.DisplayName(quest.minQuality)} 이상";
+                default: return "최고 등급";
+            }
         }
 
         private static string Format(int required) => required >= 0 ? required.ToString() : "-";
