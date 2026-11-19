@@ -93,3 +93,13 @@
 | heat_time_fill | 2140×95 | 594 | 47,0,47,0 | 높이 16 (틀 안쪽 inset 후) |
 
 - 씬 연결(Task 4)에서 처리할 것: 틀 비율이 `BarArea`와 달라 프레임 전용 Image를 두고 속 영역 패딩 자식에 `TargetZone`/`Indicator`를 넣는다(`barArea` 참조를 그 자식으로 변경). `TimeFill`은 틀의 속 영역에 맞춰 anchor inset을 준다. 코드 변경은 없다.
+
+## 씬 연결 결과 (Task 4~5)
+
+- PPU 최종 조정: `heat_target_zone` 490 (표시 폭 70 기준), `heat_time_fill` 950 (표시 높이 10 기준). 나머지는 위 표 그대로.
+- `HeatPanel` 구조 변경 (코드 변경 없음, `HeatMinigameView`는 그대로):
+  - `BarArea`: 크기 256×700, `heat_bar_frame`(Simple), 색 흰색. 틀 이미지 전용.
+  - `BarArea/Track` (신규): 70×543.7, 위치 (0, -29.9). 틀의 속 영역(원본 x 273~479, y 320~1930)에 맞춤. `TargetZone`/`Indicator`가 이 안으로 이동했고 `HeatMinigameView.barArea`도 `Track`을 가리킨다.
+  - `TimeBar/FillArea` (신규): 앵커 0~1, offset (11,7)/(-11,-8). `TimeFill`이 이 안으로 이동. `HeatMinigameView.Draw`가 `TimeFill`의 offset을 매 프레임 0으로 덮어쓰므로 inset은 부모에 둔다.
+  - `TargetZone`/`Indicator`/`TimeBar`/`TimeFill`: Sliced. `BarArea`: Simple.
+- 검증: Game 씬 Missing Script 0 (컴포넌트 2015개), `HeatMinigameView` 참조 5개 정상, 콘솔 오류 0 (additive 로드 시 `More than one global light` 경고만). 화면은 편집 모드에서 Game 캔버스 카메라로 직접 렌더링해 구간 위치/표시기 안·밖/시간 바 길이 4가지 상태를 확인했다 (런타임 로직·입력·애니메이션은 확인하지 않음).
