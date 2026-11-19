@@ -2,7 +2,20 @@ using BlackSmith.Items;
 
 namespace BlackSmith.Rank
 {
-    /// <summary>승급 퀘스트 규칙(순수 C#). 클리어 판정만 한다.</summary>
+    /// <summary>승급 퀘스트의 현재 상태.</summary>
+    public enum RankQuestState
+    {
+        /// <summary>다음 등급이 없다(최고 등급).</summary>
+        None,
+        /// <summary>승급 조건을 아직 채우지 못했거나 필요 개수가 미정이다.</summary>
+        Locked,
+        /// <summary>조건은 채웠지만 퀘스트 내용이 비어 있다(미정).</summary>
+        Preparing,
+        /// <summary>퀘스트 진행 중.</summary>
+        Active
+    }
+
+    /// <summary>승급 퀘스트 규칙(순수 C#). 상태 계산과 클리어 판정을 한다.</summary>
     public class RankQuestRules
     {
         private readonly RankQuestSettings settings;
@@ -10,6 +23,21 @@ namespace BlackSmith.Rank
         public RankQuestRules(RankQuestSettings settings)
         {
             this.settings = settings;
+        }
+
+        public RankQuestState GetState(RankProgress progress)
+        {
+            if (!progress.HasNext) return RankQuestState.None;
+            if (!progress.IsMet) return RankQuestState.Locked;
+            RankQuestSettings.QuestEntry entry;
+            return settings != null && settings.TryGet(progress.Next, out entry) ? RankQuestState.Active : RankQuestState.Preparing;
+        }
+
+        /// <summary>퀘스트가 진행 중(Active)일 때만 그 항목을 돌려준다.</summary>
+        public bool TryGetActive(RankProgress progress, out RankQuestSettings.QuestEntry entry)
+        {
+            entry = null;
+            return GetState(progress) == RankQuestState.Active && settings.TryGet(progress.Next, out entry);
         }
 
         /// <summary>
