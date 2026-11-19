@@ -1,8 +1,11 @@
+using BlackSmith.Tutorial;
+
 namespace BlackSmith.Data
 {
     /// <summary>
     /// 현재 진행 중인 게임의 런타임 데이터 보관소. 씬이 바뀌어도 유지된다.
     /// 타이틀에서 슬롯을 불러오면 Set으로 넣고, 게임 씬은 Current를 사용한다.
+    /// 데이터가 들어올 때마다 도감 목록을 준비한다(옛 저장 파일은 숙련도 기록으로 해금을 채운다).
     /// </summary>
     public static class GameSession
     {
@@ -12,20 +15,34 @@ namespace BlackSmith.Data
         {
             get
             {
-                if (current == null) current = new PlayerData();
+                if (current == null)
+                {
+                    current = new PlayerData();
+                    current.EnsureCodexInitialized();
+                }
                 return current;
             }
         }
 
         /// <summary>
-        /// 새 게임: 빈 플레이어 데이터로 시작한다. 튜토리얼이 아직 없으므로 시작하자마자 건너뛴 것으로 처리해 보상을 바로 준다.
-        /// 튜토리얼이 생기면 StartTutorial까지만 하고, CompleteTutorial은 튜토리얼을 마치거나 건너뛰는 시점에서 부른다.
+        /// 새 게임: 빈 플레이어 데이터로 시작한다. 튜토리얼 설정(TutorialConfig)이 있으면 튜토리얼 시작 지급금만 주고
+        /// 튜토리얼을 대기 상태로 둔다. CompleteTutorial은 튜토리얼을 마치거나 건너뛰는 시점에서 부른다.
+        /// 설정이 없으면 튜토리얼을 건너뛴 것으로 보고 곧바로 완료 보상을 준다.
         /// </summary>
         public static void StartNew()
         {
             current = new PlayerData();
-            current.StartTutorial();
-            current.CompleteTutorial();
+            current.EnsureCodexInitialized();
+            TutorialConfig config = TutorialConfig.Load();
+            if (config != null)
+            {
+                current.StartTutorial(config.CalculateStartMoney());
+            }
+            else
+            {
+                current.StartTutorial(0);
+                current.CompleteTutorial();
+            }
 
             // 시작 지급금은 저장하지 않은 변경으로 보지 않는다. (아무것도 안 하고 타이틀로 돌아갈 때 확인 창이 뜨지 않게)
             current.MarkSaved();
@@ -34,6 +51,7 @@ namespace BlackSmith.Data
         public static void Set(PlayerData data)
         {
             current = data ?? new PlayerData();
+            current.EnsureCodexInitialized();
         }
     }
 }

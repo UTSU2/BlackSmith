@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using BlackSmith.Data;
 using BlackSmith.Items;
+using BlackSmith.Proficiency;
 using BlackSmith.UI;
 
 namespace BlackSmith.Crafting
@@ -10,7 +12,7 @@ namespace BlackSmith.Crafting
     /// <summary>
     /// 모루 클릭 → 재료 투입 패널 → 제작 시작 → 단계별 미니게임 진행의 흐름을 잇는다.
     /// 제작 중에는 모루 클릭을 무시한다.
-    /// 단계는 레시피의 stages 순서대로 진행하며, 뷰가 연결되지 않았거나 아직 구현되지 않은 단계는
+    /// 단계는 제작 요청의 단계(레시피 또는 알 수 없는 제작 설정) 순서대로 진행하며, 뷰가 연결되지 않았거나 아직 구현되지 않은 단계는
     /// 건너뛰고 결과에 Skipped로 기록한다.
     /// 마지막에 단계 점수 → 품질을 계산해 완성품을 소지품에 지급하고 CraftResult를 알린다.
     /// </summary>
@@ -34,13 +36,15 @@ namespace BlackSmith.Crafting
         [SerializeField] private HeatTreatSettings heatTreatSettings = new HeatTreatSettings();
         [SerializeField] private PolishSettings polishSettings = new PolishSettings();
 
-        private CraftRecipeData recipe;
+        private IReadOnlyList<CraftStage> stages;
         private int difficulty;
         private int stageIndex;
         private CraftResult result;
         private ICraftStageGame activeGame;
         private Action hideActiveView;
         private CraftStage activeStage;
+        private ProficiencyRules proficiencyRules;
+        private bool proficiencyLoaded;
 
         public bool IsCrafting { get; private set; }
 
@@ -49,6 +53,9 @@ namespace BlackSmith.Crafting
 
         /// <summary>모든 단계가 끝났을 때 호출.</summary>
         public event Action<CraftResult> CraftFinished;
+
+        /// <summary>단계의 미니게임이 시작될 때마다 호출(건너뛴 단계는 제외). 앞 단계가 끝나면 같은 프레임에 다음 단계가 시작된다. 튜토리얼 조작 안내용이다.</summary>
+        public event Action<CraftStage> StageStarted;
 
         private void Awake()
         {
@@ -86,7 +93,7 @@ namespace BlackSmith.Crafting
             if (IsCrafting) return;
 
             IsCrafting = true;
-            recipe = request.Recipe;
+            stages = request.Stages;
             difficulty = request.Difficulty;
             stageIndex = -1;
             result = new CraftResult(request);
@@ -97,18 +104,20 @@ namespace BlackSmith.Crafting
         private void AdvanceStage()
         {
             stageIndex++;
-            if (stageIndex >= recipe.Stages.Count)
+            if (stageIndex >= stages.Count)
             {
                 FinishCrafting();
                 return;
             }
 
-            activeStage = recipe.Stages[stageIndex];
+            activeStage = stages[stageIndex];
             if (!TryStartStage(activeStage))
             {
                 result.AddStage(new CraftStageResult(activeStage, 0f, true));
                 AdvanceStage();
+                return;
             }
+            StageStarted?.Invoke(activeStage);
         }
 
         /// <summary>단계의 미니게임을 시작한다. 시작할 수 없으면(미구현, 뷰 없음) false.</summary>
@@ -189,7 +198,7 @@ namespace BlackSmith.Crafting
         {
             CraftResult finished = result;
             IsCrafting = false;
-            recipe = null;
+            stages = null;
             result = null;
 
             GrantResult(finished);
@@ -197,21 +206,58 @@ namespace BlackSmith.Crafting
         }
 
         /// <summary>
-        /// 완성품을 소지품에 지급한다. 등급은 레시피 결과물의 등급이고, 품질은 단계 점수 합계로 정한다.
+        /// 완성품을 소지품에 지급한다. 등급은 레시피 결과물의 등급이고, 품질은 단계 점수 합계에 숙련도 보너스를 더해 정한다.
         /// 재료 합산 가격은 제작을 시작할 때 계산해 둔 값을 쓴다 (재료는 이미 소모됐기 때문).
+        /// 숙련도는 보너스 적용 전 총점으로 쌓는다. 결과는 CraftResult에 기록해 결과 팝업이 읽는다. (docs/V2.md §2)
         /// </summary>
-        private static void GrantResult(CraftResult finished)
+        private void GrantResult(CraftResult finished)
         {
             CraftRequest request = finished.Request;
-            CraftedItemData product = finished.Recipe.Result;
-            decimal score = CraftScoring.CalculateScore(finished.Stages);
-            ItemQuality quality = ItemQualityInfo.FromScore(score);
-            ItemVariant variant = new ItemVariant(product.DefaultGrade, quality, request.IngredientValue);
+            CraftedItemData product = request.Product;
+            ItemGrade grade = product.DefaultGrade;
+            PlayerData player = GameSession.Current;
+            // 알 수 없는 제작은 레시피가 아니므로 숙련도·도감 해금이 없다.
+            string recipeId = request.IsUnknown ? null : finished.Recipe.Id;
 
-            bool granted = GameSession.Current.AddItem(product.Id, 1, variant);
-            Debug.Log($"[Crafting] 제작 종료: '{finished.Recipe.Id}' / 난이도 {finished.Difficulty} / {Describe(finished)}"
-                + $" / 점수 {score:0.0} → {product.DefaultGrade} {ItemQualityInfo.DisplayName(quality)}"
-                + $" / 재료 합산 {request.IngredientValue}G / 지급 {(granted ? "완료" : "실패")}");
+            ProficiencyRules rules = request.IsUnknown ? null : GetProficiencyRules();
+            ProficiencyState before = rules != null && player != null
+                ? rules.Evaluate(player.GetProficiencyPoints(recipeId), grade) : null;
+            decimal bonus = before != null ? before.Bonus : 0m;
+
+            decimal rawScore = CraftScoring.CalculateScore(finished.Stages);
+            decimal score = rules != null ? rules.ApplyBonus(rawScore, bonus) : rawScore;
+            ItemQuality quality = ItemQualityInfo.FromScore(score);
+            ItemVariant variant = new ItemVariant(grade, quality, request.IngredientValue);
+            finished.SetOutcome(product, grade, quality, rawScore, score, bonus);
+
+            bool granted = player != null && player.AddItem(product.Id, 1, variant);
+
+            // 제작을 마치면 품질과 관계없이 도감에 해금한다(레시피가 있을 때만).
+            if (!request.IsUnknown && player != null) finished.SetUnlocked(player.UnlockRecipe(recipeId));
+
+            if (before != null)
+            {
+                int gain = player.AddProficiencyPoints(recipeId, rules.CalculateGain(rawScore), rules.GetMaxPoints(grade));
+                ProficiencyState after = rules.Evaluate(player.GetProficiencyPoints(recipeId), grade);
+                finished.SetProficiency(before, after, gain);
+            }
+
+            ProficiencyState now = finished.ProficiencyAfter;
+            Debug.Log($"[Crafting] 제작 종료: {(request.IsUnknown ? "알 수 없는 제작" : "'" + recipeId + "'")} / 난이도 {finished.Difficulty} / {Describe(finished)}"
+                + $" / 점수 {rawScore:0.0} + 보너스 {bonus:0.0} → {score:0.0} → {grade} {ItemQualityInfo.DisplayName(quality)}"
+                + $" / 재료 합산 {request.IngredientValue}G / 지급 {(granted ? "완료" : "실패")}" + (finished.NewlyUnlocked ? " / 도감 해금" : "")
+                + (now != null ? $" / 숙련도 +{finished.ProficiencyGain} → {now.Label} ({now.Points})" : (request.IsUnknown ? " / 숙련도 없음(레시피 아님)" : " / 숙련도 설정 없음")));
+        }
+
+        // 설정 에셋은 처음 필요할 때 한 번 불러온다. 없으면 숙련도 없이 진행한다.
+        private ProficiencyRules GetProficiencyRules()
+        {
+            if (proficiencyLoaded) return proficiencyRules;
+            proficiencyLoaded = true;
+            ProficiencySettings settings = ProficiencySettings.Load();
+            if (settings == null) Debug.LogWarning($"[Crafting] 숙련도 설정({ProficiencySettings.ResourcePath})이 없어 숙련도 없이 진행합니다.");
+            else proficiencyRules = new ProficiencyRules(settings);
+            return proficiencyRules;
         }
 
         private void AbortCrafting()

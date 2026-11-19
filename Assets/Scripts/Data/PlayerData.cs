@@ -24,6 +24,12 @@ namespace BlackSmith.Data
         // 불러올 때 보상이 다시 지급되지 않게 하기 위해서다.
         [SerializeField] private bool tutorialPending;
         [SerializeField] private List<InventoryEntry> items = new List<InventoryEntry>();
+        // 레시피별 누적 숙련도. 이 필드가 없는 기존 저장 파일은 빈 목록으로 읽힌다.
+        [SerializeField] private List<ProficiencyEntry> proficiencies = new List<ProficiencyEntry>();
+        // 도감에 해금한 레시피 id. 도감 번호가 아니라 id로 저장하므로 번호가 바뀌어도 해금이 다른 레시피로 옮겨 가지 않는다.
+        [SerializeField] private List<string> unlockedRecipes = new List<string>();
+        // 도감 목록을 준비했는가. 이 필드가 없던 기존 저장 파일은 false로 읽혀, 처음 불러올 때 숙련도 기록으로 해금을 채운다.
+        [SerializeField] private bool codexInitialized;
 
         /// <summary>금액이 바뀔 때 호출 (새 금액).</summary>
         [field: NonSerialized] public event Action<int> OnMoneyChanged;
@@ -39,20 +45,25 @@ namespace BlackSmith.Data
         /// <summary>튜토리얼이 아직 끝나지 않았는가. 기존 저장 파일은 항상 false(완료)다.</summary>
         public bool IsTutorialPending => tutorialPending;
 
-        /// <summary>새 게임에서 튜토리얼을 시작 상태로 만든다. 보상은 CompleteTutorial에서 받는다.</summary>
-        public void StartTutorial()
+        /// <summary>
+        /// 새 게임에서 튜토리얼을 시작 상태로 만들고, startMoney가 0보다 크면 튜토리얼용 시작 지급금으로 바로 받는다.
+        /// (튜토리얼에서 쓰는 재료 구매가 합. 계산은 TutorialConfig.CalculateStartMoney) 완료 보상은 CompleteTutorial에서 따로 받는다.
+        /// </summary>
+        public void StartTutorial(int startMoney)
         {
             tutorialPending = true;
+            if (startMoney > 0) AddMoney(startMoney);
         }
 
         /// <summary>
-        /// 튜토리얼을 마쳤거나 건너뛰었을 때 부른다. 진행 중일 때 한 번만 TutorialRewardMoney를 지급하고,
-        /// 이미 끝났으면 아무것도 하지 않는다. (완료든 스킵이든 같은 보상)
+        /// 튜토리얼을 마쳤거나 건너뛰었을 때 부른다. 진행 중일 때 한 번만 실행한다. 튜토리얼에서 번 돈(철검 판매금 등)은 회수하고
+        /// 소지금을 정확히 TutorialRewardMoney로 맞춘다. 이미 끝났으면 아무것도 하지 않는다. (완료든 스킵이든 같은 결과)
         /// </summary>
         public void CompleteTutorial()
         {
             if (!tutorialPending) return;
             tutorialPending = false;
+            TrySpendMoney(money);
             AddMoney(TutorialRewardMoney);
         }
 
@@ -99,6 +110,17 @@ namespace BlackSmith.Data
         {
             InventoryEntry entry = Find(itemId, variant);
             return entry != null ? entry.Count : 0;
+        }
+
+        /// <summary>등급·품질 구분 없이 해당 아이템의 모든 ItemVariant 수량을 합한다. 없으면 0.</summary>
+        public int GetTotalCount(string itemId)
+        {
+            long total = 0;
+            foreach (InventoryEntry entry in items)
+            {
+                if (entry.ItemId == itemId) total += entry.Count;
+            }
+            return (int)Math.Min(total, int.MaxValue);
         }
 
         public bool HasItem(string itemId, ItemGrade grade, int count = 1) => HasItem(itemId, new ItemVariant(grade), count);
@@ -151,6 +173,83 @@ namespace BlackSmith.Data
             hasUnsavedChanges = true;
             OnInventoryChanged?.Invoke();
             return true;
+        }
+
+        // ---- 숙련도 ----
+
+        /// <summary>레시피의 누적 숙련도. 기록이 없으면 0.</summary>
+        public int GetProficiencyPoints(string recipeId)
+        {
+            ProficiencyEntry entry = FindProficiency(recipeId);
+            return entry != null ? entry.Points : 0;
+        }
+
+        /// <summary>누적 숙련도를 더한다(maxPoints를 넘지 않음). 실제로 바뀐 양을 돌려준다.</summary>
+        public int AddProficiencyPoints(string recipeId, int amount, int maxPoints)
+        {
+            if (string.IsNullOrEmpty(recipeId) || amount <= 0) return 0;
+
+            ProficiencyEntry entry = FindProficiency(recipeId);
+            int before = entry != null ? entry.Points : 0;
+            int after = (int)Math.Min((long)before + amount, maxPoints);
+            if (after <= before) return 0;
+
+            if (entry != null) entry.SetPoints(after);
+            else
+            {
+                if (proficiencies == null) proficiencies = new List<ProficiencyEntry>();
+                proficiencies.Add(new ProficiencyEntry(recipeId, after));
+            }
+
+            hasUnsavedChanges = true;
+            return after - before;
+        }
+
+        // ---- 도감 (레시피 해금) ----
+
+        /// <summary>
+        /// 도감 목록을 처음 한 번 준비한다. 도감이 생기기 전의 저장 파일은 숙련도 기록이 있는 레시피를 해금된 것으로 본다.
+        /// 새 게임·불러오기 때 GameSession이 부른다. 저장하지 않은 변경으로 보지 않는다. (docs/V2.md §3)
+        /// </summary>
+        public void EnsureCodexInitialized()
+        {
+            if (codexInitialized) return;
+            codexInitialized = true;
+            if (unlockedRecipes == null) unlockedRecipes = new List<string>();
+            if (proficiencies == null) return;
+            foreach (ProficiencyEntry entry in proficiencies)
+            {
+                if (entry != null && !string.IsNullOrEmpty(entry.RecipeId) && !unlockedRecipes.Contains(entry.RecipeId))
+                {
+                    unlockedRecipes.Add(entry.RecipeId);
+                }
+            }
+        }
+
+        public bool IsRecipeUnlocked(string recipeId)
+        {
+            return !string.IsNullOrEmpty(recipeId) && unlockedRecipes != null && unlockedRecipes.Contains(recipeId);
+        }
+
+        /// <summary>레시피를 도감에 해금한다. 새로 해금했으면 true, 이미 해금돼 있으면 false.</summary>
+        public bool UnlockRecipe(string recipeId)
+        {
+            if (string.IsNullOrEmpty(recipeId)) return false;
+            if (unlockedRecipes == null) unlockedRecipes = new List<string>();
+            if (unlockedRecipes.Contains(recipeId)) return false;
+            unlockedRecipes.Add(recipeId);
+            hasUnsavedChanges = true;
+            return true;
+        }
+
+        private ProficiencyEntry FindProficiency(string recipeId)
+        {
+            if (proficiencies == null) return null;
+            foreach (ProficiencyEntry entry in proficiencies)
+            {
+                if (entry != null && entry.RecipeId == recipeId) return entry;
+            }
+            return null;
         }
 
         private InventoryEntry Find(string itemId, ItemVariant variant)

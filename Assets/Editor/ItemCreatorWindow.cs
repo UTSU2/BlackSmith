@@ -30,6 +30,7 @@ namespace BlackSmith.EditorTools
         private ItemGrade defaultGrade = ItemGrade.Common;
         private int sellPrice;
         private int buyPrice;
+        private int fixedSellPrice;
         private bool showGradePrices;
 
         /// <summary>null이면 새로 만들기 모드, 아니면 이 아이템을 수정 중.</summary>
@@ -120,7 +121,8 @@ namespace BlackSmith.EditorTools
             }
             else
             {
-                EditorGUILayout.HelpBox("제작품 판매가는 입력하지 않습니다. 제작할 때 (레시피에 적힌 재료 구매가 합) x 품질 배율로 정해집니다. 등급은 위 '기본 등급' 하나뿐입니다.", MessageType.Info);
+                EditorGUILayout.HelpBox("제작품 판매가는 보통 입력하지 않습니다. 제작할 때 (레시피에 적힌 재료 구매가 합) x 품질 배율로 정해지고, 상품 이상이면 완성품 등급 배율(1 / 1.1 / 1.3 / 1.7 / 2.5)을 더 곱합니다. 등급은 위 '기본 등급' 하나뿐입니다.\n고정 판매가를 0보다 크게 두면 품질과 관계없이 그 값으로 팔립니다(알 수 없는 제작품).", MessageType.Info);
+                fixedSellPrice = Mathf.Max(0, EditorGUILayout.IntField(new GUIContent("고정 판매가 (0 = 재료가 × 품질 × 등급)", "0보다 크면 품질과 관계없이 이 값으로 팔린다."), fixedSellPrice));
             }
 
             EditorGUILayout.Space();
@@ -148,7 +150,7 @@ namespace BlackSmith.EditorTools
         private void OnCreateClicked()
         {
             string error;
-            ItemData created = CreateItem(type, id, displayName, icon, description, maxStack, defaultGrade, sellPrice, buyPrice, out error);
+            ItemData created = CreateItem(type, id, displayName, icon, description, maxStack, defaultGrade, sellPrice, buyPrice, out error, fixedSellPrice);
             if (created == null)
             {
                 SetMessage(error, MessageType.Error);
@@ -166,7 +168,7 @@ namespace BlackSmith.EditorTools
         private void OnSaveClicked()
         {
             string error;
-            if (UpdateItem(editing, id, displayName, icon, description, maxStack, defaultGrade, sellPrice, buyPrice, out error))
+            if (UpdateItem(editing, id, displayName, icon, description, maxStack, defaultGrade, sellPrice, buyPrice, out error, fixedSellPrice))
             {
                 SetMessage("저장 완료: " + AssetDatabase.GetAssetPath(editing), MessageType.Info);
             }
@@ -211,6 +213,8 @@ namespace BlackSmith.EditorTools
             maxStack = so.FindProperty("maxStack").intValue;
             defaultGrade = (ItemGrade)so.FindProperty("defaultGrade").enumValueIndex;
             sellPrice = so.FindProperty("sellPrice").intValue;
+            SerializedProperty fixedPrice = so.FindProperty("fixedSellPrice");
+            fixedSellPrice = fixedPrice != null ? fixedPrice.intValue : 0;
 
             SerializedProperty buy = so.FindProperty("buyPrice");
             buyPrice = buy != null ? buy.intValue : 0;
@@ -305,6 +309,7 @@ namespace BlackSmith.EditorTools
             defaultGrade = ItemGrade.Common;
             sellPrice = 0;
             buyPrice = 0;
+            fixedSellPrice = 0;
         }
 
         private static int DefaultMaxStack(ItemType type)
@@ -357,7 +362,7 @@ namespace BlackSmith.EditorTools
         /// 창의 만들기 버튼과 테스트 코드가 같이 쓴다.
         /// </summary>
         public static ItemData CreateItem(ItemType type, string id, string displayName, Sprite icon, string description,
-            int maxStack, ItemGrade defaultGrade, int sellPrice, int buyPrice, out string error)
+            int maxStack, ItemGrade defaultGrade, int sellPrice, int buyPrice, out string error, int fixedSellPrice = -1)
         {
             if (!Validate(ref id, ref displayName, maxStack, sellPrice, buyPrice, null, out error)) return null;
 
@@ -370,14 +375,14 @@ namespace BlackSmith.EditorTools
             string path = AssetDatabase.GenerateUniqueAssetPath(folder + "/" + id + ".asset");
             AssetDatabase.CreateAsset(asset, path);
 
-            ApplyFields(asset, id, displayName, icon, description, maxStack, defaultGrade, sellPrice, buyPrice);
+            ApplyFields(asset, id, displayName, icon, description, maxStack, defaultGrade, sellPrice, buyPrice, fixedSellPrice);
             error = null;
             return asset;
         }
 
         /// <summary>기존 아이템 에셋을 수정한다. 종류(광물/제작품)는 바꿀 수 없다. 실패하면 false와 이유를 반환한다.</summary>
         public static bool UpdateItem(ItemData item, string id, string displayName, Sprite icon, string description,
-            int maxStack, ItemGrade defaultGrade, int sellPrice, int buyPrice, out string error)
+            int maxStack, ItemGrade defaultGrade, int sellPrice, int buyPrice, out string error, int fixedSellPrice = -1)
         {
             if (item == null) { error = "수정할 아이템이 없습니다."; return false; }
             if (!Validate(ref id, ref displayName, maxStack, sellPrice, buyPrice, item, out error)) return false;
@@ -394,13 +399,13 @@ namespace BlackSmith.EditorTools
                 }
             }
 
-            ApplyFields(item, id, displayName, icon, description, maxStack, defaultGrade, sellPrice, buyPrice);
+            ApplyFields(item, id, displayName, icon, description, maxStack, defaultGrade, sellPrice, buyPrice, fixedSellPrice);
             error = null;
             return true;
         }
 
         private static void ApplyFields(ItemData asset, string id, string displayName, Sprite icon, string description,
-            int maxStack, ItemGrade defaultGrade, int sellPrice, int buyPrice)
+            int maxStack, ItemGrade defaultGrade, int sellPrice, int buyPrice, int fixedSellPrice)
         {
             SerializedObject so = new SerializedObject(asset);
             so.FindProperty("id").stringValue = id;
@@ -416,6 +421,10 @@ namespace BlackSmith.EditorTools
             {
                 buy.intValue = buyPrice;
             }
+            // 광물에는 이 필드가 없다(FindProperty가 null).
+            SerializedProperty fixedPrice = so.FindProperty("fixedSellPrice");
+            // 음수(인자 생략)는 현재 값을 유지한다.
+            if (fixedPrice != null && fixedSellPrice >= 0) fixedPrice.intValue = fixedSellPrice;
             so.ApplyModifiedProperties();
 
             EditorUtility.SetDirty(asset);

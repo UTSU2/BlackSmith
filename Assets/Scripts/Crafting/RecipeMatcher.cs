@@ -4,18 +4,14 @@ using BlackSmith.Items;
 namespace BlackSmith.Crafting
 {
     /// <summary>
-    /// 투입한 재료로 가장 가까운 레시피를 찾는다. 레시피 북은 플레이어에게 보이지 않는다. (docs/GameDesign.md §5 "레시피 매칭")
-    /// 매칭은 재료 수량만 본다. 재료나 레시피의 등급은 영향을 주지 않는다.
-    /// 1. 제외: 레시피가 요구하는 어떤 재료든 투입량보다 많이 요구하면 제외한다.
-    /// 2. 거리: 레시피의 재료마다 5 − |수량 차이| (최소 0)를 더한다. 가장 높은 합이 가장 가까운 레시피다.
-    ///    레시피에 없는 재료를 투입한 것은 점수에 들어가지 않는다 (0점).
-    /// 3. 동점이면 레시피 재료 구매가 합이 더 높은 것, 그래도 같으면 먼저 등록된 것.
-    /// 모든 광물을 쓰는 레시피가 있다는 콘텐츠 규칙 덕분에 후보가 비는 일은 없어야 한다. 비면 null을 돌려준다.
+    /// 투입한 재료와 정확히 일치하는 레시피를 찾는다. (docs/V2.md §3 "정확 일치 매칭")
+    /// 일치 기준은 재료 종류 + 수량이다. 같은 재료의 다른 등급 아이템은 없으므로 등급은 보지 않는다.
+    /// 레시피에 없는 재료가 섞이거나 수량이 하나라도 다르면 일치하지 않는다.
+    /// 일치하는 레시피가 없으면 null이며, 이때는 알 수 없는 제작품이 만들어진다(CraftingSession).
+    /// 재료 구성이 같은 레시피가 둘 이상이면 먼저 등록된 것을 쓴다(RecipeDatabase가 불러올 때 경고한다).
     /// </summary>
     public static class RecipeMatcher
     {
-        public const int MaxIngredientScore = 5;
-
         public static CraftRecipeData Match(IReadOnlyList<CraftInput> inputs)
         {
             return Match(inputs, RecipeDatabase.All);
@@ -26,58 +22,44 @@ namespace BlackSmith.Crafting
             if (inputs == null || recipes == null) return null;
 
             Dictionary<string, int> counts = new Dictionary<string, int>();
-            bool hasAny = false;
             foreach (CraftInput input in inputs)
             {
-                if (input.Count <= 0) continue;
-                hasAny = true;
+                if (input.Count <= 0 || string.IsNullOrEmpty(input.ItemId)) continue;
                 counts.TryGetValue(input.ItemId, out int current);
                 counts[input.ItemId] = current + input.Count;
             }
-            if (!hasAny) return null;
+            if (counts.Count == 0) return null;
 
-            CraftRecipeData best = null;
-            int bestScore = -1;
-            int bestPrice = -1;
             foreach (CraftRecipeData recipe in recipes)
             {
                 if (recipe == null || recipe.Result == null) continue;
-
-                if (!TryScore(recipe, counts, out int score)) continue;
-
-                int price = GetRecipePrice(recipe);
-                if (score > bestScore || (score == bestScore && price > bestPrice))
-                {
-                    best = recipe;
-                    bestScore = score;
-                    bestPrice = price;
-                }
+                if (IsExactMatch(recipe, counts)) return recipe;
             }
-            return best;
+            return null;
         }
 
-        /// <summary>거리 점수. 요구량이 투입량보다 많은 재료가 하나라도 있거나 재료가 없는 레시피면 false.</summary>
-        private static bool TryScore(CraftRecipeData recipe, Dictionary<string, int> counts, out int score)
+        /// <summary>레시피 재료(합산)가 투입량과 종류·수량 모두 같은가.</summary>
+        public static bool IsExactMatch(CraftRecipeData recipe, Dictionary<string, int> counts)
         {
-            score = 0;
             List<KeyValuePair<MineralItemData, int>> required = CraftScoring.SumRecipeIngredients(recipe);
-            if (required.Count == 0) return false;
+            if (required.Count == 0 || required.Count != counts.Count) return false;
 
             foreach (KeyValuePair<MineralItemData, int> pair in required)
             {
-                counts.TryGetValue(pair.Key.Id, out int have);
-                if (have < pair.Value) return false;
-
-                int difference = have - pair.Value;
-                score += difference >= MaxIngredientScore ? 0 : MaxIngredientScore - difference;
+                if (!counts.TryGetValue(pair.Key.Id, out int have) || have != pair.Value) return false;
             }
             return true;
         }
 
-        /// <summary>동점 처리용 레시피 가격: 레시피에 적힌 재료를 각 광물 자신의 구매가로 합산한 값.</summary>
-        private static int GetRecipePrice(CraftRecipeData recipe)
+        /// <summary>두 레시피의 재료 구성(합산)이 같은가. 같으면 매칭이 모호해진다.</summary>
+        public static bool HasSameIngredients(CraftRecipeData a, CraftRecipeData b)
         {
-            return CraftScoring.CalculateIngredientValue(recipe);
+            Dictionary<string, int> counts = new Dictionary<string, int>();
+            foreach (KeyValuePair<MineralItemData, int> pair in CraftScoring.SumRecipeIngredients(a))
+            {
+                counts[pair.Key.Id] = pair.Value;
+            }
+            return counts.Count > 0 && IsExactMatch(b, counts);
         }
     }
 }

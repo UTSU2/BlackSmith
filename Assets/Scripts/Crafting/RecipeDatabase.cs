@@ -66,6 +66,20 @@ namespace BlackSmith.Crafting
             }
 
             loaded = true;
+            WarnSameIngredients();
+        }
+
+        // 정확 일치 매칭에서 재료 구성이 같은 레시피는 먼저 등록된 것만 쓰이므로 불러올 때 한 번 알린다.
+        private static void WarnSameIngredients()
+        {
+            for (int i = 0; i < all.Count; i++)
+            {
+                for (int j = i + 1; j < all.Count; j++)
+                {
+                    if (!RecipeMatcher.HasSameIngredients(all[i], all[j])) continue;
+                    Debug.LogWarning($"[RecipeDatabase] 재료 구성이 같은 레시피: '{all[i].Id}', '{all[j].Id}'. 먼저 등록된 '{all[i].Id}'가 쓰입니다.", all[j]);
+                }
+            }
         }
 
         /// <summary>ID로 레시피를 찾는다. 없으면 경고를 남기고 null.</summary>

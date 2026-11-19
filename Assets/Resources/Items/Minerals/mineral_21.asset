@@ -18,5 +18,5 @@ MonoBehaviour:
   description: "\uC784\uC2DC \uAD11\uBB3C (\uACE0\uAE09)."
   maxStack: 99
   defaultGrade: 1
-  sellPrice: 65
-  buyPrice: 130
+  sellPrice: 75
+  buyPrice: 150
