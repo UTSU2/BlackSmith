@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using BlackSmith.Items;
 
 namespace BlackSmith.Rank
 {
@@ -23,6 +24,8 @@ namespace BlackSmith.Rank
             public int requiredMasters = -1;
             [Tooltip("승급 팝업에 보이는 혜택 문구. 비어 있으면 혜택 줄을 숨긴다(미정).")]
             [TextArea] public string benefitText;
+            [Tooltip("이 등급부터 판매 가격에 곱하는 배율(상점 판매, 광물·제작품 모두). 1 = 추가 없음.")]
+            public float sellPriceMultiplier = 1f;
         }
 
         [Tooltip("BlacksmithRank 순서(견습, 초급, 숙련, 장인, 명장). 견습의 필요 개수는 쓰지 않는다.")]
@@ -60,6 +63,21 @@ namespace BlackSmith.Rank
         {
             RankEntry entry = Get(rank);
             return entry != null && entry.benefitText != null ? entry.benefitText : string.Empty;
+        }
+
+        /// <summary>rank 등급의 판매 가격 배율. 에셋에 없거나 0 이하면 1(추가 없음).</summary>
+        public float GetSellPriceMultiplier(BlacksmithRank rank)
+        {
+            RankEntry entry = Get(rank);
+            return entry != null && entry.sellPriceMultiplier > 0f ? entry.sellPriceMultiplier : 1f;
+        }
+
+        /// <summary>판매 단가에 등급 배율을 적용한다. 반올림은 가격 규칙(PriceRounding, 0.5는 올림)을 따른다.</summary>
+        public int ApplySellMultiplier(int unitPrice, BlacksmithRank rank)
+        {
+            float multiplier = GetSellPriceMultiplier(rank);
+            if (multiplier == 1f) return unitPrice;
+            return PriceRounding.Round((decimal)unitPrice * (decimal)multiplier);
         }
 
         private RankEntry Get(BlacksmithRank rank)

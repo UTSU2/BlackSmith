@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using BlackSmith.Data;
 using BlackSmith.Items;
+using BlackSmith.Rank;
 using BlackSmith.Shop;
 using BlackSmith.Tutorial;
 
@@ -69,7 +70,7 @@ namespace BlackSmith.UI
 
             Unsubscribe();
             PlayerData player = GameSession.Current;
-            service = new ShopService(player);
+            service = new ShopService(player, BlacksmithRankSettings.Load());
             subscribedPlayer = player;
             subscribedPlayer.OnMoneyChanged += OnMoneyChanged;
             subscribedPlayer.OnInventoryChanged += OnInventoryChanged;
@@ -140,7 +141,7 @@ namespace BlackSmith.UI
                     {
                         if (tutorial != null && !tutorial.IsSellAllowed(entry.Item)) continue;
                         ShopItemView view = CreateView();
-                        view.Bind(entry.Item, entry.Variant, entry.Count);
+                        view.Bind(entry.Item, entry.Variant, entry.Count, service.GetSellUnitPrice(entry.Item, entry.Variant));
                         hasItems = true;
                     }
                 }

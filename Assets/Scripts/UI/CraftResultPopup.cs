@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using BlackSmith.Crafting;
 using BlackSmith.Items;
 using BlackSmith.Proficiency;
+using BlackSmith.Rank;
+using BlackSmith.Data;
 
 namespace BlackSmith.UI
 {
@@ -134,6 +136,8 @@ namespace BlackSmith.UI
                 if (result.IsUnknown)
                 {
                     int price = result.Product.GetSellUnitPrice(new ItemVariant(result.Grade, result.Quality, result.Request.IngredientValue));
+                    BlacksmithRankSettings rankSettings = BlacksmithRankSettings.Load();
+                    if (rankSettings != null) price = rankSettings.ApplySellMultiplier(price, GameSession.Current.Rank);
                     priceLabel.text = $"판매가 {price} G";
                 }
             }
