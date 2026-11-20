@@ -11,8 +11,6 @@ namespace BlackSmith.UI
     /// </summary>
     public class HeatMinigameView : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
-
         [Header("구성")]
         [Tooltip("바가 그려지는 세로 영역. 앵커 기준으로 목표 구간과 표시기를 배치한다.")]
         [SerializeField] private RectTransform barArea;
@@ -40,8 +38,7 @@ namespace BlackSmith.UI
 
         private void Awake()
         {
-            Font font = Font.CreateDynamicFontFromOSFont(KoreanFonts, 36);
-            foreach (Text text in GetComponentsInChildren<Text>(true)) text.font = font;
+            UIFonts.ApplyAll(this);
         }
 
         /// <summary>미니게임을 보여주기 시작한다. 게임 시작(Begin)은 호출한 쪽이 한다.</summary>

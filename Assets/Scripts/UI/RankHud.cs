@@ -12,8 +12,6 @@ namespace BlackSmith.UI
     /// </summary>
     public class RankHud : MonoBehaviour
     {
-        private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
-
         [SerializeField] private Text label;
         [SerializeField] private RankController controller;
 
@@ -22,7 +20,7 @@ namespace BlackSmith.UI
 
         private void Awake()
         {
-            if (label != null) label.font = Font.CreateDynamicFontFromOSFont(KoreanFonts, label.fontSize);
+            UIFonts.Apply(label);
         }
 
         private void OnEnable()

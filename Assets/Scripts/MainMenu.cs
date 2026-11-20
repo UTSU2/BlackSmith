@@ -15,19 +15,12 @@ namespace BlackSmith
         [Tooltip("제목 글자. 자체 폰트를 쓰므로 OS 한글 폰트를 덮어쓰지 않는다.")]
         [SerializeField] private Text titleLabel;
 
-        private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
-
         private void OnEnable()
         {
             if (Application.isPlaying && loadPanel != null) loadPanel.Loaded += OnPanelLoaded;
 
-            // OS 폰트는 씬에 저장되지 않으므로 활성화될 때마다 버튼 글자에 적용한다.
-            Font font = Font.CreateDynamicFontFromOSFont(KoreanFonts, 36);
-            foreach (Text label in GetComponentsInChildren<Text>(true))
-            {
-                if (label == titleLabel) continue;
-                label.font = font;
-            }
+            // 글꼴은 크기 기준(UIFontSettings)으로 활성화될 때마다 적용한다.
+            UIFonts.ApplyAll(this, titleLabel);
         }
 
         private void OnDisable()

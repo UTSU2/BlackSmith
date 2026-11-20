@@ -10,17 +10,14 @@ namespace BlackSmith.UI
     /// </summary>
     public class MinigameGuidePopup : MonoBehaviour
     {
-        private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
-
         [SerializeField] private Text messageLabel;
 
         public bool IsShown => gameObject.activeSelf;
 
         private void Awake()
         {
-            // OS 폰트는 씬에 저장되지 않으므로 시작할 때 글자에 적용한다.
-            Font font = Font.CreateDynamicFontFromOSFont(KoreanFonts, 36);
-            foreach (Text text in GetComponentsInChildren<Text>(true)) text.font = font;
+            // 글꼴은 크기 기준(UIFontSettings)으로 시작할 때 적용한다.
+            UIFonts.ApplyAll(this);
             // 아래 미니게임 입력을 막지 않는다.
             foreach (Graphic graphic in GetComponentsInChildren<Graphic>(true)) graphic.raycastTarget = false;
         }

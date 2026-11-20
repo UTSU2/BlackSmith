@@ -15,8 +15,6 @@ namespace BlackSmith.UI
     /// </summary>
     public class CraftResultPopup : MonoBehaviour
     {
-        private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
-
         [SerializeField] private CraftingController crafting;
 
         [Header("표시")]
@@ -48,9 +46,8 @@ namespace BlackSmith.UI
 
         private void Awake()
         {
-            // OS 폰트는 씬에 저장되지 않으므로 시작할 때 글자에 적용한다.
-            Font font = Font.CreateDynamicFontFromOSFont(KoreanFonts, 36);
-            foreach (Text text in GetComponentsInChildren<Text>(true)) text.font = font;
+            // 글꼴은 크기 기준(UIFontSettings)으로 시작할 때 적용한다.
+            UIFonts.ApplyAll(this);
         }
 
         // 팝업은 닫혀 있는(비활성) 동안에도 제작 완료를 들어야 하므로 OnEnable이 아니라 Awake/OnDestroy에서 구독한다.

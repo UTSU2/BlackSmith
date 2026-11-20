@@ -12,8 +12,6 @@ namespace BlackSmith.UI
     /// </summary>
     public class RankPromotionPopup : MonoBehaviour
     {
-        private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
-
         [SerializeField] private RankController controller;
         [Tooltip("결과 팝업. 이것이 열려 있는 동안은 기다린다. 비워 두면 바로 보여 준다.")]
         [SerializeField] private CraftResultPopup resultPopup;
@@ -36,9 +34,8 @@ namespace BlackSmith.UI
 
         private void Awake()
         {
-            // OS 폰트는 씬에 저장되지 않으므로 시작할 때 글자에 적용한다.
-            Font font = Font.CreateDynamicFontFromOSFont(KoreanFonts, 36);
-            foreach (Text text in GetComponentsInChildren<Text>(true)) text.font = font;
+            // 글꼴은 크기 기준(UIFontSettings)으로 시작할 때 적용한다.
+            UIFonts.ApplyAll(this);
             canvas = GetComponent<Canvas>();
         }
 
