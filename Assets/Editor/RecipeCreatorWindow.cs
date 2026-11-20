@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEditor;
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using BlackSmith.Crafting;
 using BlackSmith.Items;
@@ -18,7 +19,7 @@ namespace BlackSmith.EditorTools
     public class RecipeCreatorWindow : EditorWindow
     {
         private const string RootFolder = "Assets/Resources/Recipes";
-        private const float ListWidth = 260f;
+        private const float ListWidth = 380f;
         private static readonly Regex IdPattern = new Regex("^[a-z0-9_]+$");
 
         /// <summary>폼에서 편집하는 재료 한 줄.</summary>
@@ -48,7 +49,7 @@ namespace BlackSmith.EditorTools
         public static void Open()
         {
             RecipeCreatorWindow window = GetWindow<RecipeCreatorWindow>("Recipe Creator");
-            window.minSize = new Vector2(700, 480);
+            window.minSize = new Vector2(840, 480);
             window.RefreshList();
         }
 
@@ -143,7 +144,14 @@ namespace BlackSmith.EditorTools
                 IngredientInput line = ingredients[i];
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    line.Item = (MineralItemData)EditorGUILayout.ObjectField(line.Item, typeof(MineralItemData), false);
+                    string buttonLabel = line.Item != null ? $"{line.Item.DisplayName}  ({line.Item.DefaultGrade})" : "재료 선택…";
+                    if (GUILayout.Button(new GUIContent(buttonLabel, line.Item != null ? line.Item.Id : "클릭해서 이름으로 재료를 고르세요."), EditorStyles.popup))
+                    {
+                        int lineIndex = i;
+                        MineralDropdown dropdown = new MineralDropdown(new AdvancedDropdownState(), ingredients, lineIndex,
+                            picked => { ingredients[lineIndex].Item = picked; Repaint(); });
+                        dropdown.Show(GUILayoutUtility.GetLastRect());
+                    }
                     EditorGUILayout.LabelField("x", GUILayout.Width(12));
                     line.Count = Mathf.Max(1, EditorGUILayout.IntField(line.Count, GUILayout.Width(50)));
                     if (GUILayout.Button("✕", GUILayout.Width(24))) removeAt = i;
@@ -292,7 +300,7 @@ namespace BlackSmith.EditorTools
             {
                 if (recipe == null) continue;
                 string resultName = recipe.Result != null ? recipe.Result.DisplayName : "결과물 없음";
-                string label = $"No.{recipe.CodexNumber}  {recipe.Id}  ({resultName})";
+                string label = $"No.{recipe.CodexNumber}  {resultName}  ← {DescribeIngredients(recipe)}";
 
                 bool selected = recipe == editing;
                 Color previous = GUI.backgroundColor;
@@ -306,6 +314,18 @@ namespace BlackSmith.EditorTools
                 GUI.backgroundColor = previous;
             }
             EditorGUILayout.EndScrollView();
+        }
+
+        /// <summary>목록 표시용 재료 요약. 예: "철 원석×2, 적녹 원석×1".</summary>
+        private static string DescribeIngredients(CraftRecipeData recipe)
+        {
+            List<string> parts = new List<string>();
+            foreach (CraftIngredient ingredient in recipe.Ingredients)
+            {
+                string name = ingredient.Item != null ? ingredient.Item.DisplayName : "?";
+                parts.Add($"{name}×{ingredient.Count}");
+            }
+            return parts.Count > 0 ? string.Join(", ", parts) : "재료 없음";
         }
 
         /// <summary>목록 경고: 빈/중복 ID, 폴더 밖 에셋, 결과물/재료 누락, 재료 조합이 같은 레시피(매칭 모호).</summary>
@@ -572,6 +592,80 @@ namespace BlackSmith.EditorTools
 
             EditorUtility.SetDirty(asset);
             AssetDatabase.SaveAssets();
+        }
+
+        /// <summary>
+        /// 재료를 이름으로 고르는 팝업. 등급별로 묶여 있고 위쪽 검색창에 이름(또는 id)을 입력하면 걸러진다.
+        /// 같은 레시피의 다른 줄에서 이미 고른 광물은 회색(선택 불가)으로 보인다.
+        /// </summary>
+        private class MineralDropdown : AdvancedDropdown
+        {
+            private class MineralItem : AdvancedDropdownItem
+            {
+                public readonly MineralItemData Mineral;
+
+                public MineralItem(MineralItemData mineral, string label) : base(label)
+                {
+                    Mineral = mineral;
+                }
+            }
+
+            private readonly List<IngredientInput> lines;
+            private readonly int currentLine;
+            private readonly Action<MineralItemData> onPicked;
+
+            public MineralDropdown(AdvancedDropdownState state, List<IngredientInput> lines, int currentLine, Action<MineralItemData> onPicked)
+                : base(state)
+            {
+                this.lines = lines;
+                this.currentLine = currentLine;
+                this.onPicked = onPicked;
+                minimumSize = new Vector2(300f, 360f);
+            }
+
+            protected override AdvancedDropdownItem BuildRoot()
+            {
+                AdvancedDropdownItem root = new AdvancedDropdownItem("재료");
+
+                HashSet<MineralItemData> taken = new HashSet<MineralItemData>();
+                for (int i = 0; i < lines.Count; i++)
+                {
+                    if (i != currentLine && lines[i].Item != null) taken.Add(lines[i].Item);
+                }
+
+                List<MineralItemData> minerals = new List<MineralItemData>();
+                foreach (string guid in AssetDatabase.FindAssets("t:MineralItemData"))
+                {
+                    MineralItemData mineral = AssetDatabase.LoadAssetAtPath<MineralItemData>(AssetDatabase.GUIDToAssetPath(guid));
+                    if (mineral != null) minerals.Add(mineral);
+                }
+                minerals.Sort((a, b) =>
+                {
+                    int byGrade = a.DefaultGrade.CompareTo(b.DefaultGrade);
+                    return byGrade != 0 ? byGrade : string.Compare(a.DisplayName, b.DisplayName, StringComparison.CurrentCulture);
+                });
+
+                AdvancedDropdownItem gradeGroup = null;
+                ItemGrade? groupGrade = null;
+                foreach (MineralItemData mineral in minerals)
+                {
+                    if (groupGrade != mineral.DefaultGrade)
+                    {
+                        groupGrade = mineral.DefaultGrade;
+                        gradeGroup = new AdvancedDropdownItem(mineral.DefaultGrade.ToString());
+                        root.AddChild(gradeGroup);
+                    }
+                    MineralItem item = new MineralItem(mineral, $"{mineral.DisplayName}  ({mineral.Id})");
+                    item.enabled = !taken.Contains(mineral);
+                    gradeGroup.AddChild(item);
+                }
+                return root;
+            }
+
+            protected override void ItemSelected(AdvancedDropdownItem item)
+            {
+                if (item is MineralItem mineralItem) onPicked(mineralItem.Mineral);
+            }
         }
 
         private static void EnsureFolder(string folder)
