@@ -6,8 +6,9 @@ using BlackSmith.Rank;
 namespace BlackSmith.UI
 {
     /// <summary>
-    /// 제작 패널의 스킵 장비 한 줄: 상태 글자, 켜기/끄기 버튼, 강화 버튼. 장비가 없으면 줄 전체를 숨긴다.
-    /// 규칙은 SkipGearService/SkipGearRules가 갖고 이 클래스는 표시와 입력 전달만 한다. 패널이 열릴 때마다 새로 그린다.
+    /// 스킵 장비 한 줄: 상태 글자, 켜기/끄기 버튼, 강화 버튼. 장비가 없으면 줄 전체를 숨긴다.
+    /// 규칙은 SkipGearService/SkipGearRules가 갖고 이 클래스는 표시와 입력 전달만 한다. 켜질 때마다 새로 그린다.
+    /// 스킵 장비 팝업(SkipGearPopup) 안에서 쓰며, 어느 장비를 보여 줄지는 SetKind로 정한다.
     /// </summary>
     public class SkipGearRow : MonoBehaviour
     {
@@ -43,6 +44,13 @@ namespace BlackSmith.UI
             Refresh();
         }
 
+        /// <summary>보여 줄 장비를 바꾼다. 켜져 있으면 바로 다시 그린다.</summary>
+        public void SetKind(SkipGearKind newKind)
+        {
+            kind = newKind;
+            if (isActiveAndEnabled) Refresh();
+        }
+
         private void OnToggle()
         {
             PlayerData player = GameSession.Current;
@@ -65,8 +73,8 @@ namespace BlackSmith.UI
             if (content != null) content.SetActive(owned);
             if (!owned) return;
 
-            string name = kind == SkipGearKind.Heat ? "가열" : "열처리";
-            if (statusLabel != null) statusLabel.text = $"{name} 스킵 Lv.{entry.Level} ({rules.GetScore(entry.Level)}점)";
+            string name = SkipGearPopup.GetTitle(kind);
+            if (statusLabel != null) statusLabel.text = $"{name} Lv.{entry.Level} ({rules.GetScore(entry.Level)}점)";
             if (toggleLabel != null) toggleLabel.text = entry.Enabled ? "켜짐" : "꺼짐";
 
             int cost = rules.GetUpgradeCost(entry.Level);
