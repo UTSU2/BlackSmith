@@ -17,8 +17,6 @@ namespace BlackSmith.UI
     /// </summary>
     public class CodexPanel : MonoBehaviour
     {
-        private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
-
         [Tooltip("격자 칸. 도감 번호 순서대로 채운다. 레시피보다 많으면 남는 칸은 숨긴다.")]
         [SerializeField] private CodexSlotView[] slots;
 
@@ -63,8 +61,7 @@ namespace BlackSmith.UI
                     if (slot != null) slot.Clicked += Select;
                 }
             }
-            Font font = Font.CreateDynamicFontFromOSFont(KoreanFonts, 36);
-            foreach (Text text in GetComponentsInChildren<Text>(true)) text.font = font;
+            UIFonts.ApplyAll(this);
         }
 
         private void OnDestroy()

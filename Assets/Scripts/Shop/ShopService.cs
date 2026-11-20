@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BlackSmith.Data;
 using BlackSmith.Items;
+using BlackSmith.Rank;
 
 namespace BlackSmith.Shop
 {
@@ -18,9 +19,13 @@ namespace BlackSmith.Shop
 
         private readonly PlayerData player;
 
-        public ShopService(PlayerData player)
+        private readonly BlacksmithRankSettings rankSettings;
+
+        /// <param name="rankSettings">대장장이 등급별 판매 가격 배율. null이면 배율 없이 동작한다.</param>
+        public ShopService(PlayerData player, BlacksmithRankSettings rankSettings = null)
         {
             this.player = player ?? throw new ArgumentNullException(nameof(player));
+            this.rankSettings = rankSettings;
         }
 
         public PlayerData Player => player;
@@ -102,7 +107,7 @@ namespace BlackSmith.Shop
             }
             list.Sort((a, b) =>
             {
-                int byPrice = a.Item.GetSellUnitPrice(a.Variant).CompareTo(b.Item.GetSellUnitPrice(b.Variant));
+                int byPrice = GetSellUnitPrice(a.Item, a.Variant).CompareTo(GetSellUnitPrice(b.Item, b.Variant));
                 if (byPrice != 0) return byPrice;
                 int byId = string.CompareOrdinal(a.Item.Id, b.Item.Id);
                 if (byId != 0) return byId;
@@ -119,17 +124,22 @@ namespace BlackSmith.Shop
             return item == null ? 0 : player.GetCount(item.Id, variant);
         }
 
-        /// <summary>판매 단가. 광물은 Common 기준 판매가 x 등급 배율, 제작품은 재료 합산 가격 x 품질 배율(상품 이상은 x 완성품 등급 배율).</summary>
+        /// <summary>
+        /// 판매 단가. 광물은 Common 기준 판매가 x 등급 배율, 제작품은 재료 합산 가격 x 품질 배율(상품 이상은 x 완성품 등급 배율).
+        /// 여기에 현재 대장장이 등급의 판매 가격 배율을 곱한다(반올림 후 단가 기준).
+        /// </summary>
         public int GetSellUnitPrice(ItemData item, ItemVariant variant)
         {
-            return item == null ? 0 : item.GetSellUnitPrice(variant);
+            if (item == null) return 0;
+            int unit = item.GetSellUnitPrice(variant);
+            return rankSettings != null ? rankSettings.ApplySellMultiplier(unit, player.Rank) : unit;
         }
 
         /// <summary>총 판매 금액. int 범위를 넘으면 int.MaxValue로 제한한다.</summary>
         public int GetSellTotalPrice(ItemData item, ItemVariant variant, int quantity)
         {
             if (item == null || quantity <= 0) return 0;
-            long total = (long)item.GetSellUnitPrice(variant) * quantity;
+            long total = (long)GetSellUnitPrice(item, variant) * quantity;
             return (int)Math.Min(total, int.MaxValue);
         }
 

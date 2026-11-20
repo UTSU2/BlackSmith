@@ -15,11 +15,25 @@ namespace BlackSmith.Crafting
         /// <summary>아직 구현되지 않아 건너뛴 단계인가.</summary>
         public bool Skipped { get; }
 
+        /// <summary>스킵 장비로 건너뛴 단계인가. 이때는 미니게임 없이 FixedScore가 그대로 점수가 된다(Skipped와는 다르다).</summary>
+        public bool IsFixed { get; }
+
+        /// <summary>스킵 장비가 준 단계 점수(0~10). IsFixed일 때만 의미 있다.</summary>
+        public int FixedScore { get; }
+
         public CraftStageResult(CraftStage stage, float completeness, bool skipped)
         {
             Stage = stage;
             Completeness = completeness;
             Skipped = skipped;
+        }
+
+        /// <summary>스킵 장비로 건너뛴 단계의 결과(고정 점수).</summary>
+        public CraftStageResult(CraftStage stage, int fixedScore)
+        {
+            Stage = stage;
+            IsFixed = true;
+            FixedScore = fixedScore;
         }
     }
 

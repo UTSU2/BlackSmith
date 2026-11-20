@@ -20,5 +20,5 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: a296e412559be5c46abe69fdd698cf4a, type: 2}
     count: 1
   stages: 00000000010000000200000003000000
-  baseDifficulty: 4
+  baseDifficulty: 2
   codexNumber: 20

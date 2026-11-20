@@ -16,9 +16,9 @@ MonoBehaviour:
   result: {fileID: 11400000, guid: b00e504e2d6401443ab2c3c78e41364d, type: 2}
   ingredients:
   - item: {fileID: 11400000, guid: 52fe61322fcaf5d45be0c6891d4a53e1, type: 2}
-    count: 2
-  - item: {fileID: 11400000, guid: fc1db65fe461ba54a8b86b3db00eaf85, type: 2}
     count: 1
+  - item: {fileID: 11400000, guid: fc1db65fe461ba54a8b86b3db00eaf85, type: 2}
+    count: 2
   stages: 00000000010000000200000003000000
-  baseDifficulty: 5
+  baseDifficulty: 4
   codexNumber: 32

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bffba30a58ef0447b4ef10205a7ef95, type: 3}
+  m_Name: red_gray_hammer
+  m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Items.CraftedItemData
+  id: red_gray_hammer
+  displayName: "\ud64d\ud68c \ub9dd\uce58"
+  icon: {fileID: 21300000, guid: 247d09258fe68dc408f17edaa98eaac8, type: 3}
+  description: "\ubd89\uc740 \ud68c\uc11d(\uc73c)\ub85c \ub9cc\ub4e0 \uc7a5\ube44."
+  maxStack: 1
+  defaultGrade: 0
+  sellPrice: 0

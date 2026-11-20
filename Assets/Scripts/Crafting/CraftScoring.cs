@@ -44,7 +44,7 @@ namespace BlackSmith.Crafting
             return list;
         }
 
-        /// <summary>품질 점수 합계(0~40). 단계 점수 = 완성도(0~1) x 10, 건너뛴 단계는 0점. 재료 등급 보정은 없다.</summary>
+        /// <summary>품질 점수 합계(0~40). 단계 점수 = 완성도(0~1) x 10, 건너뛴 단계는 0점, 스킵 장비로 건너뛴 단계는 고정 점수. 재료 등급 보정은 없다.</summary>
         public static decimal CalculateScore(IReadOnlyList<CraftStageResult> stages)
         {
             decimal score = 0m;
@@ -52,7 +52,14 @@ namespace BlackSmith.Crafting
             {
                 foreach (CraftStageResult stage in stages)
                 {
-                    if (stage == null || stage.Skipped) continue;
+                    if (stage == null) continue;
+                    if (stage.IsFixed)
+                    {
+                        // 스킵 장비가 준 점수는 완성도 계산 없이 그대로 더한다(단계 점수 범위 0~10).
+                        score += System.Math.Min(System.Math.Max(stage.FixedScore, 0), StageMaxScore);
+                        continue;
+                    }
+                    if (stage.Skipped) continue;
                     decimal completeness = decimal.Round((decimal)stage.Completeness, 4);
                     if (completeness < 0m) completeness = 0m;
                     if (completeness > 1m) completeness = 1m;

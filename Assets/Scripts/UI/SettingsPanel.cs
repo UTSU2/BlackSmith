@@ -48,8 +48,6 @@ namespace BlackSmith.UI
 
         private string originalConfirmMessage;
 
-        private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
-
         public bool IsOpen => gameObject.activeSelf;
 
         /// <summary>열고 닫는 연출이 재생 중인가. 타이틀 메뉴가 다른 패널 연출과 겹치지 않게 확인하는 데 쓴다.</summary>
@@ -70,8 +68,7 @@ namespace BlackSmith.UI
 
             if (confirmMessage != null) originalConfirmMessage = confirmMessage.text;
 
-            Font font = Font.CreateDynamicFontFromOSFont(KoreanFonts, 36);
-            foreach (Text text in GetComponentsInChildren<Text>(true)) text.font = font;
+            UIFonts.ApplyAll(this);
         }
 
         private void OnDestroy()

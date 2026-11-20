@@ -19,6 +19,8 @@ MonoBehaviour:
     count: 1
   - item: {fileID: 11400000, guid: 3642d9c58da855644907681e354aba4f, type: 2}
     count: 1
+  - item: {fileID: 11400000, guid: 4beba932ccfe2db43b6fcaa1de9a6482, type: 2}
+    count: 1
   stages: 00000000010000000200000003000000
-  baseDifficulty: 3
+  baseDifficulty: 2
   codexNumber: 31

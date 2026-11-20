@@ -42,12 +42,12 @@ namespace BlackSmith.UI
         }
 
         /// <summary>판매 목록용: 이름(등급, 품질, 보유 수량)과 판매 단가.</summary>
-        public void Bind(ItemData data, ItemVariant itemVariant, int count)
+        public void Bind(ItemData data, ItemVariant itemVariant, int count, int unitPrice)
         {
             item = data;
             variant = itemVariant;
             if (nameLabel != null) nameLabel.text = $"{data.DisplayName} ({itemVariant.Describe()}) x{count}";
-            if (priceLabel != null) priceLabel.text = $"{data.GetSellUnitPrice(itemVariant):N0} G";
+            if (priceLabel != null) priceLabel.text = $"{unitPrice:N0} G";
             SetIcon(data);
         }
 

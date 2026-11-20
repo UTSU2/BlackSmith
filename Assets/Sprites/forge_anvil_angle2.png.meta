@@ -1,0 +1,858 @@
+fileFormatVersion: 2
+guid: 457a196e5e32e4a4290039c70cf05014
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5123476547310638754
+    second: forge_anvil_angle2_0
+  - first:
+      213: 7996791815804712271
+    second: forge_anvil_angle2_1
+  - first:
+      213: 7217118645708113618
+    second: forge_anvil_angle2_2
+  - first:
+      213: 980107441981149726
+    second: forge_anvil_angle2_3
+  - first:
+      213: -6545341954686883206
+    second: forge_anvil_angle2_4
+  - first:
+      213: 6617879450817451394
+    second: forge_anvil_angle2_5
+  - first:
+      213: -4416127609618754251
+    second: forge_anvil_angle2_6
+  - first:
+      213: 6810413068775083708
+    second: forge_anvil_angle2_7
+  - first:
+      213: 4723734466460736064
+    second: forge_anvil_angle2_8
+  - first:
+      213: 1456033336590562630
+    second: forge_anvil_angle2_9
+  - first:
+      213: 5605886248624645256
+    second: forge_anvil_angle2_10
+  - first:
+      213: -6631227345991437509
+    second: forge_anvil_angle2_11
+  - first:
+      213: 2519209250311691637
+    second: forge_anvil_angle2_12
+  - first:
+      213: 8259214047918378440
+    second: forge_anvil_angle2_13
+  - first:
+      213: -2976492319520054154
+    second: forge_anvil_angle2_14
+  - first:
+      213: -1664177276721439136
+    second: forge_anvil_angle2_15
+  - first:
+      213: 4822632969913268148
+    second: forge_anvil_angle2_16
+  - first:
+      213: 1821379100542951260
+    second: forge_anvil_angle2_17
+  - first:
+      213: 1330715917192123021
+    second: forge_anvil_angle2_18
+  - first:
+      213: 5318603806111757103
+    second: forge_anvil_angle2_19
+  - first:
+      213: 1437207527064557997
+    second: forge_anvil_angle2_20
+  - first:
+      213: -3815077322990537177
+    second: forge_anvil_angle2_21
+  - first:
+      213: 1796920986310776270
+    second: forge_anvil_angle2_22
+  - first:
+      213: -8407189393068846848
+    second: forge_anvil_angle2_23
+  - first:
+      213: -8969384658083236037
+    second: forge_anvil_angle2_24
+  - first:
+      213: -3938782280229613857
+    second: forge_anvil_angle2_25
+  - first:
+      213: 1649319883929668409
+    second: forge_anvil_angle2_26
+  - first:
+      213: 1415806204245823781
+    second: forge_anvil_angle2_27
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 9
+  spritePivot: {x: 0.5, y: 0.13556619}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: forge_anvil_angle2_0
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 1204
+        height: 1207
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a6de7146ce3a1740800000000000000
+      internalID: 5123476547310638754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_1
+      rect:
+        serializedVersion: 2
+        x: 605
+        y: 1004
+        width: 25
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f457ac3a9cf4afe60800000000000000
+      internalID: 7996791815804712271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_2
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 1008
+        width: 21
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d6c74b9b2b582460800000000000000
+      internalID: 7217118645708113618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_3
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 1023
+        width: 17
+        height: 194
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e12d001968a0a9d00800000000000000
+      internalID: 980107441981149726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_4
+      rect:
+        serializedVersion: 2
+        x: 734
+        y: 1012
+        width: 47
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7a6d61cb264a25a0800000000000000
+      internalID: -6545341954686883206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_5
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 1018
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 285d4582c4e67db50800000000000000
+      internalID: 6617879450817451394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_6
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 1020
+        width: 21
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53511e13653c6b2c0800000000000000
+      internalID: -4416127609618754251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_7
+      rect:
+        serializedVersion: 2
+        x: 812
+        y: 1020
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbe440a5a92738e50800000000000000
+      internalID: 6810413068775083708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_8
+      rect:
+        serializedVersion: 2
+        x: 965
+        y: 1028
+        width: 69
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04a59a648731e8140800000000000000
+      internalID: 4723734466460736064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_9
+      rect:
+        serializedVersion: 2
+        x: 1061
+        y: 913
+        width: 158
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6457b90fa9ed43410800000000000000
+      internalID: 1456033336590562630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_10
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 1004
+        width: 19
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 884e48487db1ccd40800000000000000
+      internalID: 5605886248624645256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_11
+      rect:
+        serializedVersion: 2
+        x: 643
+        y: 1008
+        width: 13
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b33f251dcd529f3a0800000000000000
+      internalID: -6631227345991437509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_12
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 1008
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57dd4bf377706f220800000000000000
+      internalID: 2519209250311691637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_13
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 1006
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8cd471ada6f9e9270800000000000000
+      internalID: 8259214047918378440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_14
+      rect:
+        serializedVersion: 2
+        x: 699
+        y: 1012
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 674245a610061b6d0800000000000000
+      internalID: -2976492319520054154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_15
+      rect:
+        serializedVersion: 2
+        x: 602
+        y: 974
+        width: 14
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06eddb18597a7e8e0800000000000000
+      internalID: -1664177276721439136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_16
+      rect:
+        serializedVersion: 2
+        x: 621
+        y: 991
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b774cd722f6de240800000000000000
+      internalID: 4822632969913268148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_17
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 984
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5fde2154a6d64910800000000000000
+      internalID: 1821379100542951260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_18
+      rect:
+        serializedVersion: 2
+        x: 997
+        y: 931
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d82d1358317a77210800000000000000
+      internalID: 1330715917192123021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_19
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 861
+        width: 7
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f23f4548bf97fc940800000000000000
+      internalID: 5318603806111757103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_20
+      rect:
+        serializedVersion: 2
+        x: 997
+        y: 236
+        width: 21
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da9533791acf1f310800000000000000
+      internalID: 1437207527064557997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_21
+      rect:
+        serializedVersion: 2
+        x: 1069
+        y: 258
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 726308c436f1e0bc0800000000000000
+      internalID: -3815077322990537177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_22
+      rect:
+        serializedVersion: 2
+        x: 1075
+        y: 256
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec59f76dd12ffe810800000000000000
+      internalID: 1796920986310776270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_23
+      rect:
+        serializedVersion: 2
+        x: 938
+        y: 83
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00113ba4ac9a35b80800000000000000
+      internalID: -8407189393068846848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_24
+      rect:
+        serializedVersion: 2
+        x: 948
+        y: 87
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b373c11ec28568380800000000000000
+      internalID: -8969384658083236037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_25
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 55
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fde8f4b7262a659c0800000000000000
+      internalID: -3938782280229613857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_26
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 31
+        width: 18
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93bcd9a22bf83e610800000000000000
+      internalID: 1649319883929668409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_angle2_27
+      rect:
+        serializedVersion: 2
+        x: 518
+        y: 6
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 521ddd2dd34f5a310800000000000000
+      internalID: 1415806204245823781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      forge_anvil_angle2_0: 5123476547310638754
+      forge_anvil_angle2_1: 7996791815804712271
+      forge_anvil_angle2_10: 5605886248624645256
+      forge_anvil_angle2_11: -6631227345991437509
+      forge_anvil_angle2_12: 2519209250311691637
+      forge_anvil_angle2_13: 8259214047918378440
+      forge_anvil_angle2_14: -2976492319520054154
+      forge_anvil_angle2_15: -1664177276721439136
+      forge_anvil_angle2_16: 4822632969913268148
+      forge_anvil_angle2_17: 1821379100542951260
+      forge_anvil_angle2_18: 1330715917192123021
+      forge_anvil_angle2_19: 5318603806111757103
+      forge_anvil_angle2_2: 7217118645708113618
+      forge_anvil_angle2_20: 1437207527064557997
+      forge_anvil_angle2_21: -3815077322990537177
+      forge_anvil_angle2_22: 1796920986310776270
+      forge_anvil_angle2_23: -8407189393068846848
+      forge_anvil_angle2_24: -8969384658083236037
+      forge_anvil_angle2_25: -3938782280229613857
+      forge_anvil_angle2_26: 1649319883929668409
+      forge_anvil_angle2_27: 1415806204245823781
+      forge_anvil_angle2_3: 980107441981149726
+      forge_anvil_angle2_4: -6545341954686883206
+      forge_anvil_angle2_5: 6617879450817451394
+      forge_anvil_angle2_6: -4416127609618754251
+      forge_anvil_angle2_7: 6810413068775083708
+      forge_anvil_angle2_8: 4723734466460736064
+      forge_anvil_angle2_9: 1456033336590562630
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

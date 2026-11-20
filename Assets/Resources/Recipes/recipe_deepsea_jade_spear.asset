@@ -18,6 +18,8 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: 52fe61322fcaf5d45be0c6891d4a53e1, type: 2}
     count: 2
   - item: {fileID: 11400000, guid: ae72153232073b34094e68505ce3668f, type: 2}
+    count: 3
+  - item: {fileID: 11400000, guid: 958f3eafb0be11d459bca34572146476, type: 2}
     count: 1
   stages: 00000000010000000200000003000000
   baseDifficulty: 7

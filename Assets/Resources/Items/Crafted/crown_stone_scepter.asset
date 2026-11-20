@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bffba30a58ef0447b4ef10205a7ef95, type: 3}
+  m_Name: crown_stone_scepter
+  m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Items.CraftedItemData
+  id: crown_stone_scepter
+  displayName: "\uc655\uad00\uc11d \uc655\ud640"
+  icon: {fileID: 21300000, guid: 51a3cff456224d8fb4107ce2085f4ec7, type: 3}
+  description: "\uc655\uad00\uc11d(\uc73c)\ub85c \ub9cc\ub4e0 \uc7a5\ube44."
+  maxStack: 1
+  defaultGrade: 4
+  sellPrice: 0

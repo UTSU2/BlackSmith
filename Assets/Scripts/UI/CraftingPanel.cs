@@ -16,7 +16,6 @@ namespace BlackSmith.UI
     /// </summary>
     public class CraftingPanel : MonoBehaviour
     {
-        private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
         private static readonly Color DimColor = new Color(1f, 1f, 1f, 0.5f);
 
         [SerializeField] private CraftingIngredientView ingredientViewPrefab;
@@ -181,18 +180,11 @@ namespace BlackSmith.UI
 
         private void ApplyFont()
         {
-            // OS 폰트는 씬에 저장되지 않으므로 시작할 때 글자에 적용한다. (ShopPanel과 동일한 방식)
-            Font font = Font.CreateDynamicFontFromOSFont(KoreanFonts, 36);
-            foreach (Text text in GetComponentsInChildren<Text>(true))
-            {
-                text.font = font;
-            }
+            // 글꼴은 크기 기준(UIFontSettings)으로 시작할 때 적용한다.
+            UIFonts.ApplyAll(this);
             if (ingredientViewPrefab != null)
             {
-                foreach (Text text in ingredientViewPrefab.GetComponentsInChildren<Text>(true))
-                {
-                    text.font = font;
-                }
+                UIFonts.ApplyAll(ingredientViewPrefab);
             }
         }
     }

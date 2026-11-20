@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: recipe_mineral_7
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Crafting.CraftRecipeData
   id: recipe_mineral_7
-  result: {fileID: 11400000, guid: 3b7a488367ddeaf409b6500cb246cff5, type: 2}
+  result: {fileID: 11400000, guid: e345f3b29bfe4b20a087e6dd1e41c0fc, type: 2}
   ingredients:
   - item: {fileID: 11400000, guid: 23e83c1ff8ad120419e6bde89e14c060, type: 2}
     count: 1

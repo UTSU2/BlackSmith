@@ -33,8 +33,10 @@ namespace BlackSmith.Crafting
         [Min(0.1f)] public float targetRadius = 0.8f;
         [Tooltip("줄어드는 원의 처음 반지름.")]
         [Min(0.2f)] public float startRadius = 2f;
-        [Tooltip("원이 화면 가장자리에 붙지 않게 하는 여백.")]
+        [Tooltip("(미사용, 호환용) 예전에 원이 화면 가장자리에 붙지 않게 하던 여백. 지금은 spawnArea가 정한다.")]
         [Min(0f)] public float margin = 2f;
+        [Tooltip("원 중심이 놓일 수 있는 영역. 게임 공간 단위, 왼쪽 아래 기준. 기본값은 예전 동작(여백 2)과 같다.")]
+        public Rect spawnArea = new Rect(2f, 2f, 12f, 5f);
         [Tooltip("마지막 원 판정 뒤 끝나기까지 기다리는 시간.")]
         [Min(0f)] public float endDelay = 0.5f;
         [Tooltip("난이도 10에서 원 개수의 배율(난이도 1은 1). 곡선(지수 2)으로 늘어난다.")]
@@ -256,9 +258,10 @@ namespace BlackSmith.Crafting
 
         private Vector2 PickPosition(int index)
         {
-            float minX = settings.margin, maxX = AreaSize.x - settings.margin;
-            float minY = settings.margin, maxY = AreaSize.y - settings.margin;
-            if (maxX <= minX || maxY <= minY)
+            Rect area = settings.spawnArea;
+            float minX = area.xMin, maxX = area.xMax;
+            float minY = area.yMin, maxY = area.yMax;
+            if (area.width <= 0f || area.height <= 0f)
             {
                 return AreaSize * 0.5f;
             }

@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using BlackSmith.Crafting;
 using BlackSmith.Items;
 using BlackSmith.Proficiency;
+using BlackSmith.Rank;
+using BlackSmith.Data;
 
 namespace BlackSmith.UI
 {
@@ -15,8 +17,6 @@ namespace BlackSmith.UI
     /// </summary>
     public class CraftResultPopup : MonoBehaviour
     {
-        private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
-
         [SerializeField] private CraftingController crafting;
 
         [Header("표시")]
@@ -48,9 +48,8 @@ namespace BlackSmith.UI
 
         private void Awake()
         {
-            // OS 폰트는 씬에 저장되지 않으므로 시작할 때 글자에 적용한다.
-            Font font = Font.CreateDynamicFontFromOSFont(KoreanFonts, 36);
-            foreach (Text text in GetComponentsInChildren<Text>(true)) text.font = font;
+            // 글꼴은 크기 기준(UIFontSettings)으로 시작할 때 적용한다.
+            UIFonts.ApplyAll(this);
         }
 
         // 팝업은 닫혀 있는(비활성) 동안에도 제작 완료를 들어야 하므로 OnEnable이 아니라 Awake/OnDestroy에서 구독한다.
@@ -119,10 +118,15 @@ namespace BlackSmith.UI
                 if (progressLabel != null) progressLabel.text = $"{after.Progress} / {after.Required}";
             }
 
+            // 품질 보너스 줄에 스킵 장비로 건너뛴 단계를 덧붙인다(줄을 새로 늘리면 상자 배치가 바뀌므로 기존 줄을 쓴다).
+            // 알 수 없는 제작품(숙련도 없음)이라도 스킵을 썼으면 이 줄에 스킵만 보여 준다.
             if (bonusLabel != null)
             {
-                bonusLabel.gameObject.SetActive(after != null);
-                bonusLabel.text = "품질 보너스 +" + result.Bonus.ToString("0.#", CultureInfo.InvariantCulture);
+                string skipText = DescribeSkips(result);
+                bool hasBonus = after != null;
+                bonusLabel.gameObject.SetActive(hasBonus || skipText.Length > 0);
+                string bonusText = hasBonus ? "품질 보너스 +" + result.Bonus.ToString("0.#", CultureInfo.InvariantCulture) : string.Empty;
+                bonusLabel.text = hasBonus && skipText.Length > 0 ? bonusText + " · " + skipText : bonusText + skipText;
             }
 
             // 알 수 없는 제작품은 숙련도가 없으므로(ProficiencyAfter == null) 위 줄들이 숨고 판매가를 보여 준다.
@@ -132,9 +136,24 @@ namespace BlackSmith.UI
                 if (result.IsUnknown)
                 {
                     int price = result.Product.GetSellUnitPrice(new ItemVariant(result.Grade, result.Quality, result.Request.IngredientValue));
+                    BlacksmithRankSettings rankSettings = BlacksmithRankSettings.Load();
+                    if (rankSettings != null) price = rankSettings.ApplySellMultiplier(price, GameSession.Current.Rank);
                     priceLabel.text = $"판매가 {price} G";
                 }
             }
+        }
+
+        // 스킵 장비로 건너뛴 단계 이름. 없으면 빈 문자열. 예: "스킵 가열·열처리"
+        private static string DescribeSkips(CraftResult result)
+        {
+            string names = string.Empty;
+            foreach (CraftStageResult stage in result.Stages)
+            {
+                if (stage == null || !stage.IsFixed) continue;
+                string name = stage.Stage == CraftStage.Heat ? "가열" : (stage.Stage == CraftStage.HeatTreat ? "열처리" : stage.Stage.ToString());
+                names = names.Length > 0 ? names + "·" + name : name;
+            }
+            return names.Length > 0 ? "스킵 " + names : string.Empty;
         }
 
         public void Hide()

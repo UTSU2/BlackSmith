@@ -34,8 +34,6 @@ namespace BlackSmith.UI
         [Tooltip("닫기 버튼. 비워 두면 연결하지 않는다.")]
         [SerializeField] private Button closeButton;
 
-        private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
-
         private Mode mode = Mode.Save;
         private int pendingSlot = -1;
 
@@ -169,12 +167,8 @@ namespace BlackSmith.UI
 
         private void ApplyFont()
         {
-            // OS 폰트는 씬에 저장되지 않으므로 시작할 때 글자에 적용한다. (MainMenu와 동일한 방식)
-            Font font = Font.CreateDynamicFontFromOSFont(KoreanFonts, 36);
-            foreach (Text text in GetComponentsInChildren<Text>(true))
-            {
-                text.font = font;
-            }
+            // 글꼴은 크기 기준(UIFontSettings)으로 시작할 때 적용한다. (MainMenu와 동일한 방식)
+            UIFonts.ApplyAll(this);
         }
     }
 }

@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: recipe_mineral_10
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Crafting.CraftRecipeData
   id: recipe_mineral_10
-  result: {fileID: 11400000, guid: 2cbb376b4f9a429438f6fbc346f2fbf2, type: 2}
+  result: {fileID: 11400000, guid: 5d85dd836dfe4401b10610c95b14be05, type: 2}
   ingredients:
   - item: {fileID: 11400000, guid: c813938979c2d444d88f3bf17184131d, type: 2}
+    count: 2
+  - item: {fileID: 11400000, guid: 52fe61322fcaf5d45be0c6891d4a53e1, type: 2}
     count: 1
   stages: 00000000010000000200000003000000
-  baseDifficulty: 5
+  baseDifficulty: 4
   codexNumber: 33

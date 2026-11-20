@@ -19,8 +19,10 @@ namespace BlackSmith.Crafting
         [Min(0.01f)] public float sandPerUnit = 0.5f;
         [Tooltip("이 시간(초) 안에 못 지우면 거기서 끝난다.")]
         [Min(1f)] public float timeLimit = 5f;
-        [Tooltip("흠집이 화면 가장자리에 붙지 않게 하는 여백.")]
+        [Tooltip("(미사용, 호환용) 예전에 흠집이 화면 가장자리에 붙지 않게 하던 여백. 지금은 spawnArea가 정한다.")]
         [Min(0f)] public float margin = 2f;
+        [Tooltip("흠집 중심이 놓일 수 있는 영역. 게임 공간 단위, 왼쪽 아래 기준. 기본값은 예전 동작(여백 2)과 같다.")]
+        public Rect spawnArea = new Rect(2f, 2f, 12f, 5f);
         [Tooltip("끝난 뒤(전부 지웠거나 시간 초과) 결과를 보여주고 끝나기까지 기다리는 시간(초).")]
         [Min(0f)] public float endDelay = 0.5f;
         [Tooltip("난이도 10에서 흠집 개수의 배율(난이도 1은 1). 곡선(지수 2)으로 늘어난다. 2면 3개 -> 6개.")]
@@ -30,7 +32,7 @@ namespace BlackSmith.Crafting
     }
 
     /// <summary>
-    /// 연마: 사포질하듯 흠집을 클릭한 뒤 드래그해서 갈아낸다.
+    /// 연마: 숫돌로 갈듯이 흠집을 클릭한 뒤 드래그해서 갈아낸다.
     /// 순수 로직이라 시간(Tick)과 포인터(PointerDown/Move/Up)만 받고, 그리는 건 PolishMinigameView가 한다.
     /// 완성도는 흠집별로 지운 비율의 평균이다.
     /// </summary>
@@ -245,31 +247,39 @@ namespace BlackSmith.Crafting
 
         private Vector2 PickPosition()
         {
-            float minX = settings.margin, maxX = AreaSize.x - settings.margin;
-            float minY = settings.margin, maxY = AreaSize.y - settings.margin;
-            if (maxX <= minX || maxY <= minY) return AreaSize * 0.5f;
+            Rect area = settings.spawnArea;
+            float minX = area.xMin, maxX = area.xMax;
+            float minY = area.yMin, maxY = area.yMax;
+            if (area.width <= 0f || area.height <= 0f) return AreaSize * 0.5f;
 
-            // 이미 만든 흠집과 겹치지 않게 몇 번 다시 뽑는다.
+            // 이미 만든 흠집과 겹치지 않는 첫 후보를 쓴다. 좁은 영역에서 못 찾으면
+            // 마지막 후보가 아니라 기존 흠집들에서 가장 멀리 떨어진 후보를 쓴다.
             float minGap = settings.flawRadius * 2.2f;
             Vector2 best = Vector2.zero;
-            for (int attempt = 0; attempt < 30; attempt++)
+            float bestNearest = -1f;
+            for (int attempt = 0; attempt < PlacementAttempts; attempt++)
             {
-                best = new Vector2(
+                Vector2 candidate = new Vector2(
                     minX + (float)random.NextDouble() * (maxX - minX),
                     minY + (float)random.NextDouble() * (maxY - minY));
 
-                bool overlaps = false;
+                float nearest = float.MaxValue;
                 foreach (Flaw other in flaws)
                 {
-                    if ((best - other.Position).magnitude < minGap)
-                    {
-                        overlaps = true;
-                        break;
-                    }
+                    nearest = Mathf.Min(nearest, (candidate - other.Position).magnitude);
                 }
-                if (!overlaps) break;
+                if (nearest >= minGap) return candidate;
+
+                if (nearest > bestNearest)
+                {
+                    bestNearest = nearest;
+                    best = candidate;
+                }
             }
             return best;
         }
+
+        /// <summary>흠집 하나를 놓을 자리를 찾는 최대 시도 횟수.</summary>
+        private const int PlacementAttempts = 400;
     }
 }

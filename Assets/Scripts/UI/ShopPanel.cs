@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using BlackSmith.Data;
 using BlackSmith.Items;
+using BlackSmith.Rank;
 using BlackSmith.Shop;
 using BlackSmith.Tutorial;
 
@@ -39,8 +40,6 @@ namespace BlackSmith.UI
         [Header("튜토리얼 (비워 두면 제한 없음)")]
         [SerializeField] private TutorialController tutorial;
 
-        private static readonly string[] KoreanFonts = { "Malgun Gothic", "맑은 고딕", "Arial" };
-
         private readonly List<ShopItemView> views = new List<ShopItemView>();
         private ShopService service;
         private PlayerData subscribedPlayer;
@@ -71,7 +70,7 @@ namespace BlackSmith.UI
 
             Unsubscribe();
             PlayerData player = GameSession.Current;
-            service = new ShopService(player);
+            service = new ShopService(player, BlacksmithRankSettings.Load());
             subscribedPlayer = player;
             subscribedPlayer.OnMoneyChanged += OnMoneyChanged;
             subscribedPlayer.OnInventoryChanged += OnInventoryChanged;
@@ -142,7 +141,7 @@ namespace BlackSmith.UI
                     {
                         if (tutorial != null && !tutorial.IsSellAllowed(entry.Item)) continue;
                         ShopItemView view = CreateView();
-                        view.Bind(entry.Item, entry.Variant, entry.Count);
+                        view.Bind(entry.Item, entry.Variant, entry.Count, service.GetSellUnitPrice(entry.Item, entry.Variant));
                         hasItems = true;
                     }
                 }
@@ -209,18 +208,11 @@ namespace BlackSmith.UI
 
         private void ApplyFont()
         {
-            // OS 폰트는 씬에 저장되지 않으므로 시작할 때 글자에 적용한다. (SaveLoadPanel과 동일한 방식)
-            Font font = Font.CreateDynamicFontFromOSFont(KoreanFonts, 36);
-            foreach (Text text in GetComponentsInChildren<Text>(true))
-            {
-                text.font = font;
-            }
+            // 글꼴은 크기 기준(UIFontSettings)으로 시작할 때 적용한다.
+            UIFonts.ApplyAll(this);
             if (itemViewPrefab != null)
             {
-                foreach (Text text in itemViewPrefab.GetComponentsInChildren<Text>(true))
-                {
-                    text.font = font;
-                }
+                UIFonts.ApplyAll(itemViewPrefab);
             }
         }
     }

@@ -17,7 +17,7 @@ namespace BlackSmith.EditorTools
         private const string RootFolder = "Assets/Resources/Items";
         private const string MineralFolder = RootFolder + "/Minerals";
         private const string CraftedFolder = RootFolder + "/Crafted";
-        private const float ListWidth = 260f;
+        private const float ListWidth = 380f;
         private static readonly Regex IdPattern = new Regex("^[a-z0-9_]+$");
 
         private ItemType type = ItemType.Mineral;
@@ -46,7 +46,7 @@ namespace BlackSmith.EditorTools
         public static void Open()
         {
             ItemCreatorWindow window = GetWindow<ItemCreatorWindow>("Item Creator");
-            window.minSize = new Vector2(700, 520);
+            window.minSize = new Vector2(840, 520);
             window.RefreshList();
         }
 
