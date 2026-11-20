@@ -234,7 +234,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 20}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &47708558
@@ -273,7 +273,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
@@ -420,7 +420,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 20}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &62494334
@@ -459,7 +459,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
@@ -817,7 +817,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 20}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &103353205
@@ -856,7 +856,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
@@ -1202,7 +1202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonLabelPress
   label: {fileID: 62494333}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -7}
 --- !u!114 &173550025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1720,7 +1720,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 20}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &225814402
@@ -1759,7 +1759,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
@@ -1888,7 +1888,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonLabelPress
   label: {fileID: 341696627}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -7}
 --- !u!1 &239933764
 GameObject:
   m_ObjectHideFlags: 0
@@ -2014,7 +2014,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 14}
+  m_AnchoredPosition: {x: 0, y: 8}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &260878808
@@ -2038,7 +2038,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 32
     m_FontStyle: 0
     m_BestFit: 0
@@ -2246,7 +2246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonLabelPress
   label: {fileID: 47708557}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -7}
 --- !u!1 &284931749
 GameObject:
   m_ObjectHideFlags: 0
@@ -2337,38 +2337,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!128 &304066208
-Font:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Malgun Gothic
-  serializedVersion: 5
-  m_LineSpacing: 47.882812
-  m_DefaultMaterial: {fileID: 411342433}
-  m_FontSize: 36
-  m_Texture: {fileID: 860195479}
-  m_AsciiStartOffset: 0
-  m_Tracking: 1
-  m_CharacterSpacing: 0
-  m_CharacterPadding: 1
-  m_ConvertCase: -2
-  m_CharacterRects: []
-  m_KerningValues: []
-  m_PixelScale: 0.1
-  m_FontData: 
-  m_Ascent: 39.18164
-  m_Descent: 0
-  m_DefaultStyle: 0
-  m_FontNames:
-  - Malgun Gothic
-  - "\uB9D1\uC740 \uACE0\uB515"
-  - Arial
-  m_FallbackFonts: []
-  m_FontRenderingMode: 0
-  m_UseLegacyBoundsCalculation: 0
-  m_ShouldRoundAdvanceValue: 1
 --- !u!1 &321909876
 GameObject:
   m_ObjectHideFlags: 0
@@ -2741,7 +2709,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 20}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &341696628
@@ -2780,7 +2748,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
@@ -2892,39 +2860,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!21 &411342433
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Malgun Gothic
-  m_Shader: {fileID: 10101, guid: 0000000000000000e000000000000000, type: 0}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 860195479}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats: []
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-  m_BuildTextureStacks: []
-  m_AllowLocking: 1
 --- !u!1 &427616326
 GameObject:
   m_ObjectHideFlags: 0
@@ -2999,7 +2934,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 20}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &453716825
@@ -3038,7 +2973,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
@@ -3117,7 +3052,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 44
     m_FontStyle: 0
     m_BestFit: 0
@@ -8300,7 +8235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonLabelPress
   label: {fileID: 1138479627}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -7}
 --- !u!114 &513850022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9143,7 +9078,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 14}
+  m_AnchoredPosition: {x: 0, y: 8}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &605035673
@@ -9167,7 +9102,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 32
     m_FontStyle: 0
     m_BestFit: 0
@@ -9223,7 +9158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 20}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &611049111
@@ -9262,7 +9197,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
@@ -9552,7 +9487,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 44
     m_FontStyle: 0
     m_BestFit: 0
@@ -9872,7 +9807,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 44
     m_FontStyle: 0
     m_BestFit: 0
@@ -10187,7 +10122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.ButtonLabelPress
   label: {fileID: 260878807}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -6}
 --- !u!114 &779844139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11057,52 +10992,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 858066770}
   m_CullTransparentMesh: 1
---- !u!28 &860195479
-Texture2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Malgun Gothic
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 4
-  m_Width: 0
-  m_Height: 0
-  m_CompleteImageSize: 0
-  m_MipsStripped: 0
-  m_TextureFormat: 4
-  m_MipCount: 1
-  m_IsReadable: 1
-  m_IsPreProcessed: 0
-  m_IgnoreMipmapLimit: 0
-  m_MipmapLimitGroupName: 
-  m_StreamingMipmaps: 0
-  m_StreamingMipmapsPriority: 0
-  m_VTOnly: 0
-  m_AlphaIsTransparency: 0
-  m_ImageCount: 1
-  m_TextureDimension: 2
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 0
-    m_WrapV: 0
-    m_WrapW: 0
-  m_LightmapFormat: 0
-  m_ColorSpace: 1
-  m_PlatformBlob: 
-  image data: 0
-  _typelessdata: 
-  m_StreamData:
-    serializedVersion: 2
-    offset: 0
-    size: 0
-    path: 
 --- !u!1 &863803226
 GameObject:
   m_ObjectHideFlags: 0
@@ -11320,7 +11209,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 20}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &876908551
@@ -11359,7 +11248,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
@@ -12220,7 +12109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonLabelPress
   label: {fileID: 103353204}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -7}
 --- !u!114 &1005386253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12421,7 +12310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonLabelPress
   label: {fileID: 1662587531}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -7}
 --- !u!114 &1033581354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12806,7 +12695,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonLabelPress
   label: {fileID: 611049110}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -7}
 --- !u!114 &1081478987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12984,7 +12873,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 20}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1138479628
@@ -13023,7 +12912,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
@@ -14169,7 +14058,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 44
     m_FontStyle: 0
     m_BestFit: 0
@@ -14566,7 +14455,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonLabelPress
   label: {fileID: 453716824}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -7}
 --- !u!1 &1300878998
 GameObject:
   m_ObjectHideFlags: 0
@@ -21057,7 +20946,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonLabelPress
   label: {fileID: 225814401}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -7}
 --- !u!1 &1460017982
 GameObject:
   m_ObjectHideFlags: 0
@@ -21202,7 +21091,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonLabelPress
   label: {fileID: 2083405045}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -7}
 --- !u!114 &1474630422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21923,7 +21812,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 44
     m_FontStyle: 0
     m_BestFit: 0
@@ -21988,7 +21877,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonLabelPress
   label: {fileID: 1776276390}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -7}
 --- !u!114 &1550712465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22080,7 +21969,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 20}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1552187343
@@ -22119,7 +22008,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
@@ -22463,7 +22352,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 20}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1585516918
@@ -22502,7 +22391,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
@@ -22563,7 +22452,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1acccb97c5938f740bae6c5025adefcc, type: 3}
     m_FontSize: 64
     m_FontStyle: 0
     m_BestFit: 0
@@ -22751,7 +22640,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 44
     m_FontStyle: 0
     m_BestFit: 0
@@ -22954,7 +22843,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 20}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1662587532
@@ -22993,7 +22882,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
@@ -23158,7 +23047,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonLabelPress
   label: {fileID: 1585516917}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -7}
 --- !u!114 &1671865744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23805,7 +23694,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1acccb97c5938f740bae6c5025adefcc, type: 3}
     m_FontSize: 64
     m_FontStyle: 0
     m_BestFit: 0
@@ -23954,7 +23843,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonLabelPress
   label: {fileID: 2051448924}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -7}
 --- !u!114 &1740699408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24325,7 +24214,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 20}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1776276391
@@ -24364,7 +24253,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
@@ -24424,7 +24313,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 44
     m_FontStyle: 0
     m_BestFit: 0
@@ -24903,7 +24792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonLabelPress
   label: {fileID: 1552187342}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -7}
 --- !u!114 &1865862319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25219,7 +25108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.ButtonLabelPress
   label: {fileID: 605035672}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -6}
 --- !u!114 &1897387703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26065,7 +25954,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 20}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2051448925
@@ -26104,7 +25993,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
@@ -26690,7 +26579,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 20}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2083405046
@@ -26729,7 +26618,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 304066208}
+    m_Font: {fileID: 12800000, guid: 1a486012d26ebcf428a5e49c55238829, type: 3}
     m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
@@ -26858,7 +26747,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonLabelPress
   label: {fileID: 876908550}
-  pressedPosition: {x: 0, y: 0}
+  pressedPosition: {x: 0, y: -7}
 --- !u!1 &2106700735
 GameObject:
   m_ObjectHideFlags: 0

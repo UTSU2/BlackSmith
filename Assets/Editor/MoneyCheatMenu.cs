@@ -2,6 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using BlackSmith.Crafting;
 using BlackSmith.Data;
+using BlackSmith.Rank;
 
 namespace BlackSmith.EditorTools
 {
@@ -34,6 +35,9 @@ namespace BlackSmith.EditorTools
             {
                 if (recipe != null && player.UnlockRecipe(recipe.Id)) added++;
             }
+            // 제작 없이 해금 수만 바뀌므로 등급 표시(도감 a/N)를 직접 다시 그리게 한다.
+            RankController rank = Object.FindFirstObjectByType<RankController>();
+            if (rank != null) rank.Refresh();
             Debug.Log($"[Cheat] 도감 해금 +{added} (현재 {player.UnlockedRecipeCount}/{RecipeDatabase.Count}). 도감 창을 다시 열면 반영됩니다.");
         }
 

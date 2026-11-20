@@ -108,6 +108,18 @@ namespace BlackSmith.Rank
             Changed?.Invoke();
         }
 
+        /// <summary>
+        /// 도감 해금 수 등이 제작 밖에서 바뀌었을 때(예: 에디터 치트) 등급 표시와 장비 지급을 다시 맞춘다.
+        /// 제작 종료·승급·불러오기는 스스로 갱신하므로 일반 플레이에서는 부를 필요가 없다.
+        /// </summary>
+        public void Refresh()
+        {
+            PlayerData player = GameSession.Current;
+            Subscribe(player);
+            SkipGearService.SyncGrants(player, gearRules);
+            Changed?.Invoke();
+        }
+
         private void OnRankChanged(BlacksmithRank rank)
         {
             SkipGearService.SyncGrants(subscribed, gearRules);
