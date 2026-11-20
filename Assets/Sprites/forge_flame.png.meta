@@ -1,0 +1,702 @@
+fileFormatVersion: 2
+guid: 37edf7dd95d55664c88bb5133dd0d14c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6137465542145919155
+    second: forge_flame_0
+  - first:
+      213: 5407976733276759214
+    second: forge_flame_1
+  - first:
+      213: 3435386430585654178
+    second: forge_flame_2
+  - first:
+      213: 4744008810816884138
+    second: forge_flame_3
+  - first:
+      213: -3011580025332592817
+    second: forge_flame_4
+  - first:
+      213: 4667072577082544262
+    second: forge_flame_5
+  - first:
+      213: -398894894293820229
+    second: forge_flame_6
+  - first:
+      213: -7416046848683867128
+    second: forge_flame_7
+  - first:
+      213: -2160002800345896616
+    second: forge_flame_8
+  - first:
+      213: 2823236117124025975
+    second: forge_flame_9
+  - first:
+      213: -3446018385333419996
+    second: forge_flame_10
+  - first:
+      213: 5214778937182502709
+    second: forge_flame_11
+  - first:
+      213: -8551040596208386828
+    second: forge_flame_12
+  - first:
+      213: 1313497576467418259
+    second: forge_flame_13
+  - first:
+      213: 6924746315575528454
+    second: forge_flame_14
+  - first:
+      213: -8205948666666692664
+    second: forge_flame_15
+  - first:
+      213: -1640517034966290470
+    second: forge_flame_16
+  - first:
+      213: 5676467045559617321
+    second: forge_flame_17
+  - first:
+      213: 5863141511190215314
+    second: forge_flame_18
+  - first:
+      213: 2469977754687548810
+    second: forge_flame_19
+  - first:
+      213: 8860152032431058252
+    second: forge_flame_20
+  - first:
+      213: 431858191341396868
+    second: forge_flame_21
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 512
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: forge_flame_0
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 0
+        width: 1151
+        height: 1226
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d47313b6b9753daa0800000000000000
+      internalID: -6137465542145919155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_1
+      rect:
+        serializedVersion: 2
+        x: 898
+        y: 1197
+        width: 124
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea4e98caf2efc0b40800000000000000
+      internalID: 5407976733276759214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_2
+      rect:
+        serializedVersion: 2
+        x: 954
+        y: 1108
+        width: 12
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ab4145d1c1fcaf20800000000000000
+      internalID: 3435386430585654178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_3
+      rect:
+        serializedVersion: 2
+        x: 1093
+        y: 1036
+        width: 110
+        height: 171
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aad401ce0ea16d140800000000000000
+      internalID: 4744008810816884138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 947
+        width: 77
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4f83694ce7b436d0800000000000000
+      internalID: -3011580025332592817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_5
+      rect:
+        serializedVersion: 2
+        x: 1011
+        y: 859
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 680d8f918c5c4c040800000000000000
+      internalID: 4667072577082544262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_6
+      rect:
+        serializedVersion: 2
+        x: 1015
+        y: 865
+        width: 144
+        height: 118
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bbc56e20537d67af0800000000000000
+      internalID: -398894894293820229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_7
+      rect:
+        serializedVersion: 2
+        x: 1204
+        y: 901
+        width: 27
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8040b8adea8e41990800000000000000
+      internalID: -7416046848683867128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_8
+      rect:
+        serializedVersion: 2
+        x: 979
+        y: 610
+        width: 19
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 859a883b5e02602e0800000000000000
+      internalID: -2160002800345896616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_9
+      rect:
+        serializedVersion: 2
+        x: 1174
+        y: 602
+        width: 33
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77e0b365a462e2720800000000000000
+      internalID: 2823236117124025975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_10
+      rect:
+        serializedVersion: 2
+        x: 1029
+        y: 578
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4208cbc49884d20d0800000000000000
+      internalID: -3446018385333419996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_11
+      rect:
+        serializedVersion: 2
+        x: 1031
+        y: 548
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53fb3f470dd9e5840800000000000000
+      internalID: 5214778937182502709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_12
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 552
+        width: 14
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fcfd0312e9945980800000000000000
+      internalID: -8551040596208386828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_13
+      rect:
+        serializedVersion: 2
+        x: 965
+        y: 280
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 39c4daa261b7a3210800000000000000
+      internalID: 1313497576467418259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_14
+      rect:
+        serializedVersion: 2
+        x: 989
+        y: 296
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60c039bc514a91060800000000000000
+      internalID: 6924746315575528454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_15
+      rect:
+        serializedVersion: 2
+        x: 995
+        y: 295
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8cfcd362a2d9e1e80800000000000000
+      internalID: -8205948666666692664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_16
+      rect:
+        serializedVersion: 2
+        x: 1163
+        y: 288
+        width: 30
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: adf6bd2d276bb39e0800000000000000
+      internalID: -1640517034966290470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_17
+      rect:
+        serializedVersion: 2
+        x: 963
+        y: 262
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 927cac5e3bcd6ce40800000000000000
+      internalID: 5676467045559617321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_18
+      rect:
+        serializedVersion: 2
+        x: 1123
+        y: 76
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29af652e3201e5150800000000000000
+      internalID: 5863141511190215314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_19
+      rect:
+        serializedVersion: 2
+        x: 1133
+        y: 71
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8da44f6eaf174220800000000000000
+      internalID: 2469977754687548810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_20
+      rect:
+        serializedVersion: 2
+        x: 713
+        y: 65
+        width: 14
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4d2205945595fa70800000000000000
+      internalID: 8860152032431058252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_flame_21
+      rect:
+        serializedVersion: 2
+        x: 1129
+        y: 63
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4832f38acb44ef500800000000000000
+      internalID: 431858191341396868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      forge_flame_0: -6137465542145919155
+      forge_flame_1: 5407976733276759214
+      forge_flame_10: -3446018385333419996
+      forge_flame_11: 5214778937182502709
+      forge_flame_12: -8551040596208386828
+      forge_flame_13: 1313497576467418259
+      forge_flame_14: 6924746315575528454
+      forge_flame_15: -8205948666666692664
+      forge_flame_16: -1640517034966290470
+      forge_flame_17: 5676467045559617321
+      forge_flame_18: 5863141511190215314
+      forge_flame_19: 2469977754687548810
+      forge_flame_2: 3435386430585654178
+      forge_flame_20: 8860152032431058252
+      forge_flame_21: 431858191341396868
+      forge_flame_3: 4744008810816884138
+      forge_flame_4: -3011580025332592817
+      forge_flame_5: 4667072577082544262
+      forge_flame_6: -398894894293820229
+      forge_flame_7: -7416046848683867128
+      forge_flame_8: -2160002800345896616
+      forge_flame_9: 2823236117124025975
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

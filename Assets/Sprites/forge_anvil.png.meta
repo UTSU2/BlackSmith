@@ -1,0 +1,780 @@
+fileFormatVersion: 2
+guid: 5c77819a9b1388248801afde2b9b766b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2522376772206843598
+    second: forge_anvil_0
+  - first:
+      213: -2568079082669116277
+    second: forge_anvil_1
+  - first:
+      213: 1544354710762107055
+    second: forge_anvil_2
+  - first:
+      213: -5038070486745350825
+    second: forge_anvil_3
+  - first:
+      213: 352598144141093918
+    second: forge_anvil_4
+  - first:
+      213: -3630447546552067167
+    second: forge_anvil_5
+  - first:
+      213: 6181411726731476155
+    second: forge_anvil_6
+  - first:
+      213: 7400865292972418145
+    second: forge_anvil_7
+  - first:
+      213: 7066243119096981074
+    second: forge_anvil_8
+  - first:
+      213: 3746757775864030807
+    second: forge_anvil_9
+  - first:
+      213: 844685002989459339
+    second: forge_anvil_10
+  - first:
+      213: -3371681218599307653
+    second: forge_anvil_11
+  - first:
+      213: 5355550091181961066
+    second: forge_anvil_12
+  - first:
+      213: 5543846503481835239
+    second: forge_anvil_13
+  - first:
+      213: 3742233296859816939
+    second: forge_anvil_14
+  - first:
+      213: 5879552833963612257
+    second: forge_anvil_15
+  - first:
+      213: -5196226475223006925
+    second: forge_anvil_16
+  - first:
+      213: -2203709584551472447
+    second: forge_anvil_17
+  - first:
+      213: -5294551683653005910
+    second: forge_anvil_18
+  - first:
+      213: 7159965322043546046
+    second: forge_anvil_19
+  - first:
+      213: 3558786759540740845
+    second: forge_anvil_20
+  - first:
+      213: 5515773807810344002
+    second: forge_anvil_21
+  - first:
+      213: -3833709252587839162
+    second: forge_anvil_22
+  - first:
+      213: 6077885862927708682
+    second: forge_anvil_23
+  - first:
+      213: -7265290418734385789
+    second: forge_anvil_24
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: forge_anvil_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1231
+        height: 1236
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec6d5196f48410320800000000000000
+      internalID: 2522376772206843598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_1
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 1030
+        width: 9
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b84756a3ea95c5cd0800000000000000
+      internalID: -2568079082669116277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_2
+      rect:
+        serializedVersion: 2
+        x: 593
+        y: 1024
+        width: 27
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa03d265d66ae6510800000000000000
+      internalID: 1544354710762107055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_3
+      rect:
+        serializedVersion: 2
+        x: 634
+        y: 1076
+        width: 6
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75df92cc59d251ab0800000000000000
+      internalID: -5038070486745350825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_4
+      rect:
+        serializedVersion: 2
+        x: 762
+        y: 1038
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1cedf9d42ea4e400800000000000000
+      internalID: 352598144141093918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_5
+      rect:
+        serializedVersion: 2
+        x: 780
+        y: 1031
+        width: 25
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ab531cf03f0e9dc0800000000000000
+      internalID: -3630447546552067167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_6
+      rect:
+        serializedVersion: 2
+        x: 834
+        y: 1036
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bbc73460739c8c550800000000000000
+      internalID: 6181411726731476155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_7
+      rect:
+        serializedVersion: 2
+        x: 852
+        y: 1047
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1646322c5c725b660800000000000000
+      internalID: 7400865292972418145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_8
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 1076
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 256e252ada6501260800000000000000
+      internalID: 7066243119096981074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_9
+      rect:
+        serializedVersion: 2
+        x: 1061
+        y: 843
+        width: 146
+        height: 331
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 756eec198582ff330800000000000000
+      internalID: 3746757775864030807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_10
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 604
+        width: 174
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b87594ee88ce8bb00800000000000000
+      internalID: 844685002989459339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_11
+      rect:
+        serializedVersion: 2
+        x: 1061
+        y: 497
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b76388dabc16531d0800000000000000
+      internalID: -3371681218599307653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_12
+      rect:
+        serializedVersion: 2
+        x: 1079
+        y: 453
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6f26b9de6cb25a40800000000000000
+      internalID: 5355550091181961066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_13
+      rect:
+        serializedVersion: 2
+        x: 1095
+        y: 232
+        width: 13
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ee7359b503bfec40800000000000000
+      internalID: 5543846503481835239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_14
+      rect:
+        serializedVersion: 2
+        x: 1071
+        y: 200
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be3e7f53b551fe330800000000000000
+      internalID: 3742233296859816939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_15
+      rect:
+        serializedVersion: 2
+        x: 611
+        y: 178
+        width: 14
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 168da8ab62e589150800000000000000
+      internalID: 5879552833963612257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_16
+      rect:
+        serializedVersion: 2
+        x: 1073
+        y: 184
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3314ad33d8b43e7b0800000000000000
+      internalID: -5196226475223006925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_17
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 103
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c29fa00fc9da61e0800000000000000
+      internalID: -2203709584551472447
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_18
+      rect:
+        serializedVersion: 2
+        x: 824
+        y: 79
+        width: 19
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aad8ae2ab49f586b0800000000000000
+      internalID: -5294551683653005910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_19
+      rect:
+        serializedVersion: 2
+        x: 940
+        y: 80
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb95588768e4d5360800000000000000
+      internalID: 7159965322043546046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_20
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 50
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de21ac9d3b9536130800000000000000
+      internalID: 3558786759540740845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_21
+      rect:
+        serializedVersion: 2
+        x: 739
+        y: 63
+        width: 14
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24470fbed07fb8c40800000000000000
+      internalID: 5515773807810344002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_22
+      rect:
+        serializedVersion: 2
+        x: 731
+        y: 33
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 641af532fbdebcac0800000000000000
+      internalID: -3833709252587839162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_23
+      rect:
+        serializedVersion: 2
+        x: 738
+        y: 34
+        width: 19
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a02bc258dfcf85450800000000000000
+      internalID: 6077885862927708682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: forge_anvil_24
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 13
+        width: 7
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 385b9497bd08c2b90800000000000000
+      internalID: -7265290418734385789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      forge_anvil_0: 2522376772206843598
+      forge_anvil_1: -2568079082669116277
+      forge_anvil_10: 844685002989459339
+      forge_anvil_11: -3371681218599307653
+      forge_anvil_12: 5355550091181961066
+      forge_anvil_13: 5543846503481835239
+      forge_anvil_14: 3742233296859816939
+      forge_anvil_15: 5879552833963612257
+      forge_anvil_16: -5196226475223006925
+      forge_anvil_17: -2203709584551472447
+      forge_anvil_18: -5294551683653005910
+      forge_anvil_19: 7159965322043546046
+      forge_anvil_2: 1544354710762107055
+      forge_anvil_20: 3558786759540740845
+      forge_anvil_21: 5515773807810344002
+      forge_anvil_22: -3833709252587839162
+      forge_anvil_23: 6077885862927708682
+      forge_anvil_24: -7265290418734385789
+      forge_anvil_3: -5038070486745350825
+      forge_anvil_4: 352598144141093918
+      forge_anvil_5: -3630447546552067167
+      forge_anvil_6: 6181411726731476155
+      forge_anvil_7: 7400865292972418145
+      forge_anvil_8: 7066243119096981074
+      forge_anvil_9: 3746757775864030807
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
