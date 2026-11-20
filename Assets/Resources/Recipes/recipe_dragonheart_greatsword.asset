@@ -15,10 +15,10 @@ MonoBehaviour:
   id: recipe_dragonheart_greatsword
   result: {fileID: 11400000, guid: 0ca041ba13da90649a380e4230aa305b, type: 2}
   ingredients:
-  - item: {fileID: 11400000, guid: 52fe61322fcaf5d45be0c6891d4a53e1, type: 2}
-    count: 4
   - item: {fileID: 11400000, guid: d218dccbaeb16e14a99107290cc3da17, type: 2}
-    count: 1
+    count: 3
+  - item: {fileID: 11400000, guid: 01fb34ab67409e9488fb2f9fc8454d69, type: 2}
+    count: 2
   stages: 00000000010000000200000003000000
   baseDifficulty: 9
   codexNumber: 47

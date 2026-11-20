@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bffba30a58ef0447b4ef10205a7ef95, type: 3}
+  m_Name: malachite_fan
+  m_EditorClassIdentifier: Assembly-CSharp::BlackSmith.Items.CraftedItemData
+  id: malachite_fan
+  displayName: "\uacf5\uc791 \ucca0\uc120"
+  icon: {fileID: 21300000, guid: 94c344870f9745099b144782e423cd5b, type: 3}
+  description: "\uacf5\uc791\uc11d(\uc73c)\ub85c \ub9cc\ub4e0 \uc7a5\ube44."
+  maxStack: 1
+  defaultGrade: 1
+  sellPrice: 0
